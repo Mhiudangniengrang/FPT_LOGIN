@@ -1,7 +1,6 @@
 import React from "react";
-import "../login/Login.css";
+import "./Login.css";
 import logo from "../../assets/image/logo.png";
-
 
 class Login extends React.Component {
   state = {
@@ -23,14 +22,14 @@ class Login extends React.Component {
       alert("Login failed");
       return;
     }
-    alert("Login successfully")
+    alert("Login successfully");
   };
   render() {
     return (
       <>
         <div className="form-login-container">
           <div className="header">
-            <img src={logo} alt="FPTlogo" />
+            <img src={logo} alt="FPT logo" />
           </div>
           <form>
             <div className="wrapper">
@@ -59,9 +58,12 @@ class Login extends React.Component {
                     <input type="checkbox" />
                     Remember me{" "}
                   </label>
-                  <a href="#">Forgot Password?</a>
+                  <a href="/">Forgot Password?</a>
                 </div>
-                <button className="btn_login" onClick={() => this.handleSubmit()}>Login</button>
+                <button className="submit"
+                  onClick={() => this.handleSubmit()}>
+                  Login
+                </button>
                 <p> Note: Only for students from K19 to log in</p>
               </div>
             </div>
