@@ -61,7 +61,7 @@ class Login extends React.Component {
                   </label>
                   <a href="#">Forgot Password?</a>
                 </div>
-                <button onClick={() => this.handleSubmit()}>Login</button>
+                <button className="btn_login" onClick={() => this.handleSubmit()}>Login</button>
                 <p> Note: Only for students from K19 to log in</p>
               </div>
             </div>
