@@ -97,7 +97,7 @@
   .remember-forgot a:hover{
     text-decoration: underline;
   }
-.login {
+.submit {
     width: 100%;
     height: 45px;
     background:white;
