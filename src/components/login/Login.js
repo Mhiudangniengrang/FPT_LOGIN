@@ -1,6 +1,6 @@
 import React from "react";
-import "../login/Login.css";
-import logo from "../../assets/image/logo.png";
+import "./Login.css";
+import logo from "../../src/assets/image/logo.jpg";
 
 
 class Login extends React.Component {
@@ -28,44 +28,44 @@ class Login extends React.Component {
   render() {
     return (
       <>
-        <div className="form-login-container">
-          <div className="header">
-            <img src={logo} alt="FPTlogo" />
-          </div>
-          <form>
-            <div className="wrapper">
-              <div className="form-box login">
-                <h1>Login</h1>
-                <div className="input-box">
-                  <label htmlFor="email"></label>
-                  <input
-                    type="text"
-                    value={this.state.Email}
-                    placeholder="Email"
-                    onChange={(event) => this.handleChangeEmail(event)}
-                  />
-                </div>
-                <div className="input-box">
-                  <label htmlFor="passw"></label>
-                  <input
-                    type="password"
-                    value={this.state.Password}
-                    placeholder="Password"
-                    onChange={(event) => this.handleChangePassword(event)}
-                  />
-                </div>
-                <div className="remember-forgot">
-                  <label>
-                    <input type="checkbox" />
-                    Remember me{" "}
-                  </label>
-                  <a href="#">Forgot Password?</a>
-                </div>
-                <button onClick={() => this.handleSubmit()}>Login</button>
-                <p> Note: Only for students from K19 to log in</p>
+      <div className="form-login-container">
+        <div className="header">
+          <img src={logo} />
+        </div>
+        <form>
+          <div className="wrapper">
+            <div className="form-box login">
+              <h1>Login</h1>
+              <div className="input-box">
+                <label htmlFor="email"></label>
+                <input
+                  type="text"
+                  value={this.state.Email}
+                  placeholder="Email"
+                  onChange={(event) => this.handleChangeEmail(event)}
+                />
               </div>
+              <div className="input-box">
+                <label htmlFor="passw"></label>
+                <input
+                  type="password"
+                  value={this.state.Password}
+                  placeholder="Password"
+                  onChange={(event) => this.handleChangePassword(event)}
+                />
+              </div>
+              <div className="remember-forgot">
+                <label>
+                  <input type="checkbox" />
+                  Remember me{" "}
+                </label>
+                <a href="#">Forgot Password?</a>
+              </div>
+              <button onClick={() => this.handleSubmit()}>Login</button>
+              <p> Note: Only for students from K19 to log in</p>
             </div>
-          </form>
+          </div>
+        </form>
         </div>
       </>
     );
