@@ -30,13 +30,13 @@ function Header() {
           <img src={Image} alt='logoFPT' width={180} height={40} />
         </Navbar.Brand>
         <Nav>
-          <Nav.Link href="/home">MML</Nav.Link>
+          <Nav.Link href="/">MML</Nav.Link>
           <Nav.Link href="#overview">Overview</Nav.Link>
           <Nav.Link href="#features">Features</Nav.Link>
         </Nav>
         <div>
           <Language />
-          <ButtonLink text="Login" link="#" style={buttonStyle} />
+          <ButtonLink text="Login" link="/login" style={buttonStyle} />
         </div>
       </Container>
     </Navbar >
