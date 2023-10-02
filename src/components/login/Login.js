@@ -2,7 +2,6 @@ import React from "react";
 import "./Login.css";
 import logo from "../../assets/image/logo.png";
 
-
 class Login extends React.Component {
   state = {
     Email: "",
@@ -23,7 +22,7 @@ class Login extends React.Component {
       alert("Login failed");
       return;
     }
-    alert("Login successfully")
+    alert("Login successfully");
   };
   render() {
     return (
@@ -61,7 +60,9 @@ class Login extends React.Component {
                   </label>
                   <a href="/">Forgot Password?</a>
                 </div>
-                <button onClick={() => this.handleSubmit()}>Login</button>
+                <button className="login" onClick={() => this.handleSubmit()}>
+                  Login
+                </button>
                 <p> Note: Only for students from K19 to log in</p>
               </div>
             </div>
