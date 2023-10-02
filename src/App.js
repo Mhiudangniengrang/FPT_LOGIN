@@ -1,9 +1,11 @@
-import Login from "./components/Login";
+import Nav from "./Navigation/Nav";
+// import Login from "./components/Login";
 
 function App() {
   return (
     <div className="App">
-      <Login />
+      {/* <Login /> */}
+      <Nav/>
     </div>
   );
 }
