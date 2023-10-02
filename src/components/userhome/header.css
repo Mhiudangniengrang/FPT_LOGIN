@@ -1,0 +1,59 @@
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+ul {
+  display: flex;
+}
+li > a {
+  padding: 5px;
+  margin-right: 10px;
+
+  color: #000;
+}
+nav ul li:first-of-type > a {
+  border-right: solid 1px;
+  font-weight: 700;
+  padding-right: 16px;
+}
+nav ul li:nth-child(2) a {
+  color: #ff5722;
+}
+.logo {
+  width: 180px;
+  height: 40px;
+}
+.select_login {
+  width: 250px;
+}
+.select {
+  display: inline-block;
+  margin-right: 10px;
+}
+.fa-earth-asia {
+  color: gray;
+  margin-right: 5px;
+}
+
+select {
+  border-radius: 10px;
+  border: solid 1px grey;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  color: gray;
+}
+
+.cta-button {
+  border: none;
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #ff5722;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 5px;
+  font-weight: bold;
+}

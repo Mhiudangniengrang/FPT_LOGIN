@@ -1,0 +1,252 @@
+header {
+  padding: 10px 0; 
+  background-color: rgb(248 249 250);
+}
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+ul {
+  display: flex;
+}
+li > a {
+  padding: 5px;
+  margin-right: 10px;
+
+  color: #000;
+}
+nav ul li:first-of-type > a {
+  border-right: solid 1px;
+  font-weight: 700;
+  padding-right: 16px;
+}
+nav ul li:nth-child(2) a {
+  color: #ff5722;
+}
+.logo {
+  width: 180px;
+  height: 40px;
+}
+.select_login {
+  width: 250px;
+}
+.select {
+  display: inline-block;
+  margin-right: 10px;
+}
+.fa-earth-asia {
+  color: gray;
+  margin-right: 5px;
+}
+
+select {
+  border-radius: 10px;
+  border: solid 1px grey;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  color: gray;
+}
+
+.cta-button {
+  border: none;
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #ff5722;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 5px;
+  font-weight: bold;
+}
+.cta-button > a {
+  color: #fff;
+}
+
+.cta-button:hover {
+  background-color: #ff8a4e;
+}
+
+.hero {
+  text-align: center;
+  padding: 100px 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.hero h1 {
+  color: rgb(70 30 13);
+  font-size: 64px;
+  padding-bottom: 24px;
+  animation: bounceOutDown 1s ease-in;
+}
+
+.hero p {
+  line-height: 30px;
+  margin: 0 auto;
+  font-size: 18px;
+  color: rgb(112 81 69);
+
+  max-width: 800px;
+  padding-bottom: 24px;
+}
+
+.hero span {
+  color: rgb(162 121 104);
+  font-size: 14px;
+
+  padding-bottom: 12px;
+}
+
+.login_btn {
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 50px;
+  background-color: #fff;
+  border: 1px #555 solid;
+  border-radius: 10px;
+}
+
+.login_btn a {
+  color: #333;
+  font-weight: bold;
+}
+
+.login_btn img {
+  width: 30px;
+  padding-right: 8px;
+}
+
+/* Add this style to create a grid layout for the features */
+.features {
+  margin: 40px auto;
+  max-width: 1200px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* Creates 3 columns */
+  gap: 50px; /* Adjust the gap between features as needed */
+}
+h2 {
+  font-size: 32px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+/* Style individual feature items */
+.feature {
+  position: relative;
+  display: flex; /* Use flexbox to center vertically */
+  justify-content: space-evenly; /* Center items vertically */
+  align-items: center; /* Center items horizontally */
+  text-align: center;
+  padding: 30px 20px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Style the icon */
+.feature img {
+  width: 50px; /* Adjust the size of the icon as needed */
+  height: 50px;
+  margin-bottom: 10px;
+}
+
+/* Style the heading and description */
+.feature h3 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.features a {
+  color: #333;
+}
+
+.feature span {
+  font-size: 16px;
+  color: #555;
+}
+.description {
+  text-align: right;
+}
+
+.feature:hover {
+  animation: float 0.5s ease;
+}
+
+.head_master {
+  margin: 20px auto;
+  max-width: 1200px;
+  max-height: 600px;
+  height: 500px; /* Set a height for the container to make the background image visible */
+  /* background-image: url('../../assets/Rectangle\ 25.png'); */
+  /* url("../assests/image/Rectangle\ 25.png"); */
+  background-size: contain; /* Scale the image to cover the entire container */
+  background-repeat: no-repeat; /* Prevent the image from repeating */
+  background-position: center center; /* Center the image horizontally and vertically */
+}
+
+.head_master div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+  max-width: 600px;
+  padding-left: 130px;
+}
+.head_master cite {
+  font-size: 24px;
+  font-weight: 500;
+  padding-bottom: 10px;
+}
+.head_master p {
+  font-size: 20px;
+  font-weight: 600;
+  padding-bottom: 10px;
+}
+
+/* Style the footer */
+footer {
+  background-color: #212529;
+  color: #fff;
+  text-align: center;
+  padding: 10px 0;
+}
+
+.first_footer,
+.second_footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 10px;
+  padding-bottom: 10px;
+
+  max-width: 1200px;
+  margin: 0 auto;
+  font-weight: light;
+}
+
+.first_footer h4 {
+  width: 100px;
+}
+
+u > a {
+  color: #ddd;
+}
+
+.icons a {
+  color: #ddd;
+  padding-right: 5px;
+}
+
+@keyframes float {
+  0% {
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.2);
+    transform: translate(-1%, -1%);
+  }
+  100% {
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.2);
+    transform: translate(-2%, -2%);
+  }
+}
