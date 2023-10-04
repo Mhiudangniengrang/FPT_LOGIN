@@ -1,6 +1,5 @@
 import React from 'react';
-import './hero.module.css'
-import './home.css'
+import styles from './hero.module.scss'
 import Carousel from 'react-bootstrap/Carousel';
 
 var heroData = [
@@ -30,9 +29,9 @@ var heroData = [
 function Hero() {
   return (
     <section className=" align-items-center justify-content-between hero" id='overview'>
-      <div className='w-50 float-start leftDivStyle'>
-        <h1 className='text-start h1Style'>Connecting Students and Teachers for Meetings</h1>
-        <p className='m-0 text-start pStyle'>
+      <div className={'w-50 float-start ' + styles.leftDivStyle} >
+        <h1 className={'text-start '} >Connecting Students and Teachers for Meetings</h1>
+        <p className={'m-0 text-start ' + styles.pStyle} >
           {/* Meet My Lecturer is your personalized gateway to educational
           excellence. Connect with experienced educators, discover their
           expertise. Get ready to elevate your knowledge! */}
@@ -66,7 +65,7 @@ function Hero() {
           })
         }
       </Carousel>
-    </section>
+    </section >
   )
 }
 

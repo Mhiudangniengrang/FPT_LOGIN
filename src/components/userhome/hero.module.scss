@@ -1,14 +1,10 @@
-
-
-.h1Style{
-  width: 90%,
-}
-.pStyle {
-  width: 90%,
-}
 .leftDivStyle {
   padding: 0 50px;
-  margin: auto 0,
+  margin: auto 0;
+
+  .pStyle {
+    width: 90%,
+  }
 }
 
 .rightDivStyle {
