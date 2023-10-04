@@ -22,6 +22,14 @@ function Header() {
     borderRadius: '10px',
     fontWeight: 'bold',
   }
+
+  const titleStyle = {
+    fontWeight: '700',
+    paddingRight: '10px',
+  }
+  const overViewStyle = {
+    color: 'rgb(255, 87, 34)',
+  }
   return (
     <Navbar fixed="top" bg="light" data-bs-theme="light" >
       <Container style={containerStlye}>
@@ -29,8 +37,8 @@ function Header() {
           <img src={Image} alt='logoFPT' width={180} height={40} />
         </Navbar.Brand>
         <Nav>
-          <Nav.Link href="/">MML</Nav.Link>
-          <Nav.Link href="#overview">Overview</Nav.Link>
+          <Nav.Link href="/" style={titleStyle} >Meet My Lecturer</Nav.Link>
+          <Nav.Link href="#overview" style={overViewStyle}>Overview</Nav.Link>
           <Nav.Link href="#features">Features</Nav.Link>
         </Nav>
         <div>

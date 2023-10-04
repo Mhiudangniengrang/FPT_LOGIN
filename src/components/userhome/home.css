@@ -54,12 +54,13 @@ select {
   text-align: center;
   padding: 100px 0;
   display: flex;
-  flex-direction: column;
+  max-width: 1350px;
+  margin: 0 auto;
 }
 
 .hero h1 {
   color: rgb(70 30 13);
-  font-size: 64px;
+  font-size: 56px;
   padding-bottom: 24px;
   font-weight: 600;
 }
@@ -82,7 +83,6 @@ select {
 }
 
 .login_btn {
-  margin: 0 auto;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -105,7 +105,7 @@ select {
 /* Add this style to create a grid layout for the features */
 .features {
   margin: 0 auto;
-  max-width: 1200px;
+  max-width: 1350px;
 }
 h2 {
   font-weight: 600;
@@ -159,7 +159,7 @@ h2 {
 
 .head_master {
   margin: 20px auto;
-  max-width: 1200px;
+  max-width: 1350px;
   max-height: 600px;
   height: 500px; /* Set a height for the container to make the background image visible */
   /* background-image: url('../../assets/Rectangle\ 25.png'); */
@@ -204,7 +204,7 @@ footer {
   padding-top: 10px;
   padding-bottom: 10px;
 
-  max-width: 1200px;
+  max-width: 1350px;
   margin: 0 auto;
   font-weight: light;
 }
