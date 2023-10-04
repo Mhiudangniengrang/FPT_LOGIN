@@ -5,10 +5,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Rate from '../../assets/image/rate 1.png';
 import Schedule from '../../assets/image/schedule 1.png';
-import Remind from '../../assets/image/remind 1.png';
 import Search from '../../assets/image/search 1.png';
-import Track from '../../assets/image/track 1.png';
-import Group from '../../assets/image/group 1.png';
 
 const featuresData = [
     {
@@ -19,29 +16,12 @@ const featuresData = [
     },
     {
         id: 2,
-        icon: Remind,
-        title: 'Remind',
-        description: 'your lesson'
+        icon: Search,
+        title: 'Search',
+        description: 'lectures'
     },
     {
         id: 3,
-        icon: Rate,
-        title: 'Rate',
-        description: 'your course'
-    }, {
-        id: 4,
-        icon: Schedule,
-        title: 'Schedule',
-        description: 'your meeting'
-    },
-    {
-        id: 5,
-        icon: Remind,
-        title: 'Remind',
-        description: 'your lesson'
-    },
-    {
-        id: 6,
         icon: Rate,
         title: 'Rate',
         description: 'your course'

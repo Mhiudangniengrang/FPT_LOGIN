@@ -8,6 +8,7 @@ import {
   Route,
 } from "react-router-dom";
 import Userhome from './components/userhome/userhome';
+import Nopage from './components/Nopage';
 function App() {
 
   return (
@@ -19,6 +20,9 @@ function App() {
           </Route>
           <Route exact path="/">
             <Userhome />
+          </Route>
+          <Route path="*">
+            <Nopage />
           </Route>
         </Switch>
       </Router>
