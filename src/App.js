@@ -9,6 +9,8 @@ import {
 } from "react-router-dom";
 import Userhome from './components/userhome/userhome';
 import Nopage from './components/Nopage';
+import Hero from './components/userhome/section_hero';
+import Feature from './components/userhome/section_feature';
 function App() {
 
   return (
@@ -23,6 +25,12 @@ function App() {
           </Route>
           <Route path="*">
             <Nopage />
+          </Route>
+          <Route path='/#overview'>
+            <Hero />
+          </Route>
+          <Route path='/#features'>
+            <Feature />
           </Route>
         </Switch>
       </Router>

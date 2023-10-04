@@ -1,7 +1,7 @@
 import React from 'react';
+import './hero.module.css'
 import './home.css'
 import Carousel from 'react-bootstrap/Carousel';
-
 
 var heroData = [
   {
@@ -27,29 +27,12 @@ var heroData = [
   }
 ]
 
-const h1Style = {
-  width: '90%',
-}
-const pStyle = {
-  width: '90%',
-}
-const leftDivStyle = {
-  padding: '0 50px',
-  margin: 'auto 0',
-}
-
-const rightDivStyle = {
-  padding: '32px',
-  color: "#333",
-  backgroundColor: 'rgb(248 249 250)',
-}
-
 function Hero() {
   return (
-    <section className=" align-items-center justify-content-between hero">
-      <div className='w-50 float-start' style={leftDivStyle}>
-        <h1 className='text-start' style={h1Style}>Connecting Students and Teachers for Meetings</h1>
-        <p className='m-0 text-start' style={pStyle}>
+    <section className=" align-items-center justify-content-between hero" id='overview'>
+      <div className='w-50 float-start leftDivStyle'>
+        <h1 className='text-start h1Style'>Connecting Students and Teachers for Meetings</h1>
+        <p className='m-0 text-start pStyle'>
           {/* Meet My Lecturer is your personalized gateway to educational
           excellence. Connect with experienced educators, discover their
           expertise. Get ready to elevate your knowledge! */}
@@ -74,7 +57,7 @@ function Hero() {
                   src={hero.image}
                   alt={"slide " + hero.id}
                 />
-                <div style={rightDivStyle}>
+                <div className='rightDivStyle'>
                   <h3 className='text-start'>{hero.title}</h3>
                   <p className=' text-start'>{hero.description}</p>
                 </div>

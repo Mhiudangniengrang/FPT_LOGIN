@@ -30,7 +30,7 @@ const featuresData = [
 
 function Feature() {
     return (
-        <section className='features'>
+        <section className='features' id='features'>
             <Container fluid>
                 <div className="title-holder">
                     <h2>OUR SERVICES</h2>
