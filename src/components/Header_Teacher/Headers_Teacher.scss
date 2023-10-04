@@ -1,0 +1,24 @@
+*{
+    margin:0;
+}
+
+.container{
+  display: flex;
+  justify-content: space-between;
+  background-color: orange;
+  align-items: center;
+  color:white;
+  padding:15px;
+  .title{
+    text-align: center;
+  }
+  .teacher{
+ float: right;
+
+    border-radius: 3px;
+    border:1px solid black;
+    padding:3px;
+   
+  }
+}
+
