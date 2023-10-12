@@ -11,6 +11,8 @@ import Userhome from './Pages/userhome/userhome';
 import Nopage from './components/Nopage';
 import Hero from './components/userhome/section_hero';
 import Feature from './Pages/userhome/section_feature';
+import L_home from './Pages/lecturer/L_Home';
+import S_home from './Pages/student/S_Home';
 function App() {
 
   return (
@@ -22,6 +24,15 @@ function App() {
           </Route>
           <Route exact path="/">
             <Userhome />
+<<<<<<< Updated upstream
+=======
+          </Route>
+          <Route path='/lecturer_home'>
+            <L_home />
+          </Route>
+          <Route path='/student_home'>
+            <S_home />
+>>>>>>> Stashed changes
           </Route>
           <Route path="*">
             <Nopage />
@@ -32,6 +43,7 @@ function App() {
           <Route path='/#features'>
             <Feature />
           </Route>
+
         </Switch>
       </Router>
     </div>
