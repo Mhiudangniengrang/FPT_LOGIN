@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './hero.module.scss'
+import styles from '../../assets/style/hero.module.scss'
 import Carousel from 'react-bootstrap/Carousel';
 
 var heroData = [
