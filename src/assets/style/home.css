@@ -52,7 +52,7 @@ select {
 
 .hero {
   text-align: center;
-  padding: 100px 0;
+  padding: 100px 0 0 0;
   display: flex;
   max-width: 1350px;
   margin: 0 auto;
@@ -104,6 +104,7 @@ select {
 
 /* Add this style to create a grid layout for the features */
 .features {
+  padding-top: 100px;
   margin: 0 auto;
   max-width: 1350px;
 }

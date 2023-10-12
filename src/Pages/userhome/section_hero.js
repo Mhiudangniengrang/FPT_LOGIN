@@ -28,7 +28,7 @@ var heroData = [
 
 function Hero() {
   return (
-    <section className=" align-items-center justify-content-between hero" id='overview'>
+    <section className={" align-items-center justify-content-between hero " + styles.section} id='overview'>
       <div className={'w-50 float-start ' + styles.leftDivStyle} >
         <h1 className={'text-start '} >Connecting Students and Teachers for Meetings</h1>
         <p className={'m-0 text-start ' + styles.pStyle} >
@@ -56,7 +56,7 @@ function Hero() {
                   src={hero.image}
                   alt={"slide " + hero.id}
                 />
-                <div className='rightDivStyle'>
+                <div className={styles.rightDivStyle}>
                   <h3 className='text-start'>{hero.title}</h3>
                   <p className=' text-start'>{hero.description}</p>
                 </div>

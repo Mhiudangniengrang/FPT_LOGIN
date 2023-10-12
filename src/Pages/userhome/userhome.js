@@ -3,6 +3,7 @@ import Header from "../../components/Header";
 import Hero from "./section_hero";
 import Feature from "./section_feature";
 import Connect_section from "./connect_section";
+import Team from "./team_section";
 
 class Userhome extends React.Component {
     render() {
@@ -12,6 +13,7 @@ class Userhome extends React.Component {
                 <Hero />
                 <Connect_section />
                 <Feature />
+                <Team />
             </>
         )
     }

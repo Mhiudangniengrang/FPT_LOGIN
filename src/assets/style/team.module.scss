@@ -1,0 +1,23 @@
+.section {
+    h2 {
+        padding: 50px 0;
+    }
+
+    .content {
+        max-width: 1350px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 0 auto;
+        gap: 50px;
+
+
+        .member {
+            text-align: center;
+
+            p {
+                margin: 0;
+            }
+        }
+    }
+}

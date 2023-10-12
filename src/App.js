@@ -21,7 +21,9 @@ function App() {
             <Login />
           </Route>
           <Route exact path="/">
-            <Userhome />
+            <div>
+              <Userhome />
+            </div>
           </Route>
           <Route path="*">
             <Nopage />
