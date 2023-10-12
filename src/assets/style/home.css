@@ -113,6 +113,7 @@ h2 {
   font-size: 32px;
   text-align: center;
   margin-bottom: 20px;
+  padding:  0  0 50px 0;
 }
 /* Style individual feature items */
 .feature {
@@ -136,6 +137,7 @@ h2 {
   margin-right: 30px;
 }
 
+
 /* Style the heading and description */
 .feature h3 {
   font-size: 24px;
@@ -158,70 +160,7 @@ h2 {
   animation: float 0.5s ease;
 }
 
-.head_master {
-  margin: 20px auto;
-  max-width: 1350px;
-  max-height: 600px;
-  height: 500px; /* Set a height for the container to make the background image visible */
-  /* background-image: url('../../assets/Rectangle\ 25.png'); */
-  /* url("../assests/image/Rectangle\ 25.png"); */
-  background-size: contain; /* Scale the image to cover the entire container */
-  background-repeat: no-repeat; /* Prevent the image from repeating */
-  background-position: center center; /* Center the image horizontally and vertically */
-}
 
-.head_master div {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  height: 100%;
-  max-width: 600px;
-  padding-left: 130px;
-}
-.head_master cite {
-  font-size: 24px;
-  font-weight: 500;
-  padding-bottom: 10px;
-}
-.head_master p {
-  font-size: 20px;
-  font-weight: 600;
-  padding-bottom: 10px;
-}
-
-/* Style the footer */
-footer {
-  background-color: #212529;
-  color: #fff;
-  text-align: center;
-  padding: 10px 0;
-}
-
-.first_footer,
-.second_footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-top: 10px;
-  padding-bottom: 10px;
-
-  max-width: 1350px;
-  margin: 0 auto;
-  font-weight: light;
-}
-
-.first_footer h4 {
-  width: 100px;
-}
-
-u > a {
-  color: #ddd;
-}
-
-.icons a {
-  color: #ddd;
-  padding-right: 5px;
-}
 
 @keyframes float {
   0% {

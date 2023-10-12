@@ -33,7 +33,7 @@ function Feature() {
         <section className='features' id='features'>
             <Container fluid>
                 <div className="title-holder">
-                    <h2>OUR SERVICES</h2>
+                    <h2>Our services</h2>
                 </div>
                 <Row>
                     {
