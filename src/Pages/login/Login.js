@@ -1,77 +1,70 @@
-import React from "react";
+import React, { useState } from "react";
 import "../../assets/style/Login.css";
 import logo from "../../assets/image/logo.png";
 
-class Login extends React.Component {
-  state = {
-    Email: "",
-    Password: "",
+function Login() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleChangeEmail = (event) => {
+    setEmail(event.target.value);
   };
-  handleChangeEmail = (event) => {
-    this.setState({
-      Email: event.target.value,
-    });
+
+  const handleChangePassword = (event) => {
+    setPassword(event.target.value);
   };
-  handleChangePassword = (event) => {
-    this.setState({
-      Password: event.target.value,
-    });
-  };
-  handleSubmit = () => {
-    if (!this.state.Email || !this.state.Password) {
+
+  const handleSubmit = () => {
+    if (!email || !password) {
       alert("Login failed");
       return;
     }
     alert("Login successfully");
   };
-  render() {
-    return (
-      <>
-        <div className="form-login-container">
-          <div className="header">
-            <img src={logo} alt="FPT logo" />
-          </div>
-          <form>
-            <div className="wrapper">
-              <div className="form-box login">
-                <h1>Login</h1>
-                <div className="input-box">
-                  <label htmlFor="email"></label>
-                  <input
-                    type="text"
-                    value={this.state.Email}
-                    placeholder="Email"
-                    onChange={(event) => this.handleChangeEmail(event)}
-                  />
-                </div>
-                <div className="input-box">
-                  <label htmlFor="passw"></label>
-                  <input
-                    type="password"
-                    value={this.state.Password}
-                    placeholder="Password"
-                    onChange={(event) => this.handleChangePassword(event)}
-                  />
-                </div>
-                <div className="remember-forgot">
-                  <label>
-                    <input type="checkbox" />
-                    Remember me{" "}
-                  </label>
-                  <a href="/">Forgot Password?</a>
-                </div>
-                <button className="submit"
-                  onClick={() => this.handleSubmit()}>
-                  Login
-                </button>
-                <p> Note: Only for students from K19 to log in</p>
-              </div>
+
+  return (
+    <div className="form-login-container">
+      <div className="header">
+        <img src={logo} alt="FPT logo" />
+      </div>
+      <form>
+        <div className="wrapper">
+          <div className="form-box login">
+            <h1>Login</h1>
+            <div className="input-box">
+              <label htmlFor="email"></label>
+              <input
+                type="text"
+                value={email}
+                placeholder="Email"
+                onChange={(event) => handleChangeEmail(event)}
+              />
             </div>
-          </form>
+            <div className="input-box">
+              <label htmlFor="passw"></label>
+              <input
+                type="password"
+                value={password}
+                placeholder="Password"
+                onChange={(event) => handleChangePassword(event)}
+              />
+            </div>
+            <div className="remember-forgot">
+              <label>
+                <input type="checkbox" />
+                Remember me{" "}
+              </label>
+              <a href="/">Forgot Password?</a>
+            </div>
+            <button className="submit" onClick={() => handleSubmit()}>
+              Login
+            </button>
+            <p> Note: Only for students from K19 to log in</p>
+          </div>
         </div>
-      </>
-    );
-  }
+      </form>
+    </div>
+  );
 }
 
 export default Login;
