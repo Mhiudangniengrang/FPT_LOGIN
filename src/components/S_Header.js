@@ -1,5 +1,6 @@
 import React from "react";
 import Style from '../assets/style/header.module.scss';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBell } from '@fortawesome/free-solid-svg-icons'
 import { faUser } from '@fortawesome/free-solid-svg-icons'
@@ -7,9 +8,29 @@ import { faUserPen } from '@fortawesome/free-solid-svg-icons'
 import { faCalendarDays } from '@fortawesome/free-solid-svg-icons'
 import { faRightFromBracket } from '@fortawesome/free-solid-svg-icons'
 import { faHouse } from '@fortawesome/free-solid-svg-icons'
+import { faCircleQuestion } from '@fortawesome/free-solid-svg-icons'
+
 import NavDropdown from 'react-bootstrap/NavDropdown';
-import { NavLink, Stack } from "react-bootstrap";
+import { Stack } from "react-bootstrap";
+
 import FormSearch from "./FormSearch";
+import HorizontalStack from "./HorizontalStack";
+import CustomNavDropdown from "./DropDownStack";
+
+const dropdownItems = [
+    {
+        link: '',
+        desc: 'View Schedule'
+    },
+    {
+        link: '',
+        desc: 'Book slot'
+    },
+    {
+        link: '',
+        desc: 'Send Request'
+    },
+]
 
 class S_Header extends React.Component {
 
@@ -45,13 +66,9 @@ class S_Header extends React.Component {
                     <FormSearch />
                 </Stack>
                 <Stack direction="horizontal" gap={5} className={Style.div3}>
-                    <Stack direction="horizontal" gap={2}>
-                        <FontAwesomeIcon icon={faHouse} style={{ color: "#0a0a0a", }} />
-                        <NavLink href="">
-                            Home
-                        </NavLink>
-                    </Stack>
-                    <Stack direction="horizontal" gap={2}>
+
+                    <HorizontalStack icon={faHouse} text='Home' link="/" />
+                    {/* <Stack direction="horizontal" gap={2}>
                         <FontAwesomeIcon icon={faCalendarDays} style={{ color: "#0a0a0a", }} />
                         <NavDropdown title="Schedule">
                             <NavDropdown.Item>
@@ -64,7 +81,10 @@ class S_Header extends React.Component {
                                 <NavLink href="">Send Request</NavLink>
                             </NavDropdown.Item>
                         </NavDropdown>
-                    </Stack>
+                    </Stack> */}
+                    <CustomNavDropdown title='Schedule' icon={faCalendarDays} items={dropdownItems} />
+
+                    <HorizontalStack modify='ms-auto' icon={faCircleQuestion} text='Help Center' link="/" />
                 </Stack>
             </ Stack>
         );

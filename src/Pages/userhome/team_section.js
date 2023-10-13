@@ -27,7 +27,7 @@ const members = [
 function Team() {
 
     return (
-        <section className={Style.section} id='team'>
+        <section className={Style.section + ' pb-5'} id='team'>
             <h2>Our team</h2>
             <div className={Style.content}>
                 {

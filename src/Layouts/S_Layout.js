@@ -5,11 +5,11 @@ import Footer from "../components/Footer";
 const S_Layout = ({ children }) => {
 
     return (
-        <>
+        <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
             <S_Header />
-            <main>{children}</main>
+            <main style={{ flex: '1' }}>{children}</main>
             <Footer />
-        </>
+        </div>
     )
 }
 

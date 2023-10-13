@@ -5,9 +5,9 @@ import Footer from "../components/Footer";
 const L_Layout = ({ children }) => {
 
     return (
-        <div >
+        <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
             <L_Header />
-            <main>{children}</main>
+            <main style={{ flex: '1' }}>{children}</main>
             <Footer />
         </div>
     )
