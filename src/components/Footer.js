@@ -5,7 +5,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 function Footer() {
   return (
-    <footer className={`container ${Style.footer}`}>
+    <footer className={`${Style.footer}`}>
       <div className={`row ${Style.footerContainer}`}>
         <div className={`col-md-6 ${Style.footerSection}`}>
           <h5 className={Style.title}>Address:</h5>

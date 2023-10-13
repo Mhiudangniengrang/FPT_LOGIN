@@ -7,18 +7,18 @@ import Team from "./team_section";
 import Footer from "../../components/Footer";
 
 class Userhome extends React.Component {
-  render() {
-    return (
-      <>
-        <Header />
-        <Hero />
-        <Connect_section />
-        <Feature />
-        <Team />
-        <Footer />
-      </>
-    );
-  }
+    render() {
+        return (
+            <>
+                <Header />
+                <Hero />
+                <Connect_section />
+                <Feature />
+                <Team />
+                <Footer />
+            </>
+        );
+    }
 }
 
 export default Userhome;

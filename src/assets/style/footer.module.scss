@@ -1,51 +1,57 @@
 /* footer.module.scss */
 .footer {
-    background-color: rgb(248 249 250);
-    color:black;
-    text-align: center;
-    border-top: 1px solid black;
+  background-color: rgb(248 249 250);
+  color: black;
+  text-align: center;
+  padding: 50px 50px 0 50px;
+  border-top: 1px solid black;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
 
-    .footerContainer {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      max-width: 1350px; /* Set the max-width to 1350px */
-      margin: 0 auto;
-      padding: 5px;
-     
-    }
-  
-    .footerSection, .logoSection {
-      flex: 1;
-      text-align: left;
-    }
-  
-    .logoSection {
-      text-align: right;
-    }
-  
-    .title {
-      font-size: 18px;
-      font-weight: bold;
-      margin-bottom: 5px;
-     
-    }
-  
-    .siteTitle {
-      font-size: 24px;
-    
-      color: black /* Text color for the site title */
-    }
-  
-    .copyRight {
-    background-color: rgb(248 249 250);
-      border-top: 1px solid;
-      padding: 10px 0;
-    }
-  
-    .copyRight p {
-      font-size: 14px;
-      margin: 0;
-    }
+  .footerContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1350px;
+    /* Set the max-width to 1350px */
+    margin: 0 auto;
+    padding-bottom: 30px;
+
   }
-  
+
+  .footerSection,
+  .logoSection {
+    flex: 1;
+    text-align: left;
+  }
+
+  .logoSection {
+    text-align: right;
+  }
+
+  .title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 5px;
+
+  }
+
+  .siteTitle {
+    font-size: 24px;
+    padding-bottom: 30px;
+    color: black
+      /* Text color for the site title */
+  }
+
+  .copyRight {
+    background-color: rgb(248 249 250);
+    border-top: 1px solid;
+    padding: 10px 0;
+  }
+
+  .copyRight p {
+    font-size: 14px;
+    margin: 0;
+  }
+}
