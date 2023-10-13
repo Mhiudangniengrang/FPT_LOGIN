@@ -1,6 +1,7 @@
-
-
 import 'bootstrap/dist/css/bootstrap.min.css';
+
+import "./App.css";
+
 import Login from './Pages/login/Login';
 import {
   BrowserRouter as Router,
@@ -12,7 +13,6 @@ import Nopage from './components/Nopage';
 import L_home from './Pages/lecturer/L_Home';
 import S_home from './Pages/student/S_Home';
 function App() {
-
   return (
     <div className="App">
       <Router>

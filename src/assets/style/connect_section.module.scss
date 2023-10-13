@@ -1,0 +1,50 @@
+.section {
+    max-width: 1350px;
+    padding: 50px;
+    margin: 0 auto;
+    background-image: url(../image/pexels-fauxels-3183150.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    color: #fff;
+
+    .content {
+        display: flex;
+        justify-content: space-between;
+
+        .h2 {
+            font-size: 48px;
+            margin: auto 0;
+            text-align: left;
+            padding-right: 50px;
+            width: 80%;
+        }
+
+        p {
+            color: #fff;
+            text-align: left;
+            padding-bottom: 50px;
+            margin: 0;
+        }
+
+        .description {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+
+            .subDescription {
+                display: flex;
+                justify-content: space-between;
+
+                div {
+                    width: 40%;
+
+                }
+            }
+        }
+    }
+
+
+
+
+}

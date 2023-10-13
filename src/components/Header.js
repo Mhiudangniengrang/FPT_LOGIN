@@ -10,7 +10,7 @@ import Language from './Language';
 function Header() {
 
   const containerStlye = {
-    maxWidth: '1200px',
+    maxWidth: '1350px',
   }
   const buttonStyle = {
     border: 'none',
