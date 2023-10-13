@@ -1,6 +1,5 @@
 import React from "react";
-import S_Header from "../../components/S_Header";
-import Footer from "../../components/Footer";
+import S_Layout from "../../Layouts/S_Layout";
 
 class S_home extends React.Component {
 
@@ -8,8 +7,9 @@ class S_home extends React.Component {
 
         return (
             <>
-                <S_Header />
-                <Footer />
+                <S_Layout>
+                    <h1>Hello student home</h1>
+                </S_Layout>
             </>
         )
     }

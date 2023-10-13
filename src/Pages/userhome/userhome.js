@@ -5,12 +5,6 @@ import Feature from "./section_feature";
 import Connect_section from "./connect_section";
 import Team from "./team_section";
 import Footer from "../../components/Footer";
-import {
-    BrowserRouter as Router,
-    Switch,
-    Route,
-} from 'react-router-dom'
-import Footer from "../../components/Footer";
 
 class Userhome extends React.Component {
     render() {
@@ -18,10 +12,12 @@ class Userhome extends React.Component {
             <>
                 <Header />
                 <Hero />
+                <Connect_section />
                 <Feature />
+                <Team />
                 <Footer />
             </>
-        )
+        );
     }
 }
 

@@ -1,6 +1,7 @@
 import React from "react";
 import L_Header from "../../components/L_Header";
 import Footer from "../../components/Footer";
+import L_Layout from "../../Layouts/L_Layout";
 
 class L_home extends React.Component {
 
@@ -8,8 +9,9 @@ class L_home extends React.Component {
 
         return (
             <>
-                <L_Header />
-                <Footer />
+                <L_Layout>
+                    <h1>Hello Lecturer home</h1>
+                </L_Layout>
             </>
         )
     }
