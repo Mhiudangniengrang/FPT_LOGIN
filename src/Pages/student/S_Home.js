@@ -1,10 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import S_Layout from "../../Layouts/S_Layout";
-import { Button, Card } from "react-bootstrap";
-import FormSearch from "../../components/FormSearch";
-import Connect_section from "../userhome/connect_section";
-import WeeklyCalendar from "../../components/Week";
+import WeeklyCalendar from "../../components/Schedule/Week";
 
+import "react-datepicker/dist/react-datepicker.css";
+import Datepicker from "../../components/Schedule/CurrentWeekDatePicker";
 class S_home extends React.Component {
 
 
@@ -12,7 +11,7 @@ class S_home extends React.Component {
     return (
       <>
         <S_Layout>
-          <div>HOME</div>
+          <WeeklyCalendar />
         </S_Layout>
       </>
     );
