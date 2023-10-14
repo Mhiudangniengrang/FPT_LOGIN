@@ -6,7 +6,7 @@ const HorizontalStack = ({ icon, text, link, modify }) => {
     return (
         <Stack className={modify} direction="horizontal" gap={2}>
             <FontAwesomeIcon icon={icon} style={{ color: "#000000", }} />
-            <NavLink href={link}>{text}</NavLink>
+            <NavLink onTouchCancel={link}>{text}</NavLink>
         </Stack>
     )
 }

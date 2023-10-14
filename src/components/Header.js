@@ -37,9 +37,9 @@ function Header() {
           <img src={Image} alt='logoFPT' width={180} height={40} />
         </Navbar.Brand>
         <Nav>
-          <Nav.Link href="/" style={titleStyle} >Meet My Lecturer</Nav.Link>
-          <Nav.Link href="#overview" style={overViewStyle}>Overview</Nav.Link>
-          <Nav.Link href="#features">Features</Nav.Link>
+          <Nav.Link to="/" style={titleStyle} >Meet My Lecturer</Nav.Link>
+          <Nav.Link to="/#overview" style={overViewStyle}>Overview</Nav.Link>
+          <Nav.Link to="/#features">Features</Nav.Link>
         </Nav>
         <div>
           <Language />

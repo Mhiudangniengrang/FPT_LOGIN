@@ -19,27 +19,31 @@ import HorizontalStack from "./HorizontalStack";
 import CustomNavDropdown from "./DropDownStack";
 import S_ViewProfile from "../Pages/student/S_ViewProfile"; // Adjust the path as needed
 const dropdownItems = [
-  {
-    link: "",
-    desc: "View Schedule",
-  },
-  {
-    link: "",
-    desc: "Book slot",
-  },
-  {
-    link: "",
-    desc: "Send Request",
-  },
+    {
+        link: "",
+        desc: "View Schedule",
+    },
+    {
+        link: "",
+        desc: "Book slot",
+    },
+    {
+        link: "",
+        desc: "Send Request",
+    },
 ];
 
 class S_Header extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      activePage: null,
+    constructor() {
+        super();
+        this.state = {
+            activePage: null,
+        };
+    }
+
+    handleViewProfileClick = () => {
+        this.setState({ activePage: "ViewProfile" });
     };
-  }
 
   render() {
     return (
