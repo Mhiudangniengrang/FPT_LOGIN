@@ -1,15 +1,17 @@
 import React from "react";
 import S_Header from "../components/S_Header";
-import Footer from "../components/Footer";
+import Footer from "../components/Footer"; import Container from 'react-bootstrap/Container';
 
 const S_Layout = ({ children }) => {
 
     return (
-        <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+        <Container fluid style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
             <S_Header />
-            <main style={{ flex: '1' }}>{children}</main>
+            <Container>
+                {children}
+            </Container>
             <Footer />
-        </div>
+        </Container>
     )
 }
 

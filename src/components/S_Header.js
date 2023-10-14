@@ -63,25 +63,10 @@ class S_Header extends React.Component {
                 </div>
                 <Stack direction="horizontal" gap={3} className={Style.div2}>
                     <h1 style={{ color: "#fff", fontWeight: '700', margin: '0' }}>MML - MEET MY LECTURER</h1>
-                    <FormSearch />
                 </Stack>
                 <Stack direction="horizontal" gap={5} className={Style.div3}>
 
                     <HorizontalStack icon={faHouse} text='Home' link="/" />
-                    {/* <Stack direction="horizontal" gap={2}>
-                        <FontAwesomeIcon icon={faCalendarDays} style={{ color: "#0a0a0a", }} />
-                        <NavDropdown title="Schedule">
-                            <NavDropdown.Item>
-                                <NavLink href="">View Schedule</NavLink>
-                            </NavDropdown.Item>
-                            <NavDropdown.Item>
-                                <NavLink href="">Book slot</NavLink>
-                            </NavDropdown.Item>
-                            <NavDropdown.Item>
-                                <NavLink href="">Send Request</NavLink>
-                            </NavDropdown.Item>
-                        </NavDropdown>
-                    </Stack> */}
                     <CustomNavDropdown title='Schedule' icon={faCalendarDays} items={dropdownItems} />
 
                     <HorizontalStack modify='ms-auto' icon={faCircleQuestion} text='Help Center' link="/" />

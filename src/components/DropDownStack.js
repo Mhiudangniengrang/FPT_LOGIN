@@ -9,7 +9,7 @@ function CustomNavDropdown({ title, items, icon }) {
             <NavDropdown title={title} id="nav-dropdown">
                 {items.map((item, index) => (
                     <NavDropdown.Item key={index}>
-                        <NavLink href={'/' + item.link}>{item.desc}</NavLink>
+                        <NavLink to={item.link}>{item.desc}</NavLink>
                     </NavDropdown.Item>
                 ))}
             </NavDropdown>

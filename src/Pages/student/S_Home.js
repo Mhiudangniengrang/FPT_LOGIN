@@ -1,5 +1,8 @@
 import React from "react";
 import S_Layout from "../../Layouts/S_Layout";
+import FormSearch from "../../components/FormSearch";
+import Connect_section from "../userhome/connect_section";
+import WeeklyCalendar from "../../components/Week";
 
 class S_home extends React.Component {
 
@@ -8,7 +11,8 @@ class S_home extends React.Component {
         return (
             <>
                 <S_Layout>
-                    <h1>Hello student home</h1>
+                    <FormSearch />
+                    <WeeklyCalendar />
                 </S_Layout>
             </>
         )
