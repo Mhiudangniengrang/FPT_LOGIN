@@ -103,7 +103,6 @@ class S_Header extends React.Component {
           <h1 style={{ color: "#fff", fontWeight: "700", margin: "0" }}>
             MML - MEET MY LECTURER
           </h1>
-          <FormSearch />
         </Stack>
         <Stack direction="horizontal" gap={5} className={Style.div3}>
           <HorizontalStack icon={faHouse} text="Home" link="/" />
