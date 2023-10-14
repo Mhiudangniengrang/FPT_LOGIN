@@ -12,6 +12,7 @@ import { faCircleQuestion } from "@fortawesome/free-solid-svg-icons";
 
 import NavDropdown from "react-bootstrap/NavDropdown";
 import { Stack } from "react-bootstrap";
+import { NavLink } from "react-router-dom";
 
 import FormSearch from "./FormSearch";
 import HorizontalStack from "./HorizontalStack";
@@ -40,12 +41,6 @@ class S_Header extends React.Component {
     };
   }
 
-  handleViewProfileClick = () => {
-    this.setState({ activePage: "ViewProfile" });
-  };
-
- 
-
   render() {
     return (
       <Stack className={Style.container}>
@@ -58,14 +53,26 @@ class S_Header extends React.Component {
             title="Student [hieudmse161153]"
             id="nav-dropdown"
           >
-            <NavDropdown.Item onClick={() => this.handleViewProfileClick()}>
+            <NavDropdown.Item>
               <FontAwesomeIcon
                 icon={faUser}
                 style={{ color: "#000000", paddingRight: " 5px" }}
               />
-              View Profile
+
+              <NavLink
+                to="/s_view_profile"
+                style={({ isActive, isPending }) => {
+                  return {
+                    fontWeight: isActive ? "bold" : "",
+                    color: isPending ? "red" : "black",
+                    textDecoration: "none",
+                  };
+                }}
+              >
+                View Profile
+              </NavLink>
             </NavDropdown.Item>
-            <NavDropdown.Item >
+            <NavDropdown.Item>
               <FontAwesomeIcon
                 icon={faUserPen}
                 style={{ color: "#000000", paddingRight: " 5px" }}
@@ -124,7 +131,6 @@ class S_Header extends React.Component {
           />
         </Stack>
         {this.state.activePage === "ViewProfile" && <S_ViewProfile />}
-
       </Stack>
     );
   }

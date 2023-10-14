@@ -10,6 +10,8 @@ import L_home from "./Pages/lecturer/L_Home";
 import S_home from "./Pages/student/S_Home";
 import S_ViewProfile from "./Pages/student/S_ViewProfile";
 import L_ViewProfile from "./Pages/lecturer/L_ViewProfile";
+import S_UserForm from "./Pages/student/S_UserForm";
+import Calender_type from "./components/Calender_type";
 function App() {
   return (
     <div className="App">
@@ -27,11 +29,15 @@ function App() {
           <Route path="/student_home">
             <S_home />
           </Route>
+          <Route path="/s_userform">
+            <S_UserForm />
+          </Route>
+
           <Route path="/s_view_profile">
             <S_ViewProfile />
           </Route>
           <Route path="/l_view_profile">
-            <L_ViewProfile/>
+            <L_ViewProfile />
           </Route>
           <Route path="*">
             <Nopage />

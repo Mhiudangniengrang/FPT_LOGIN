@@ -39,18 +39,11 @@ class S_ViewProfile extends React.Component {
               <Card className="my-4">
                 <Card.Body className="py-2 ">
                   <Row>
-                    <Col md={3}>
-                      <Image
-                        className="py-3"
-                        src={student}
-                        alt="User Image"
-                        fluid
-                      />
-                    </Col>
-                    <Col md={9} className="py-3">
+                    
+                    <Col md={9} className="py-1">
                       <h5>Name:</h5>
                       <p>Duong Minh Hieu(K16-HCM)</p>
-                      <h5>Email:</h5>
+                      <h5>Email Address:</h5>
                       <p>hieudmse161153@fpt.edu.vn</p>
                     </Col>
                   </Row>
