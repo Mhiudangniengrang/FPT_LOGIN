@@ -12,10 +12,7 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "bootstrap": "^5.3.2",
-<<<<<<< HEAD
-=======
     "font-awesome": "^4.7.0",
->>>>>>> 3642c7e3f0fbbac191afd418488231e310a59d81
     "react": "^17.0.2",
     "react-bootstrap": "^2.9.0",
     "react-dom": "^17.0.2",
