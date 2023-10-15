@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Table } from 'react-bootstrap';
 
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import 'react-datepicker/dist/react-datepicker-cssmodules.css';
-import CurrentWeekDatePicker from './CurrentWeekDatePicker';
 
 function WeeklyCalendar() {
     const [selectedDate, setSelectedDate] = useState(new Date());
@@ -12,6 +11,11 @@ function WeeklyCalendar() {
     startOfWeek.setDate(selectedDate.getDate() - selectedDate.getDay());
     const endOfWeek = new Date(selectedDate);
     endOfWeek.setDate(selectedDate.getDate() - selectedDate.getDay() + 6);
+
+    const [cellContents, setCellContents] = useState({});
+    const [clickedCell, setClickedCell] = useState(null);
+
+    const [isModalOpen, setModalOpen] = useState(false);
 
     const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
@@ -36,9 +40,27 @@ function WeeklyCalendar() {
         return `${day}/${month < 10 ? `0${month}` : month}`;
     };
     const daysInWeek = daysBetween();
+
+    const handleDayClick = (day, timeSlot) => {
+        // Update the content for the clicked day and time slot
+        setCellContents((prevContents) => ({
+            ...prevContents,
+            [day]: {
+                ...prevContents[day],
+                [timeSlot]: 'Your Updated Content',
+            },
+        }));
+
+        // Set the clicked cell for applying the animation
+        setClickedCell({ day, timeSlot });
+        setModalOpen(true);
+    };
+    const closeForm = () => {
+        setModalOpen(false);
+    };
     return (
         <div>
-            <h1>{formatDate(startOfWeek) + ' - ' + formatDate(endOfWeek)}</h1>
+            <h3>{formatDate(startOfWeek) + ' - ' + formatDate(endOfWeek)}</h3>
 
             <Table responsive striped bordered>
                 <thead>
@@ -70,7 +92,10 @@ function WeeklyCalendar() {
                         <tr key={slot}>
                             <td>{slot}</td>
                             {daysOfWeek.map(day => (
-                                <td key={day}>
+                                <td
+                                    onClick={() => handleDayClick(day, slot)}
+                                    key={day}>
+                                    {cellContents[day] && cellContents[day][slot] ? cellContents[day][slot] : ''}
 
                                 </td>
                             ))}
@@ -78,6 +103,7 @@ function WeeklyCalendar() {
                     ))}
                 </tbody>
             </Table>
+
         </div >
     );
 }

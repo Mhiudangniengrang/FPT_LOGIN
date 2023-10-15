@@ -21,6 +21,7 @@ function CurrentWeekDatePicker() {
                 min={formattedStartDate}
                 max={formattedEndDate}
                 onChange={(e) => setSelectedDate(new Date(e.target.value))}
+
             />
         </div>
     );
