@@ -1,11 +1,10 @@
 import React, { Component } from "react";
-import { Container, Row, Col, Card } from "react-bootstrap";
 
 class S_EditProfile extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      description: "", // Initialize description and interest fields as empty strings
+      description: "",
       interest: "",
     };
   }
@@ -19,16 +18,14 @@ class S_EditProfile extends Component {
   };
 
   handleUpdateProfile = () => {
-    // Handle the update profile logic here
-    // You can use this.state.description and this.state.interest to get the user's input
+    const { description, interest } = this.state;
+    this.props.onUpdateProfile(description, interest);
   };
 
   render() {
     return (
       <div>
-       
-          <h3>Edit Profile</h3>
-        
+        <h3>Edit Profile</h3>
 
         <form>
           <div className="form-group">
@@ -41,7 +38,7 @@ class S_EditProfile extends Component {
             />
           </div>
           <div className="form-group">
-            <label>Interest:</label>
+            <label>Interests:</label>
             <input
               type="text"
               className="form-control"
@@ -51,7 +48,7 @@ class S_EditProfile extends Component {
           </div>
           <button
             type="button"
-            className="btn btn-primary"
+            className="btn btn-primary my-3"
             onClick={this.handleUpdateProfile}
           >
             Update Profile

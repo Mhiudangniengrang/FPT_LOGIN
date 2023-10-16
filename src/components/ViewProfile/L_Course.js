@@ -13,18 +13,22 @@ class L_Course extends React.Component {
 
         <div>
           <div style={{ float: "left", width: "50%", padding: "15px" }}>
-            <FontAwesomeIcon icon={faBriefcase} /> SWP391
+            <FontAwesomeIcon icon={faBriefcase} /> CSI104 - Introduction to
+            Computing
             <br />
-            <FontAwesomeIcon icon={faBriefcase} /> SWR301
+            <FontAwesomeIcon icon={faBriefcase} /> SWT301 - Software Testing
             <br />
-            <FontAwesomeIcon icon={faBriefcase} /> SWT302
+            <FontAwesomeIcon icon={faBriefcase} /> SWE102 - Introduction to
+            Software Engineering
           </div>
           <div style={{ float: "left", width: "50%", padding: "15px" }}>
-            <FontAwesomeIcon icon={faBriefcase} /> SWE201C
+            <FontAwesomeIcon icon={faBriefcase} /> SWR301 - Software Requirement
             <br />
-            <FontAwesomeIcon icon={faBriefcase} /> PRN211
+            <FontAwesomeIcon icon={faBriefcase} /> SWP391 - Application
+            Development Project
             <br />
-            <FontAwesomeIcon icon={faBriefcase} /> PRF192
+            <FontAwesomeIcon icon={faBriefcase} /> CEA201 - Computer
+            Organization and Architecture
           </div>
         </div>
       </div>

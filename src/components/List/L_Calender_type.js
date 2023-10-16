@@ -1,10 +1,10 @@
 import React from "react";
 import { Button, Card } from "react-bootstrap";
-// import { NavLink } from "react-router-dom";
-// import List from "./L_List";
-// import S_Layout from "../Layouts/S_Layout";
+import { NavLink } from "react-router-dom";
+import List from "./L_List";
+import S_Layout from "../../Layouts/S_Layout";
 
-class Calender_type extends React.Component {
+class L_Calender_type extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -19,7 +19,7 @@ class Calender_type extends React.Component {
   render() {
     return (
       <>
-        
+        <S_Layout>
           <div className=" text-end">
             <div className="btn-group p-3">
               <Button
@@ -82,14 +82,25 @@ class Calender_type extends React.Component {
                 <p>Month content goes here.</p>
               )}
               {this.state.activeButton === "list" && (
-                <p>Month content goes here</p>
+                <NavLink
+                  to="/l_calender_type"
+                  style={({ isActive, isPending }) => {
+                    return {
+                      fontWeight: isActive ? "bold" : "",
+                      color: isPending ? "red" : "black",
+                      textDecoration: "none",
+                    };
+                  }}
+                >
+                  <List />
+                </NavLink>
               )}
             </div>
           )}{" "}
-      
+        </S_Layout>
       </>
     );
   }
 }
 
-export default Calender_type;
+export default L_Calender_type;

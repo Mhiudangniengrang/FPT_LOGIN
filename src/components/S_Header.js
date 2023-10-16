@@ -134,7 +134,6 @@ class S_Header extends React.Component {
             link="/"
           />
         </Stack>
-        {this.state.activePage === "ViewProfile" && <S_ViewProfile />}
       </Stack>
     );
   }
