@@ -14,36 +14,35 @@ import NavDropdown from "react-bootstrap/NavDropdown";
 import { Stack } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 
-import FormSearch from "./FormSearch";
 import HorizontalStack from "./HorizontalStack";
 import CustomNavDropdown from "./DropDownStack";
 import S_ViewProfile from "../Pages/student/S_ViewProfile"; // Adjust the path as needed
 const dropdownItems = [
-    {
-        link: "",
-        desc: "View Schedule",
-    },
-    {
-        link: "",
-        desc: "Book slot",
-    },
-    {
-        link: "",
-        desc: "Send Request",
-    },
+  {
+    link: "",
+    desc: "View Schedule",
+  },
+  {
+    link: "",
+    desc: "Book slot",
+  },
+  {
+    link: "",
+    desc: "Send Request",
+  },
 ];
 
 class S_Header extends React.Component {
-    constructor() {
-        super();
-        this.state = {
-            activePage: null,
-        };
-    }
-
-    handleViewProfileClick = () => {
-        this.setState({ activePage: "ViewProfile" });
+  constructor() {
+    super();
+    this.state = {
+      activePage: null,
     };
+  }
+
+  handleViewProfileClick = () => {
+    this.setState({ activePage: "ViewProfile" });
+  };
 
   render() {
     return (
@@ -103,7 +102,6 @@ class S_Header extends React.Component {
           <h1 style={{ color: "#fff", fontWeight: "700", margin: "0" }}>
             MML - MEET MY LECTURER
           </h1>
-          <FormSearch />
         </Stack>
         <Stack direction="horizontal" gap={5} className={Style.div3}>
           <HorizontalStack icon={faHouse} text="Home" link="/" />
