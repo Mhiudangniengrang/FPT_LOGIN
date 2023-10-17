@@ -2,7 +2,7 @@ import React from "react";
 import { Button, Card } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 import List from "./L_List";
-import S_Layout from "../../Layouts/S_Layout";
+import L_Layout from "../../Layouts/L_Layout";
 
 class L_Calender_type extends React.Component {
   constructor(props) {
@@ -19,7 +19,7 @@ class L_Calender_type extends React.Component {
   render() {
     return (
       <>
-        <S_Layout>
+        <L_Layout>
           <div className=" text-end">
             <div className="btn-group p-3">
               <Button
@@ -97,7 +97,7 @@ class L_Calender_type extends React.Component {
               )}
             </div>
           )}{" "}
-        </S_Layout>
+        </L_Layout>
       </>
     );
   }

@@ -1,7 +1,15 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
-import { Container, Row, Col, Card, Button, Image, CardBody } from "react-bootstrap";
+import {
+  Container,
+  Row,
+  Col,
+  Card,
+  Button,
+  Image,
+  CardBody,
+} from "react-bootstrap";
 import S_Aboutme from "../../components/ViewProfile/S_Aboutme";
 import S_EditProfile from "../../components/ViewProfile/S_EditProfile";
 import S_Course from "../../components/ViewProfile/S_Course";
@@ -12,22 +20,26 @@ class S_ViewProfile extends React.Component {
     super(props);
     this.state = {
       activeTab: "aboutMe",
-      description: "", // Initialize description and interest in S_ViewProfile state
-      interest: "",
+      description: "", // Initialize description and course in S_ViewProfile state
+      course: [],
     };
   }
 
   setActiveTab = (tab) => {
     this.setState({ activeTab: tab });
   };
+  handleUpdateProfile = (description, selectedSubjects) => {
+    // Tạo một mảng mới chứa các môn học đã chọn
+    const course = selectedSubjects.map((subject) => ({
+      id: subject.id,
+      name: subject.name,
+    }));
 
-  handleUpdateProfile = (description, interest) => {
-    // Update the description and interest in S_ViewProfile state
-    this.setState({ description, interest });
+    this.setState({ description, course });
   };
 
   render() {
-    const { activeTab, description, interest } = this.state;
+    const { activeTab, description, course } = this.state;
 
     return (
       <S_Layout>
@@ -46,7 +58,7 @@ class S_ViewProfile extends React.Component {
               <Card className="my-4">
                 <Card.Body className="py-2">
                   <Row>
-                    <Col md={6} className="py-1">
+                    <Col md={6} className="py-2">
                       <h5>Name:</h5>
                       <p>Duong Minh Hieu(K16-HCM)</p>
                       <h5>Email Address:</h5>
@@ -67,16 +79,29 @@ class S_ViewProfile extends React.Component {
                         Course
                       </Button>
                       <Button
-                        variant={activeTab === "editprofile" ? "success" : "dark"}
+                        variant={
+                          activeTab === "editprofile" ? "success" : "dark"
+                        }
                         onClick={() => this.setActiveTab("editprofile")}
                       >
                         Edit profile
                       </Button>
                       <Card className="my-3">
                         <CardBody>
-                          {activeTab === "aboutMe" && <S_Aboutme description={description} interest={interest} />}
-                          {activeTab === "course" && <S_Course />}
-                          {activeTab === "editprofile" && <S_EditProfile onUpdateProfile={this.handleUpdateProfile} />}
+                          {activeTab === "aboutMe" && (
+                            <S_Aboutme
+                              description={description}
+                              course={course}
+                            />
+                          )}
+                          {activeTab === "course" && (
+                            <S_Course course={course} />
+                          )}
+                          {activeTab === "editprofile" && (
+                            <S_EditProfile
+                              onUpdateProfile={this.handleUpdateProfile}
+                            />
+                          )}
                         </CardBody>
                       </Card>
                     </Col>

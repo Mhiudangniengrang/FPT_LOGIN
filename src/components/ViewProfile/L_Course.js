@@ -1,36 +1,25 @@
 import React from "react";
-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { faBriefcase } from "@fortawesome/free-solid-svg-icons";
 class L_Course extends React.Component {
   render() {
+    const { course } = this.props;
+
     return (
       <div>
-        <h3 className="font-weight-bold">Course</h3>
+        <strong>Course:</strong>
 
-        <strong style={{ padding: "5px" }}>Course Profile:</strong>
-
-        <div>
-          <div style={{ float: "left", width: "50%", padding: "15px" }}>
-            <FontAwesomeIcon icon={faBriefcase} /> CSI104 - Introduction to
-            Computing
-            <br />
-            <FontAwesomeIcon icon={faBriefcase} /> SWT301 - Software Testing
-            <br />
-            <FontAwesomeIcon icon={faBriefcase} /> SWE102 - Introduction to
-            Software Engineering
+        {Array.isArray(course) ? (
+          <div>
+            {course.map((subject) => (
+              <div className="d-flex">
+                <FontAwesomeIcon className="my-1 mx-2" icon={faBriefcase} />
+                <p key={subject.id}>{subject.name}</p>
+              </div>
+            ))}
           </div>
-          <div style={{ float: "left", width: "50%", padding: "15px" }}>
-            <FontAwesomeIcon icon={faBriefcase} /> SWR301 - Software Requirement
-            <br />
-            <FontAwesomeIcon icon={faBriefcase} /> SWP391 - Application
-            Development Project
-            <br />
-            <FontAwesomeIcon icon={faBriefcase} /> CEA201 - Computer
-            Organization and Architecture
-          </div>
-        </div>
+        ) : null}
       </div>
     );
   }

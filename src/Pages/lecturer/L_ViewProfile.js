@@ -1,48 +1,43 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
-import {
-  Container,
-  Row,
-  Col,
-  Card,
-  Button,
-  Image,
-  CardBody,
-} from "react-bootstrap";
-import L_Aboutme from "../../components/ViewProfile/S_Aboutme";
-import L_EditProfile from "../../components/ViewProfile/S_EditProfile";
+import { Container, Row, Col, Card, Button, CardBody } from "react-bootstrap";
+import L_Aboutme from "../../components/ViewProfile/L_Aboutme";
+import L_EditProfile from "../../components/ViewProfile/L_EditProfile";
 import L_Course from "../../components/ViewProfile/L_Course";
-import L_Layout from "../../Layouts/S_Layout";
-
+import L_Layout from "../../Layouts/L_Layout";
 class L_ViewProfile extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       activeTab: "aboutMe",
-      description: "", // Initialize description and interest in S_ViewProfile state
-      interest: "",
+      description: "", // Initialize description and course in S_ViewProfile state
+      course: [],
     };
   }
 
   setActiveTab = (tab) => {
     this.setState({ activeTab: tab });
   };
+  handleUpdateProfile = (description, selectedSubjects) => {
+    // Tạo một mảng mới chứa các môn học đã chọn
+    const course = selectedSubjects.map((subject) => ({
+      id: subject.id,
+      name: subject.name,
+    }));
 
-  handleUpdateProfile = (description, interest) => {
-    // Update the description and interest in S_ViewProfile state
-    this.setState({ description, interest });
+    this.setState({ description, course });
   };
 
   render() {
-    const { activeTab, description, interest } = this.state;
+    const { activeTab, description, course } = this.state;
 
     return (
       <L_Layout>
         <Container>
           <Row>
             <Col md={4}>
-              <Card className="my-2">
+              <Card className="my-2  ">
                 <Card.Header>
                   <FontAwesomeIcon icon={faUser} /> View Profile
                 </Card.Header>
@@ -51,10 +46,10 @@ class L_ViewProfile extends React.Component {
           </Row>
           <Row>
             <Col md={12}>
-              <Card className="my-4">
-                <Card.Body className="py-2">
+              <Card className="my-4 ">
+                <Card.Body className="py-2 ">
                   <Row>
-                    <Col md={6} className="py-1">
+                    <Col md={6} className="py-2">
                       <h5>Name:</h5>
                       <p>Hungld FU HCM Lại Đức Hùng</p>
                       <h5>Email Address:</h5>
@@ -87,10 +82,12 @@ class L_ViewProfile extends React.Component {
                           {activeTab === "aboutMe" && (
                             <L_Aboutme
                               description={description}
-                              interest={interest}
+                              course={course}
                             />
                           )}
-                          {activeTab === "course" && <L_Course />}
+                          {activeTab === "course" && (
+                            <L_Course course={course} />
+                          )}
                           {activeTab === "editprofile" && (
                             <L_EditProfile
                               onUpdateProfile={this.handleUpdateProfile}
