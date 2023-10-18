@@ -5,8 +5,8 @@ function Breadcrumbs({ items }) {
     return (
         <Breadcrumb>
             {items.map((item, index) => (
-                <Breadcrumb.Item key={index}>
-                    <NavLink to={item.route}>{item.text}</NavLink>
+                <Breadcrumb.Item key={index} href={item.route}>
+                    {item.text}
                 </Breadcrumb.Item>
             ))}
         </Breadcrumb>

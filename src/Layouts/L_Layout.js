@@ -8,7 +8,9 @@ const L_Layout = ({ children }) => {
     return (
         <Container fluid style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
             <L_Header />
-            <Container>
+            <Container style={{
+                flex: '1'
+            }}>
                 {children}
             </Container>
             <Footer />

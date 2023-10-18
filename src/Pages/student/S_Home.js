@@ -4,7 +4,11 @@ import WeeklyCalendar from "../../components/Schedule/Week";
 
 import "react-datepicker/dist/react-datepicker.css";
 import FormSearch from "../../components/FormSearch";
-import FormOverlay from "../../components/Schedule/FormOverlay";
+import BookPublicOverlay from "../../components/Schedule/BookPublicOverlay";
+import OffCanvasSidebar from "../../components/OffCanvasSidebar";
+import BookPrivateOverlay from "../../components/Schedule/BookPrivateOverlay";
+import Month from "../../components/Schedule/Month";
+
 class S_home extends React.Component {
 
 
@@ -12,9 +16,9 @@ class S_home extends React.Component {
     return (
       <>
         <S_Layout>
+          <OffCanvasSidebar />
           <FormSearch />
-          <WeeklyCalendar />
-          <FormOverlay />
+          <Month />
         </S_Layout>
       </>
     );

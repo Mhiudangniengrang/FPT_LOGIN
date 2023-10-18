@@ -12,16 +12,16 @@ function CurrentWeekDatePicker() {
     const formattedStartDate = format(startOfCurrentWeek, 'yyyy-MM-dd');
     const formattedEndDate = format(endOfCurrentWeek, 'yyyy-MM-dd');
 
+
+
     return (
         <div>
-            <h1>Select a date for the current week ({formattedStartDate} - {formattedEndDate}):</h1>
             <input
                 type="date"
                 value={format(selectedDate, 'yyyy-MM-dd')}
                 min={formattedStartDate}
                 max={formattedEndDate}
                 onChange={(e) => setSelectedDate(new Date(e.target.value))}
-
             />
         </div>
     );

@@ -1,71 +1,72 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useContext } from 'react';
 import { Table } from 'react-bootstrap';
+import GlobalContext from '../../context/GlobalContext';
 
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import 'react-datepicker/dist/react-datepicker-cssmodules.css';
-
+import { format, addDays, startOfWeek } from 'date-fns';
+import { getDaysInWeek, getStartOfWeekFormatted, } from '../../Utils/dateUtils';
+import BookPublicOverlay from './BookPublicOverlay';
+import { useEffect } from 'react';
 function WeeklyCalendar() {
+
+    const { setShowSlotModal, setSelectedSlot } = useContext(GlobalContext);
+
     const [selectedDate, setSelectedDate] = useState(new Date());
-    const startOfWeek = new Date(selectedDate);
-    startOfWeek.setDate(selectedDate.getDate() - selectedDate.getDay());
-    const endOfWeek = new Date(selectedDate);
-    endOfWeek.setDate(selectedDate.getDate() - selectedDate.getDay() + 6);
 
-    const [cellContents, setCellContents] = useState({});
-    const [clickedCell, setClickedCell] = useState(null);
-
-    const [isModalOpen, setModalOpen] = useState(false);
+    const [clickedCells, setClickedCells] = useState({});
 
     const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
     const timeSlots = ['Slot 1', 'Slot 2', 'Slot 3', 'Slot 4', 'Slot 5', 'Slot 6'];
 
-    const daysBetween = () => {
-        var daysOfBetween = [];
-        for (let d = new Date(startOfWeek); d <= endOfWeek; d.setDate(d.getDate() + 1)) {
-            daysOfBetween.push(formatDate2(d));
-        }
-        return daysOfBetween;
-    };
-    const formatDate = (date) => {
-        const day = date.getDate();
-        const month = date.getMonth() + 1; // Month is 0-based, so we add 1
-        const year = date.getFullYear();
-        return `${day}/${month < 10 ? `0${month}` : month}/${year}`;
-    };
-    const formatDate2 = (date) => {
-        const day = date.getDate();
-        const month = date.getMonth() + 1; // Month is 0-based, so we add 1
-        return `${day}/${month < 10 ? `0${month}` : month}`;
-    };
-    const daysInWeek = daysBetween();
+    function getDateForCell(day) {
+        const dayStart = startOfWeek(selectedDate);
+        const currentDate = addDays(dayStart, day);
+        return currentDate;
+    }
 
     const handleDayClick = (day, timeSlot) => {
-        // Update the content for the clicked day and time slot
-        setCellContents((prevContents) => ({
-            ...prevContents,
-            [day]: {
-                ...prevContents[day],
-                [timeSlot]: 'Your Updated Content',
-            },
+        const cellKey = `${day}-${timeSlot}`;
+
+        // Toggle the clicked state for the cell
+        setClickedCells((prevClickedCells) => ({
+            ...prevClickedCells,
+            [cellKey]: !prevClickedCells[cellKey],
         }));
 
-        // Set the clicked cell for applying the animation
-        setClickedCell({ day, timeSlot });
-        setModalOpen(true);
+
+        let i = daysOfWeek.indexOf(day);
+        let j = timeSlots.indexOf(timeSlot);
+        let currDate = getDateForCell(i);
+        setSelectedDate(currDate);
+        setSelectedSlot((prevSlot) => ({
+            ...prevSlot,
+            'slot': {
+                teacher: 'hungld',
+                slot: j + 1,
+                date: selectedDate,
+                time: '7:00 - 7:30',
+                room: '610 - NVH',
+                duration: 30,
+                status: 'wait',
+            }
+
+        }));
+
+        setShowSlotModal(true);
     };
-    const closeForm = () => {
-        setModalOpen(false);
-    };
+
     return (
         <div>
-            <h3>{formatDate(startOfWeek) + ' - ' + formatDate(endOfWeek)}</h3>
-
             <Table responsive striped bordered>
                 <thead>
                     <tr>
-                        <th rowSpan={'2'}>
+                        <th rowSpan={'2'}
+                            style={{ width: '200px' }}
+                        >
+                            <h6>Choose date</h6>
                             <DatePicker
                                 onChange={(date) => setSelectedDate(date)}
                                 value={selectedDate}
@@ -79,7 +80,7 @@ function WeeklyCalendar() {
                     </tr>
                     <tr>
                         {
-                            daysInWeek.map((day, index) => (
+                            getDaysInWeek(selectedDate).map((day, index) => (
                                 <th key={index}>{day}</th>
                             ))
                         }
@@ -95,15 +96,14 @@ function WeeklyCalendar() {
                                 <td
                                     onClick={() => handleDayClick(day, slot)}
                                     key={day}>
-                                    {cellContents[day] && cellContents[day][slot] ? cellContents[day][slot] : ''}
-
+                                    {clickedCells[`${day}-${slot}`] && <BookPublicOverlay />}
                                 </td>
                             ))}
                         </tr>
                     ))}
+
                 </tbody>
             </Table>
-
         </div >
     );
 }

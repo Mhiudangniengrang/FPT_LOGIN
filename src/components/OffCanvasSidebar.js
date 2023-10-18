@@ -10,7 +10,7 @@ function OffCanvasSidebar() {
     return (
         <div>
             {/* Navbar with a button to open the sidebar */}
-            <nav className="navbar navbar-expand-lg navbar-light bg-light">
+            <nav className="navbar navbar-expand-lg navbar-light bg-light d-lg-none">
                 <Button variant="light" onClick={openSidebar}>
                     <span className="navbar-toggler-icon"></span>
                 </Button>
@@ -30,13 +30,6 @@ function OffCanvasSidebar() {
                     </ListGroup>
                 </Offcanvas.Body>
             </Offcanvas>
-
-            {/* Page content */}
-            <div className={`content ${showSidebar ? 'offcanvas-open' : ''}`}>
-                {/* Page content goes here */}
-                <h2>Main Content</h2>
-                <p>This is the main content of your page.</p>
-            </div>
         </div>
     );
 }
