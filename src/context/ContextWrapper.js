@@ -1,6 +1,8 @@
 import { useState, useEffect, useReducer } from "react";
 import GlobalContext from "./GlobalContext";
 
+import dayjs from "dayjs";
+
 function savedSlotsReducer(state, { type, payload }) {
     switch (payload) {
         case "add":
@@ -46,6 +48,7 @@ function initSlots() {
 // }, [])
 
 export default function ContextWrapper(props) {
+    const [monthIndex, setMonthIndex] = useState(dayjs().month());
     const [showSlotModal, setShowSlotModal] = useState(false)
     const [daySelected, setDaySelected] = useState(null);
     const [selectedSlot, setSelectedSlot] = useState(null);
@@ -65,6 +68,8 @@ export default function ContextWrapper(props) {
     return (
         <GlobalContext.Provider
             value={{
+                monthIndex,
+                setMonthIndex,
                 showSlotModal,
                 setShowSlotModal,
                 daySelected,

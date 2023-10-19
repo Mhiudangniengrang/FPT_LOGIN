@@ -54,11 +54,6 @@ function WeeklyCalendar() {
 
     const [selectedDate, setSelectedDate] = useState(new Date());
 
-    useEffect(() => {
-        // This effect will run every time selectedDate changes
-        console.log(selectedDate);
-    }, [selectedDate]);
-
     function getDateForCell(day) {
         const dayStart = startOfWeek(selectedDate);
         const currentDate = addDays(dayStart, day);
@@ -77,7 +72,7 @@ function WeeklyCalendar() {
             'slot': {
                 teacher: 'hungld',
                 slot: j + 1,
-                date: currDate,
+                date: format(currDate, 'dd/MM/yyy'),
                 time: `${time}`,
                 room: '610 - NVH',
                 duration: 30,

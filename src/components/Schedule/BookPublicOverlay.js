@@ -62,7 +62,7 @@ function BookPublicOverlay() {
                         <Stack direction='vertical'>
                             <p>Lecturer: {slotData.teacher}</p>
                             <p>Slot: {slotData.slot}</p>
-                            <p>Date : {getDateFormat(slotData.date)}</p>
+                            <p>Date : {slotData.date}</p>
                             <p>Time : {slotData.time}</p>
                             <p>Room: {slotData.room}</p>
                             <p>Status: {slotData.status}</p>

@@ -1,53 +1,102 @@
 import React, { useContext, useState, useEffect } from "react";
-import { format } from 'date-fns'
-import GlobalContext from "../context/GlobalContext";
+import dayjs from "dayjs";
+import GlobalContext from "../../context/GlobalContext";
 import Style from '../../assets/style/month.module.scss'
 
+const slotTime = [
+    {
+        slot: '1',
+        start: '7:00',
+        end: '9:15'
+    },
+    {
+        slot: '2',
+        start: '9:30',
+        end: '11:45'
+    },
+    {
+        slot: '3',
+        start: '12:30',
+        end: '14:45'
+    },
+    {
+        slot: '4',
+        start: '15:00',
+        end: '17:15'
+    },
+    {
+        slot: '5',
+        start: '17:30',
+        end: '19:45'
+    },
+    {
+        slot: '6',
+        start: '20:00',
+        end: '22:15'
+    },
+]
+
 export default function Day({ day, rowIdx }) {
+
     const [dayEvents, setDayEvents] = useState([]);
     const {
-        setDaySelected,
-        setShowEventModal,
-        setSelectedEvent,
+        setShowSlotModal,
+        setSelectedSlot,
     } = useContext(GlobalContext);
+
     function getCurrentDayClass() {
         const isCurrentDay =
-            format(day, 'dd/MM/yyyy') === format(new Date(), 'dd/MM/yyyy');
+            day.format("DD-MM-YY") === dayjs().format("DD-MM-YY");
 
         return isCurrentDay ? Style.dayCurr : '';
     }
+    const handleDayClick = () => {
+        setShowSlotModal(true);
+        const value = slotTime.find(item => item.slot == 1)
+        let time = `${value.start} - ${value.end}`
+        setSelectedSlot(() => ({
+            'slot': {
+                teacher: 'hungld',
+                slot: 1,
+                date: day.format("DD-MM-YY"),
+                time: `${time}`,
+                room: '610 - NVH',
+                duration: 30,
+                status: 'wait',
+            }
+        }));
+    };
 
     return (
         <div className={Style.container}>
             <header className={Style.header}>
                 {rowIdx === 0 && (
                     <p className={Style.dayRow}>
-                        {format(day, 'dd').toUpperCase()}
+                        {day.format("ddd").toUpperCase()}
                     </p>
                 )}
                 <p
                     id="dateCurr"
                     className={`${Style.day}  ${getCurrentDayClass()}`}
                 >
-                    {format(day, 'DD')}
+                    {day.format("DD")}
                 </p>
             </header>
             <div
-                className="flex-1 cursor-pointer"
+                className={Style.daySelect}
                 onClick={() => {
-                    setDaySelected(day);
-                    setShowEventModal(true);
+                    handleDayClick();
                 }}
             >
-                {dayEvents.map((evt, idx) => (
+                {/* {dayEvents.map((evt, idx) => (
                     <div
                         key={idx}
-                        onClick={() => setSelectedEvent(evt)}
-                        className={`bg-${evt.label}-200 p-1 mr-3 text-gray-600 text-sm rounded mb-1 truncate`}
+                        onClick={() => setSelectedSlot(evt)}
+                        className={Style.dayEvent}
                     >
                         {evt.title}
                     </div>
-                ))}
+                ))} */}
             </div>
         </div>
     );
