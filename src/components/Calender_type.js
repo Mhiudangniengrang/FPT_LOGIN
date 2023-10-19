@@ -1,11 +1,12 @@
 import React from "react";
 import { Button, Card } from "react-bootstrap";
+import WeeklyCalendar from "./Schedule/Week";
 
 class Calender_type extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      activeButton: null, // Initially, no button is active
+      activeButton: "week",
     };
   }
 
@@ -16,8 +17,8 @@ class Calender_type extends React.Component {
   render() {
     return (
       <>
-        <div className=" p-5 my-5 mx-5 text-end">
-          <div className="btn-group p-4 mx-5">
+        <div className="text-end">
+          <div className="btn-group">
             <Button
               variant="secondary"
               onClick={() => this.handleButtonClick("day")}
@@ -72,7 +73,7 @@ class Calender_type extends React.Component {
                 <p>Day content goes here.</p>
               )}
               {this.state.activeButton === "week" && (
-                <p>Week content goes here.</p>
+                <WeeklyCalendar />
               )}
               {this.state.activeButton === "month" && (
                 <p>Month content goes here.</p>

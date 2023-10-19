@@ -19,7 +19,6 @@ const S_Layout = ({ children }) => {
             <S_Header />
             <Container
                 style={{ flex: '1' }}
-                onClick={() => setShowSlotModal(false)}
             >
                 {children}
             </Container>

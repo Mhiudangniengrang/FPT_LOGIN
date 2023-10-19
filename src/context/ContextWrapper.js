@@ -58,7 +58,6 @@ export default function ContextWrapper(props) {
 
     useEffect(() => {
         if (!showSlotModal) {
-            // 3 state selected slot + showModal + showFullScreen
             setSelectedSlot(null);
         }
     }, [showSlotModal]);

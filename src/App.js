@@ -11,7 +11,6 @@ import S_home from "./Pages/student/S_Home";
 import S_ViewProfile from "./Pages/student/S_ViewProfile";
 import L_ViewProfile from "./Pages/lecturer/L_ViewProfile";
 import S_UserForm from "./Pages/student/S_UserForm";
-import Calender_type from "./components/Calender_type";
 function App() {
   return (
     <div className="App">

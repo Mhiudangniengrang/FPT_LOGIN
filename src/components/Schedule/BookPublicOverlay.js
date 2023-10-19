@@ -12,14 +12,17 @@ import GlobalContext from '../../context/GlobalContext';
 import { useState } from 'react';
 import { getDateFormat } from '../../Utils/dateUtils'
 
-
 const subjects = [
     'SWP301', 'SWR301', 'SWT301', 'PRF192', 'CEA201'
 ]
 
 function BookPublicOverlay() {
 
-    const { setShowSlotModal, selectedSlot } = useContext(GlobalContext)
+    const { showSlotModal, setShowSlotModal, selectedSlot } = useContext(GlobalContext)
+    console.log("BookPublic:" + showSlotModal)
+    const [description, setDescription] = useState(
+        selectedSlot ? selectedSlot.description : ""
+    );
 
     const slotData = selectedSlot['slot']
 
@@ -30,10 +33,6 @@ function BookPublicOverlay() {
 
     return (
         <>
-
-            {
-                console.log(selectedSlot.teacher)
-            }
             <div className={Style.box}>
                 <div className={Style.box_content}>
                     <div
@@ -62,6 +61,7 @@ function BookPublicOverlay() {
                         </Stack>
                         <Stack direction='vertical'>
                             <p>Lecturer: {slotData.teacher}</p>
+                            <p>Slot: {slotData.slot}</p>
                             <p>Date : {getDateFormat(slotData.date)}</p>
                             <p>Time : {slotData.time}</p>
                             <p>Room: {slotData.room}</p>
@@ -71,11 +71,11 @@ function BookPublicOverlay() {
                             <div className={Style.subjects}>
                                 {subjects.map(subject => {
                                     return (
-                                        <div className={Style.contain}>
+                                        <button type='radio' className={Style.contain}>
                                             <span
                                                 className={Style.span}
                                             >{subject}</span>
-                                        </div>
+                                        </button>
                                     )
                                 }
                                 )}
@@ -88,9 +88,9 @@ function BookPublicOverlay() {
                                         rows="4"
                                         maxLength='200'
                                         placeholder='Enter your purpose (200 words)'
+                                        onChange={(e) => setDescription(e.target.value)}
                                     ></textarea>
-
-                                    <button className={Style.book_btn} type='submit'>Book</button>
+                                    <button className={Style.book_btn} type='submit' onSubmit={() => handleSubmit}>Book</button>
                                 </Stack>
                             </form>
                         </Stack>

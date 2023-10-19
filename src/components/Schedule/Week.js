@@ -9,57 +9,87 @@ import { format, addDays, startOfWeek } from 'date-fns';
 import { getDaysInWeek, getStartOfWeekFormatted, } from '../../Utils/dateUtils';
 import BookPublicOverlay from './BookPublicOverlay';
 import { useEffect } from 'react';
-function WeeklyCalendar() {
+import BookPrivateOverlay from './BookPrivateOverlay';
 
-    const { setShowSlotModal, setSelectedSlot } = useContext(GlobalContext);
+
+const slotTime = [
+    {
+        slot: '1',
+        start: '7:00',
+        end: '9:15'
+    },
+    {
+        slot: '2',
+        start: '9:30',
+        end: '11:45'
+    },
+    {
+        slot: '3',
+        start: '12:30',
+        end: '14:45'
+    },
+    {
+        slot: '4',
+        start: '15:00',
+        end: '17:15'
+    },
+    {
+        slot: '5',
+        start: '17:30',
+        end: '19:45'
+    },
+    {
+        slot: '6',
+        start: '20:00',
+        end: '22:15'
+    },
+]
+
+const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+const timeSlots = ['Slot 1', 'Slot 2', 'Slot 3', 'Slot 4', 'Slot 5', 'Slot 6'];
+
+function WeeklyCalendar() {
+    const { setSelectedSlot, showSlotModal, setShowSlotModal } = useContext(GlobalContext);
 
     const [selectedDate, setSelectedDate] = useState(new Date());
 
-    const [clickedCells, setClickedCells] = useState({});
-
-    const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-
-    const timeSlots = ['Slot 1', 'Slot 2', 'Slot 3', 'Slot 4', 'Slot 5', 'Slot 6'];
+    useEffect(() => {
+        // This effect will run every time selectedDate changes
+        console.log(selectedDate);
+    }, [selectedDate]);
 
     function getDateForCell(day) {
         const dayStart = startOfWeek(selectedDate);
         const currentDate = addDays(dayStart, day);
         return currentDate;
     }
-
     const handleDayClick = (day, timeSlot) => {
-        const cellKey = `${day}-${timeSlot}`;
-
-        // Toggle the clicked state for the cell
-        setClickedCells((prevClickedCells) => ({
-            ...prevClickedCells,
-            [cellKey]: !prevClickedCells[cellKey],
-        }));
-
 
         let i = daysOfWeek.indexOf(day);
         let j = timeSlots.indexOf(timeSlot);
         let currDate = getDateForCell(i);
-        setSelectedDate(currDate);
-        setSelectedSlot((prevSlot) => ({
-            ...prevSlot,
+
+        setShowSlotModal(true);
+        const value = slotTime.find(item => item.slot == j + 1)
+        let time = `${value.start} - ${value.end}`
+        setSelectedSlot(() => ({
             'slot': {
                 teacher: 'hungld',
                 slot: j + 1,
-                date: selectedDate,
-                time: '7:00 - 7:30',
+                date: currDate,
+                time: `${time}`,
                 room: '610 - NVH',
                 duration: 30,
                 status: 'wait',
             }
-
         }));
 
-        setShowSlotModal(true);
     };
 
     return (
         <div>
+            {showSlotModal && <BookPrivateOverlay />}
             <Table responsive striped bordered>
                 <thead>
                     <tr>
@@ -68,7 +98,10 @@ function WeeklyCalendar() {
                         >
                             <h6>Choose date</h6>
                             <DatePicker
-                                onChange={(date) => setSelectedDate(date)}
+                                onChange={(date) => {
+                                    setShowSlotModal(false),
+                                        setSelectedDate(date)
+                                }}
                                 value={selectedDate}
                                 selected={selectedDate}
                                 dateFormat={'dd/MM/yyyy'}
@@ -96,7 +129,6 @@ function WeeklyCalendar() {
                                 <td
                                     onClick={() => handleDayClick(day, slot)}
                                     key={day}>
-                                    {clickedCells[`${day}-${slot}`] && <BookPublicOverlay />}
                                 </td>
                             ))}
                         </tr>

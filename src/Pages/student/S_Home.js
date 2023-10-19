@@ -8,6 +8,7 @@ import BookPublicOverlay from "../../components/Schedule/BookPublicOverlay";
 import OffCanvasSidebar from "../../components/OffCanvasSidebar";
 import BookPrivateOverlay from "../../components/Schedule/BookPrivateOverlay";
 import Month from "../../components/Schedule/Month";
+import Calender_type from "../../components/Calender_type";
 
 class S_home extends React.Component {
 
@@ -18,7 +19,7 @@ class S_home extends React.Component {
         <S_Layout>
           <OffCanvasSidebar />
           <FormSearch />
-          <Month />
+          <WeeklyCalendar />
         </S_Layout>
       </>
     );
