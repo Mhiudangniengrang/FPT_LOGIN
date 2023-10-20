@@ -1,0 +1,60 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    border-width: 1px;
+    height: 18vh;
+    border-color: #E5E7EB;
+
+    .header {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        .dayRow {
+            margin-top: 0.25rem;
+            font-size: 0.875rem;
+            line-height: 1.25rem;
+        }
+
+        .day {
+            padding: 0.25rem;
+            margin-top: 0.25rem;
+            margin-bottom: 0.25rem;
+            font-size: 0.875rem;
+            line-height: 1.25rem;
+            text-align: center;
+        }
+
+        .dayCurr {
+            border-radius: 9999px;
+            color: #ffffff;
+            background-color: #2563EB;
+        }
+    }
+
+    .daySelect {
+        cursor: pointer;
+        flex: 1;
+
+        .dayEvent {
+            padding: 0.25rem;
+            margin-bottom: 0.25rem;
+            margin-right: 0.75rem;
+            border-radius: 0.25rem;
+            font-size: 0.875rem;
+            line-height: 1.25rem;
+            color: #4B5563;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+    }
+
+}
+
+.month {
+    display: grid;
+    flex: 1 1 0%;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    grid-template-rows: repeat(5, minmax(0, 1fr));
+}

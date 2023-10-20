@@ -5,9 +5,13 @@ import App from './App';
 
 import reportWebVitals from './reportWebVitals';
 
+import ContextWrapper from './context/ContextWrapper';
+
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <ContextWrapper>
+      <App />
+    </ContextWrapper>
   </React.StrictMode>,
   document.getElementById('root')
 );

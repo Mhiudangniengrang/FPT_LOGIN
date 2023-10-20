@@ -1,0 +1,79 @@
+.box {
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    align-items: center;
+    text-align: left;
+
+    .box_content {
+        display: flex;
+        height: 60vh;
+        overflow-y: auto;
+        width: 400px;
+        background-color: #fff;
+        padding: 10px 10px;
+        color: black;
+        border-radius: 3px;
+        box-shadow: rgba(0, 0, 0, 0.3) 1px 2px 7px 3px;
+
+        .object {
+
+            .purpose {
+                text-align: start;
+                padding: 10px;
+                max-width: 90%;
+                height: 100px;
+            }
+
+            .book_btn {
+                width: 100px;
+                padding: 5px;
+                border: none;
+                border-radius: 10px;
+                background-color: #FB9553;
+                color: #fff;
+                font-weight: bold;
+            }
+
+            #tooltip-right {
+                background-color: #d0dbd1;
+            }
+
+            .code {
+                max-width: 90%;
+            }
+        }
+
+        .subjects {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            justify-content: flex-start;
+
+            .contain {
+                position: relative;
+                width: 80px;
+                height: 40px;
+                border-radius: 20px;
+                background-color: #d0dbd1;
+                margin: 5px 10px 10px 10px;
+                text-align: center;
+
+                .span {
+                    font-size: 14px;
+                    font-weight: bold;
+                    position: absolute;
+                    top: 50%;
+                    transform: translate(-50%, -50%);
+                }
+
+            }
+
+        }
+    }
+}

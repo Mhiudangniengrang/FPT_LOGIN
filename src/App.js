@@ -11,8 +11,8 @@ import S_home from "./Pages/student/S_Home";
 import S_ViewProfile from "./Pages/student/S_ViewProfile";
 import L_ViewProfile from "./Pages/lecturer/L_ViewProfile";
 import S_UserForm from "./Pages/student/S_UserForm";
-import Calender_type from "./components/Calender_type";
-import WeeklyCalendar from "./components/Week";
+import S_Schedule from "./Pages/student/S_Schedule";
+import WeeklyCalendar from "./components/Schedule/Week";
 import L_UserForm from "./Pages/lecturer/L_UserForm";
 import List from "./components/List/S_List";
 import S_Calender_type from "./components/List/S_Calender_type";
@@ -50,20 +50,14 @@ function App() {
           <Route path="/l_user_info">
             <L_UserInfo />
           </Route>
-          <Route path="/calender_type">
-            <Calender_type />
-          </Route>
-          <Route path="/s_calender_type">
-            <S_Calender_type />
-          </Route>
-          <Route path="/l_calender_type">
-            <L_Calender_type />
-          </Route>
           <Route path="/s_view_profile">
             <S_ViewProfile />
           </Route>
           <Route path="/l_view_profile">
             <L_ViewProfile />
+          </Route>
+          <Route path="/s_view_schedule">
+            <S_Schedule />
           </Route>
           <Route path="/s_view_teacher_profile">
             <S_ViewTeacherProfile />

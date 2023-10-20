@@ -15,6 +15,19 @@ import S_EditProfile from "../../components/ViewProfile/S_EditProfile";
 import S_Course from "../../components/ViewProfile/S_Course";
 import S_Layout from "../../Layouts/S_Layout";
 
+import Breadcrumbs from "../../components/BreadcrumpCus";
+
+const breadScrumData = [
+  {
+    route: '/student_home',
+    text: "Home",
+  },
+  {
+    route: '/s_view_profile',
+    text: "View Profile",
+  },
+]
+
 class S_ViewProfile extends React.Component {
   constructor(props) {
     super(props);
@@ -44,6 +57,7 @@ class S_ViewProfile extends React.Component {
     return (
       <S_Layout>
         <Container>
+          <Breadcrumbs items={breadScrumData} />
           <Row>
             <Col md={4}>
               <Card className="my-2">
