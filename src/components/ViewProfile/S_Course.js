@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBriefcase } from "@fortawesome/free-solid-svg-icons";
 class S_Course extends React.Component {
   render() {
-    const { course } = this.props;
+    const { course} = this.props;
 
     return (
       <div>

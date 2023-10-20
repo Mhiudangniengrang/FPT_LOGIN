@@ -8,14 +8,17 @@ import {
   FormGroup,
   Button,
 } from "react-bootstrap";
-import { useLocation } from "react-router-dom";
+import { useLocation,useHistory  } from "react-router-dom";
 import L_Layout from "../../Layouts/L_Layout";
 import L_SubjectList from "../../components/SubjectList_userinfo/L_SubjectList";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
+
 function L_UserInfo() {
   const location = useLocation();
   const formData = location.state.formData;
+  const history = useHistory();
+
   const subjects = [
     { id: 1, name: "CEA201 - Computer Organization and Architecture" },
     { id: 2, name: "CSI104 - Introduction to Computing" },
@@ -49,7 +52,13 @@ function L_UserInfo() {
   const handleSubjectSelection = (subject) => {
     setSelectedSubjects([...selectedSubjects, subject]);
   };
+  const handleClickSave = () => {
+    // Handle saving the selected subjects (e.g., send to server or another component)
+    console.log("Selected Subjects:", selectedSubjects);
 
+    // Redirect to S_ViewProfile and pass selectedSubjects as state
+    history.push("/l_view_profile", { selectedSubjects: selectedSubjects });
+  };
   return (
     <L_Layout>
       <Container className="py-2">
@@ -116,6 +125,10 @@ function L_UserInfo() {
                     onSubjectSelect={handleSubjectSelection}
                     required
                   />
+                  <Button onClick={handleClickSave}>Save</Button>
+                  <Button className="mx-2" variant="secondary">
+                    Cancel
+                  </Button>
                 </div>
               </CardBody>
             </Card>

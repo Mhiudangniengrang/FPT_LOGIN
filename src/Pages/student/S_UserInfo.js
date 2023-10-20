@@ -8,13 +8,14 @@ import {
   FormGroup,
   Button,
 } from "react-bootstrap";
-import { useLocation } from "react-router-dom";
+import { useLocation, useHistory } from "react-router-dom";
 import S_Layout from "../../Layouts/S_Layout";
 import S_SubjectList from "../../components/SubjectList_userinfo/S_SubjectList";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 function S_UserInfo() {
   const location = useLocation();
+  const history = useHistory();
   const formData = location.state.formData;
   const subjects = [
     { id: 1, name: "SWP391 - Lại Đức Hùng" },
@@ -28,9 +29,9 @@ function S_UserInfo() {
     // Add more subjects here
   ];
   const [filteredSubjects, setFilteredSubjects] = useState(subjects);
-  const [major, setMajor] = useState("Select Major"); // Default major
-  const [selectedSubjects, setSelectedSubjects] = useState([]); // Initialize with an empty array for multi-selection
-  const [enteredID, setEnteredID] = useState(""); // Initialize with an empty string
+  const [major, setMajor] = useState("Select Major");
+  const [selectedSubjects, setSelectedSubjects] = useState([]);
+  const [enteredID, setEnteredID] = useState("");
 
   const handleEnteredIDChange = (event) => {
     setEnteredID(event.target.value);
@@ -48,6 +49,13 @@ function S_UserInfo() {
 
   const handleSubjectSelection = (subject) => {
     setSelectedSubjects([...selectedSubjects, subject]);
+  };
+  const handleClickSave = () => {
+    // Handle saving the selected subjects (e.g., send to server or another component)
+    console.log("Selected Subjects:", selectedSubjects);
+
+    // Redirect to S_ViewProfile and pass selectedSubjects as state
+    history.push("/s_view_profile", { selectedSubjects: selectedSubjects });
   };
 
   return (
@@ -113,6 +121,10 @@ function S_UserInfo() {
                     onSearch={handleSearch}
                     onSubjectSelect={handleSubjectSelection}
                   />
+                  <Button onClick={handleClickSave}>Save</Button>
+                  <Button className="mx-2" variant="secondary">
+                    Cancel
+                  </Button>
                 </div>
               </CardBody>
             </Card>

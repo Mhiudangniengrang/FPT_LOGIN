@@ -65,7 +65,7 @@ function S_EditProfile(props) {
             onSubjectSelect={handleSubjectSelection}
           />
         </div>
-        <div >
+        <div>
           <button
             type="button"
             className="btn btn-primary  "

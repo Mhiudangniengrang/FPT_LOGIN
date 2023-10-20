@@ -20,10 +20,14 @@ import L_Calender_type from "./components/List/L_Calender_type";
 import S_ViewTeacherProfile from "./Pages/student/S_ViewTeacherProfile";
 import S_UserInfo from "./Pages/student/S_UserInfo";
 import L_UserInfo from "./Pages/lecturer/L_UserInfo";
+import S_SearchSubject from "./components/S_SearchSubject";
+import S_SearchName from "./components/S_SearchName";
+
 function App() {
   return (
     <div className="App">
       <Router>
+        
         <Switch>
           <Route path="/login">
             <Login />
@@ -43,7 +47,15 @@ function App() {
           <Route path="/s_user_info">
             <S_UserInfo />
           </Route>
-
+          <Route path="/s_searchsubject">
+            <S_SearchSubject />
+          </Route>
+          <Route path="/s_searchname">
+            <S_SearchName />
+          </Route>
+          <Route path="/s_searchsubject">
+            <S_SearchSubject />
+          </Route>
           <Route path="/l_userform">
             <L_UserForm />
           </Route>
@@ -73,6 +85,7 @@ function App() {
           </Route>
         </Switch>
       </Router>
+     
     </div>
   );
 }
