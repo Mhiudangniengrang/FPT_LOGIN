@@ -1,4 +1,4 @@
-import { startOfMonth, endOfMonth, startOfWeek, endOfWeek, getYear, format, eachDayOfInterval, addDays } from 'date-fns';
+import { startOfMonth, endOfMonth, startOfWeek, endOfWeek, subDays, format, eachDayOfInterval, addDays } from 'date-fns';
 import dayjs from "dayjs";
 
 export function getMonth(month = dayjs().month()) {
@@ -13,6 +13,13 @@ export function getMonth(month = dayjs().month()) {
         });
     });
     return daysMatrix;
+}
+
+export function addDaysByOne(date) {
+    return addDays(date, 1);
+}
+export function subDaysByOne(date) {
+    return subDays(date, 1)
 }
 
 // Get the current month and year formatted as 'dd/MM/yyyy'

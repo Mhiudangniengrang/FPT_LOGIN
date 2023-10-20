@@ -5,12 +5,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { faEllipsisVertical } from '@fortawesome/free-solid-svg-icons'
 import { faXmark } from '@fortawesome/free-solid-svg-icons'
-import Overlay from 'react-bootstrap/Overlay';
 import Style from '../../assets/style/form.module.scss'
 import { useContext } from 'react';
 import GlobalContext from '../../context/GlobalContext';
 import { useState } from 'react';
-import { getDateFormat } from '../../Utils/dateUtils'
 
 const subjects = [
     'SWP301', 'SWR301', 'SWT301', 'PRF192', 'CEA201'
@@ -18,17 +16,30 @@ const subjects = [
 
 function BookPublicOverlay() {
 
-    const { showSlotModal, setShowSlotModal, selectedSlot } = useContext(GlobalContext)
-    console.log("BookPublic:" + showSlotModal)
-    const [description, setDescription] = useState(
+    const { showSlotModal, setShowSlotModal, selectedSlot, dispatchCalSlot } = useContext(GlobalContext)
+    const [purpose, setPurpose] = useState(
         selectedSlot ? selectedSlot.description : ""
+    );
+    const [subject, setSubject] = useState(
+        selectedSlot ? selectedSlot.subject : ""
     );
 
     const slotData = selectedSlot['slot']
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // Handle form submission (e.g., save the event data)
+        const calendarSlot = {
+            teacher: selectedSlot['slot'].teacher,
+            slot: selectedSlot['slot'].slot,
+            date: selectedSlot['slot'].date,
+            time: selectedSlot['slot'].time,
+            subject: selectedSlot['slot'].subject,
+            room: selectedSlot['slot'].room,
+            purpose: purpose,
+            status: 'waiting',
+        };
+        dispatchCalSlot({ type: "push", payload: calendarSlot });
+        setShowSlotModal(false);
     };
 
     return (
@@ -69,18 +80,22 @@ function BookPublicOverlay() {
 
                             <label htmlFor='form'>Choose your subject:</label>
                             <div className={Style.subjects}>
-                                {subjects.map(subject => {
+                                {subjects.map((subject, index) => {
                                     return (
-                                        <button type='radio' className={Style.contain}>
-                                            <span
-                                                className={Style.span}
-                                            >{subject}</span>
-                                        </button>
+                                        <>
+                                            <input id={`radio-${index}`} type="radio" name="radio"
+                                                value={subject}
+                                            />
+                                            <label htmlFor={`radio-${index}`} key={index}>{subject}</label>
+
+                                        </>
                                     )
                                 }
                                 )}
+
+                                {console.log(subject)}
                             </div>
-                            <form id='form' className={Style.object}>
+                            <form id='form' className={Style.object} onSubmit={(e) => handleSubmit(e)}>
 
                                 <Stack direction='vertical' gap='2'>
                                     <label htmlFor='purpose'>Purpose:</label>
@@ -88,9 +103,9 @@ function BookPublicOverlay() {
                                         rows="4"
                                         maxLength='200'
                                         placeholder='Enter your purpose (200 words)'
-                                        onChange={(e) => setDescription(e.target.value)}
+                                        onChange={(e) => setPurpose(e.target.value)}
                                     ></textarea>
-                                    <button className={Style.book_btn} type='submit' onSubmit={() => handleSubmit}>Book</button>
+                                    <button className={Style.book_btn} type='submit' >Book</button>
                                 </Stack>
                             </form>
                         </Stack>

@@ -50,8 +50,9 @@ const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Fri
 const timeSlots = ['Slot 1', 'Slot 2', 'Slot 3', 'Slot 4', 'Slot 5', 'Slot 6'];
 
 function WeeklyCalendar() {
-    const { setSelectedSlot, showSlotModal, setShowSlotModal } = useContext(GlobalContext);
+    const { setSelectedSlot, showSlotModal, setShowSlotModal, setDaySelected, savedSlots } = useContext(GlobalContext);
 
+    console.log(savedSlots)
     const [selectedDate, setSelectedDate] = useState(new Date());
 
     function getDateForCell(day) {
@@ -75,6 +76,7 @@ function WeeklyCalendar() {
                 date: format(currDate, 'dd/MM/yyy'),
                 time: `${time}`,
                 room: '610 - NVH',
+                purpose: '',
                 duration: 30,
                 status: 'wait',
             }
@@ -84,7 +86,7 @@ function WeeklyCalendar() {
 
     return (
         <div>
-            {showSlotModal && <BookPrivateOverlay />}
+            {showSlotModal && <BookPublicOverlay />}
             <Table responsive striped bordered>
                 <thead>
                     <tr>
@@ -95,7 +97,8 @@ function WeeklyCalendar() {
                             <DatePicker
                                 onChange={(date) => {
                                     setShowSlotModal(false),
-                                        setSelectedDate(date)
+                                        setSelectedDate(date),
+                                        setDaySelected(date)
                                 }}
                                 value={selectedDate}
                                 selected={selectedDate}

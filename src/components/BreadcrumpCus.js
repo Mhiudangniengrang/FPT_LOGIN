@@ -3,9 +3,19 @@ import { Breadcrumb, NavLink } from 'react-bootstrap';
 
 function Breadcrumbs({ items }) {
     return (
-        <Breadcrumb>
+        <Breadcrumb
+            style={{
+                backgroundColor: 'rgb(231 231 231)',
+                padding: '10px',
+                display: 'inline-block',
+            }}
+        >
             {items.map((item, index) => (
-                <Breadcrumb.Item key={index} href={item.route}>
+                <Breadcrumb.Item
+                    style={{
+                        alignSelf: 'center',
+                    }}
+                    key={index} href={item.route}>
                     {item.text}
                 </Breadcrumb.Item>
             ))}

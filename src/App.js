@@ -11,6 +11,7 @@ import S_home from "./Pages/student/S_Home";
 import S_ViewProfile from "./Pages/student/S_ViewProfile";
 import L_ViewProfile from "./Pages/lecturer/L_ViewProfile";
 import S_UserForm from "./Pages/student/S_UserForm";
+import S_Schedule from "./Pages/student/S_Schedule";
 function App() {
   return (
     <div className="App">
@@ -37,6 +38,9 @@ function App() {
           </Route>
           <Route path="/l_view_profile">
             <L_ViewProfile />
+          </Route>
+          <Route path="/s_view_schedule">
+            <S_Schedule />
           </Route>
           <Route path="*">
             <Nopage />

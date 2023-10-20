@@ -4,20 +4,17 @@ import GlobalContext from "./GlobalContext";
 import dayjs from "dayjs";
 
 function savedSlotsReducer(state, { type, payload }) {
-    switch (payload) {
-        case "add":
-
-            return [...state];
-        case 'update':
-
-            return state.map(slot => slot.id === payload.id ? payload : slot)
-
-        case 'delete':
-            return state.filter((slot => slot.id === payload.id ? payload : slot))
-
+    switch (type) {
+        case "push":
+            return [...state, payload];
+        case "update":
+            return state.map((evt) =>
+                evt.id === payload.id ? { ...evt, ...payload } : evt
+            );
+        case "delete":
+            return state.filter((evt) => evt.id !== payload.id);
         default:
             throw new Error();
-
     }
 }
 
@@ -27,30 +24,10 @@ function initSlots() {
     return parseSlots
 }
 
-
-
-// useEffect(() => {
-//     // Initialize the state using useReducer
-//     const [state, dispatchCalSlot] = useReducer(reducer, initialState);
-
-//     // Use the useEffect hook to initialize the state
-//     useEffect(() => {
-//         // Fetch data or perform any initial setup here
-//         // For example, you can fetch data from an API and update the state based on the result
-//         // Simulate a delayed API call with setTimeout
-//         setTimeout(() => {
-//             const initialCount = 10; // Replace this with your actual initial data
-//             dispatchCalSlot({ type: 'SET_INITIAL_COUNT', payload: initialCount });
-//         }, 1000); // Delayed initialization
-
-//         // The empty dependency array ensures this effect runs only once on component mount
-//     }, []);
-// }, [])
-
 export default function ContextWrapper(props) {
     const [monthIndex, setMonthIndex] = useState(dayjs().month());
     const [showSlotModal, setShowSlotModal] = useState(false)
-    const [daySelected, setDaySelected] = useState(null);
+    const [daySelected, setDaySelected] = useState(new Date());
     const [selectedSlot, setSelectedSlot] = useState(null);
     const [savedSlots, dispatchCalSlot] = useReducer(savedSlotsReducer, [], initSlots);
 

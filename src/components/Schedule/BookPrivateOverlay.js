@@ -27,17 +27,42 @@ function BookPrivateOverlay() {
         setIsHovered(false);
     };
 
-    const { showSlotModal, setShowSlotModal, selectedSlot } = useContext(GlobalContext)
+    const { showSlotModal, setShowSlotModal, selectedSlot, dispatchCalSlot } = useContext(GlobalContext)
     console.log("BookPublic:" + showSlotModal)
-    const [description, setDescription] = useState(
-        selectedSlot ? selectedSlot.description : ""
+    const [purpose, setPurpose] = useState(
+        selectedSlot ? selectedSlot['slot'].purpose : ""
     );
 
     const slotData = selectedSlot['slot']
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // Handle form submission (e.g., save the event data)
+        const calendarSlot = {
+            // title,
+            // description,
+            // label: selectedLabel,
+            // day: daySelected.valueOf(),
+            // id: selectedEvent ? selectedEvent.id : Date.now(),
+            //  < p > Lecturer: { slotData.teacher }</p>
+            //                 <p>Slot: {slotData.slot}</p>
+            //                 <p>Date : {getDateFormat(slotData.date)}</p>
+            //                 <p>Time : {slotData.time}</p>
+            //                 <p>Room: {slotData.room}</p>
+            //                 <p>Status: {slotData.status}</p>
+            teacher: selectedSlot['slot'].teacher,
+            slot: selectedSlot['slot'].slot,
+            time: selectedSlot['slot'].time,
+            room: selectedSlot['slot'].room,
+            purpose: purpose,
+            status: 'waiting',
+        };
+        if (selectedEvent) {
+            dispatchCalSlot({ type: "update", payload: calendarSlot });
+        } else {
+            dispatchCalSlot({ type: "push", payload: calendarSlot });
+        }
+
+        setShowEventModal(false);
     };
 
     return (
@@ -97,6 +122,7 @@ function BookPrivateOverlay() {
                                         rows="4"
                                         maxLength='200'
                                         placeholder='Enter your purpose (200 words)'
+                                        onChange={(e) => setPurpose(e.target.value)}
                                     ></textarea>
                                     <label htmlFor='code'>
                                         <span>Private code:  </span>
