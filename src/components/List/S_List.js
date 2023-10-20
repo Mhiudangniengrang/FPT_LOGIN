@@ -5,8 +5,7 @@ import { Button, Form, Card } from "react-bootstrap";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-function List() {
-  const [currentPage, setCurrentPage] = useState(1);
+function S_List() {
   const [recordsPerPage, setRecordsPerPage] = useState(5);
   const [isEditing, setIsEditing] = useState(false);
   const [editingIndex, setEditingIndex] = useState(null);
@@ -79,7 +78,19 @@ function List() {
 
       <div className="d-flex justify-content-between">
         <Button onClick={handlePrev}>Previous</Button>
-        <h3 className={activeIndex === 0 ? "" : ""}>{options[activeIndex]}</h3>
+        <h3
+          style={{
+            marginLeft: "1rem",
+            fontSize: "1.25rem",
+            lineHeight: "1.75rem",
+            fontWeight: 700,
+            color: "#6B7280",
+          }}
+          className={activeIndex === 0 ? "" : ""}
+        >
+          {options[activeIndex]}
+        </h3>
+
         <Button onClick={handleNext}>Next</Button>
       </div>
 
@@ -208,4 +219,4 @@ function List() {
   );
 }
 
-export default List;
+export default S_List;

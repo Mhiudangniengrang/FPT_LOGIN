@@ -68,15 +68,15 @@ const S_SearchName = () => {
                         Teacher: {teacher.teacher}
                       </div>
                     </div>
-                    <div>
+                    <div className="d-flex">
                       Subject:
                       <FontAwesomeIcon
-                        className="mx-1"
+                        className="mx-1 my-1"
                         icon={faCalendarDays}
                       />{" "}
                       <div>{teacher.detail}</div>
                       <FontAwesomeIcon
-                        className="mx-2"
+                        className="mx-2 my-1"
                         icon={faMagnifyingGlass}
                         onClick={() => handleClickSearch()}
                       />
