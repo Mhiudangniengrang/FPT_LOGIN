@@ -12,23 +12,21 @@ import S_ViewProfile from "./Pages/student/S_ViewProfile";
 import L_ViewProfile from "./Pages/lecturer/L_ViewProfile";
 import S_UserForm from "./Pages/student/S_UserForm";
 import S_Schedule from "./Pages/student/S_Schedule";
-import WeeklyCalendar from "./components/Schedule/Week";
 import L_UserForm from "./Pages/lecturer/L_UserForm";
-import List from "./components/List/S_List";
-import S_Calender_type from "./components/List/S_Calender_type";
-import L_Calender_type from "./components/List/L_Calender_type";
 import S_ViewTeacherProfile from "./Pages/student/S_ViewTeacherProfile";
 import S_UserInfo from "./Pages/student/S_UserInfo";
 import L_UserInfo from "./Pages/lecturer/L_UserInfo";
 import S_SearchSubject from "./components/S_SearchSubject";
 import S_SearchName from "./components/S_SearchName";
 import Calender_type from "./components/Calender_type";
+import L_ViewTeaching from "./Pages/lecturer/L_ViewTeaching";
+import L_ViewMeeting from "./Pages/lecturer/L_ViewMeeting";
 
 function App() {
   return (
     <div className="App">
       <Router>
-        
+
         <Switch>
           <Route path="/login">
             <Login />
@@ -43,7 +41,7 @@ function App() {
             <S_home />
           </Route>
           <Route path="/calender_type">
-            <Calender_type/>
+            <Calender_type />
           </Route>
           <Route path="/s_userform">
             <S_UserForm />
@@ -78,12 +76,18 @@ function App() {
           <Route path="/s_view_teacher_profile">
             <S_ViewTeacherProfile />
           </Route>
+          <Route path="/l_view_teaching_schedule">
+            <L_ViewTeaching />
+          </Route>
+          <Route path="/l_view_meeting_schedule">
+            <L_ViewMeeting />
+          </Route>
           <Route path="*">
             <Nopage />
           </Route>
         </Switch>
       </Router>
-     
+
     </div>
   );
 }

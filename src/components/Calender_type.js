@@ -26,7 +26,6 @@ const Calender_type = () => {
   const {
     setMonthIndex,
     monthIndex,
-    showSlotModal,
     daySelected,
     setDaySelected,
   } = useContext(GlobalContext);
@@ -88,8 +87,8 @@ const Calender_type = () => {
           dayjs(new Date(dayjs().year(), monthIndex)).format("MMMM YYYY")}
         {activeButton === "week" &&
           getStartOfWeekFormatted(daySelected) +
-            " - " +
-            getEndOfWeekFormatted(daySelected)}
+          " - " +
+          getEndOfWeekFormatted(daySelected)}
       </h2>
       <Stack direction="horizontal">
         {activeButton === "month" && (

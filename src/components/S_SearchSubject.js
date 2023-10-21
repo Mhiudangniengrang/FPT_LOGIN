@@ -19,7 +19,7 @@ const S_SearchSubject = () => {
     {
       courseName: "SWP391",
       teacher: "Lại Đức Hùng",
-      
+
     },
     { courseName: "SWP391", teacher: "Nguyễn Ngọc Lâm" },
     { courseName: "SWP391", teacher: "Nguyễn Minh Sang" },
@@ -46,41 +46,41 @@ const S_SearchSubject = () => {
 
   return (
     <S_Layout>
-        <div className="my-5">
-      <Container >
-        <Row>
-          <Col md={4}>
-            <Card className="my-2">
-              <Card.Header>
-              <FontAwesomeIcon className="mx-1" icon={faBriefcase} /> Search Subject
-              </Card.Header>
-            </Card>
-          </Col>
-        </Row>
-        <InputGroup className=" mb-3 ">
-          <FormControl
-            placeholder="Search for courses..."
-            value={searchText}
-            onChange={(e) => setSearchText(e.target.value)}
-          />
-          <Button variant="outline-secondary" onClick={handleSearch}>
-            Search
-          </Button>
-        </InputGroup>
+      <div className="my-5">
+        <Container >
+          <Row>
+            <Col md={4}>
+              <Card className="my-2">
+                <Card.Header>
+                  <FontAwesomeIcon className="mx-1" icon={faBriefcase} /> Search Subject
+                </Card.Header>
+              </Card>
+            </Col>
+          </Row>
+          <InputGroup className=" mb-3 ">
+            <FormControl
+              placeholder="Search for courses..."
+              value={searchText}
+              onChange={(e) => setSearchText(e.target.value)}
+            />
+            <Button variant="outline-secondary" onClick={handleSearch}>
+              Search
+            </Button>
+          </InputGroup>
 
-        <h4>Search Results:</h4>
-        {searchResults.length > 0 ? (
-          <ListGroup>
-            {searchResults.map((course, index) => (
-              <ListGroup.Item key={index}>
-                {course.courseName} - {course.teacher}
-              </ListGroup.Item>
-            ))}
-          </ListGroup>
-        ) : (
-          <p>No results found.</p>
-        )}
-      </Container>
+          <h4>Search Results:</h4>
+          {searchResults.length > 0 ? (
+            <ListGroup>
+              {searchResults.map((course, index) => (
+                <ListGroup.Item key={index}>
+                  {course.courseName} - {course.teacher}
+                </ListGroup.Item>
+              ))}
+            </ListGroup>
+          ) : (
+            <p>No results found.</p>
+          )}
+        </Container>
       </div>
     </S_Layout>
   );

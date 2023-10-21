@@ -58,5 +58,30 @@ export function getDaysInWeek(date) {
 
     return formattedDaysInWeek;
 }
+export function getFullDaysInWeek(date) {
+    const startOfWeekDate = startOfWeek(date);
+    const endOfWeekDate = addDays(startOfWeekDate, 6); // Assuming you want a week from Sunday to Saturday
 
+    const daysInWeek = eachDayOfInterval({ start: startOfWeekDate, end: endOfWeekDate });
+
+    // Format each date in 'dd/MM/yyyy' format
+    const formattedDaysInWeek = daysInWeek.map((day) => format(day, 'yyyy-MM-dd'));
+
+    return formattedDaysInWeek;
+}
+
+export function getCurentTime() {
+    const currentDate = new Date();
+    const options = {
+        hour12: false,
+        timeZone: 'Asia/Ho_Chi_Minh',
+        hour: '2-digit',
+        minute: '2-digit',
+    };
+
+    const formatter = new Intl.DateTimeFormat('en-US', options);
+    const currentTime = formatter.format(currentDate);
+
+    return currentTime;
+}
 
