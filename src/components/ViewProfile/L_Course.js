@@ -1,32 +1,25 @@
 import React from "react";
-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { faBriefcase } from "@fortawesome/free-solid-svg-icons";
 class L_Course extends React.Component {
   render() {
+    const { course } = this.props;
+
     return (
       <div>
-        <h3 className="font-weight-bold">Course</h3>
+        <strong>Course:</strong>
 
-        <strong style={{ padding: "5px" }}>Course Profile:</strong>
-
-        <div>
-          <div style={{ float: "left", width: "50%", padding: "15px" }}>
-            <FontAwesomeIcon icon={faBriefcase} /> SWP391
-            <br />
-            <FontAwesomeIcon icon={faBriefcase} /> SWR301
-            <br />
-            <FontAwesomeIcon icon={faBriefcase} /> SWT302
+        {Array.isArray(course) ? (
+          <div>
+            {course.map((subject) => (
+              <div className="d-flex">
+                <FontAwesomeIcon className="my-1 mx-2" icon={faBriefcase} />
+                <p key={subject.id}>{subject.name}</p>
+              </div>
+            ))}
           </div>
-          <div style={{ float: "left", width: "50%", padding: "15px" }}>
-            <FontAwesomeIcon icon={faBriefcase} /> SWE201C
-            <br />
-            <FontAwesomeIcon icon={faBriefcase} /> PRN211
-            <br />
-            <FontAwesomeIcon icon={faBriefcase} /> PRF192
-          </div>
-        </div>
+        ) : null}
       </div>
     );
   }

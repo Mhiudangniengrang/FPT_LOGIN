@@ -1,4 +1,3 @@
-import { useRef } from 'react';
 import { Stack } from 'react-bootstrap';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -6,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsisVertical } from '@fortawesome/free-solid-svg-icons'
 import { faXmark } from '@fortawesome/free-solid-svg-icons'
 import Style from '../../assets/style/form.module.scss'
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import GlobalContext from '../../context/GlobalContext';
 import { useState } from 'react';
 
@@ -16,16 +15,20 @@ const subjects = [
 
 function BookPublicOverlay() {
 
-    const { showSlotModal, setShowSlotModal, selectedSlot, dispatchCalSlot } = useContext(GlobalContext)
+    const { setShowSlotModal, selectedSlot, dispatchCalSlot, setSelectedSlot } = useContext(GlobalContext)
     const [purpose, setPurpose] = useState(
-        selectedSlot ? selectedSlot.description : ""
+        selectedSlot['slot'] ? selectedSlot['slot'].description : ""
     );
     const [subject, setSubject] = useState(
-        selectedSlot ? selectedSlot.subject : ""
+        selectedSlot['slot'] ? selectedSlot['slot'].subject : ""
     );
 
     const slotData = selectedSlot['slot']
 
+    useEffect(() => {
+        setSelectedSlot(selectedSlot)
+    }, [selectedSlot])
+    console.log(selectedSlot['slot'])
     const handleSubmit = (e) => {
         e.preventDefault();
         const calendarSlot = {
@@ -33,10 +36,10 @@ function BookPublicOverlay() {
             slot: selectedSlot['slot'].slot,
             date: selectedSlot['slot'].date,
             time: selectedSlot['slot'].time,
-            subject: selectedSlot['slot'].subject,
+            subject: subject,
             room: selectedSlot['slot'].room,
             purpose: purpose,
-            status: 'waiting',
+            status: 'booked',
         };
         dispatchCalSlot({ type: "push", payload: calendarSlot });
         setShowSlotModal(false);
@@ -62,8 +65,9 @@ function BookPublicOverlay() {
                             <h4
                                 style={{ margin: '0' }}
                             >Book slot</h4>
-                            <FontAwesomeIcon className='pe-2' icon={faEllipsisVertical} style={{ color: "#0d0d0d", marginLeft: 'auto' }} />
                             <FontAwesomeIcon icon={faXmark}
+
+                                className='ms-auto'
                                 style={{
                                     color: "#000000",
                                     cursor: 'pointer',
@@ -76,7 +80,6 @@ function BookPublicOverlay() {
                             <p>Date : {slotData.date}</p>
                             <p>Time : {slotData.time}</p>
                             <p>Room: {slotData.room}</p>
-                            <p>Status: {slotData.status}</p>
 
                             <label htmlFor='form'>Choose your subject:</label>
                             <div className={Style.subjects}>
@@ -85,6 +88,11 @@ function BookPublicOverlay() {
                                         <>
                                             <input id={`radio-${index}`} type="radio" name="radio"
                                                 value={subject}
+                                                onClick={() => {
+                                                    setSubject(subject);
+                                                    selectedSlot['slot']['subject'] = subject
+                                                }}
+
                                             />
                                             <label htmlFor={`radio-${index}`} key={index}>{subject}</label>
 
@@ -92,8 +100,6 @@ function BookPublicOverlay() {
                                     )
                                 }
                                 )}
-
-                                {console.log(subject)}
                             </div>
                             <form id='form' className={Style.object} onSubmit={(e) => handleSubmit(e)}>
 
@@ -103,9 +109,18 @@ function BookPublicOverlay() {
                                         rows="4"
                                         maxLength='200'
                                         placeholder='Enter your purpose (200 words)'
-                                        onChange={(e) => setPurpose(e.target.value)}
-                                    ></textarea>
-                                    <button className={Style.book_btn} type='submit' >Book</button>
+                                        onChange={(e) => {
+                                            setPurpose(e.target.value);
+                                            selectedSlot['slot']['purpose'] = e.target.value;
+                                        }}
+                                        value={selectedSlot['slot']['purpose']}
+                                        required
+                                    >
+                                    </textarea>
+                                    {selectedSlot['slot'].status !== 'Booked' && (
+
+                                        <button className={Style.book_btn} type='submit' >Book</button>
+                                    )}
                                 </Stack>
                             </form>
                         </Stack>

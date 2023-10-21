@@ -14,7 +14,6 @@ import NavDropdown from "react-bootstrap/NavDropdown";
 import { Stack } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 
-import FormSearch from "./FormSearch";
 import HorizontalStack from "./HorizontalStack";
 import CustomNavDropdown from "./DropDownStack";
 import S_ViewProfile from "../Pages/student/S_ViewProfile"; // Adjust the path as needed
@@ -120,7 +119,6 @@ class S_Header extends React.Component {
             link="/"
           />
         </Stack>
-        {this.state.activePage === "ViewProfile" && <S_ViewProfile />}
       </Stack>
     );
   }

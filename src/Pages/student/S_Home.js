@@ -3,6 +3,7 @@ import S_Layout from "../../Layouts/S_Layout";
 
 import "react-datepicker/dist/react-datepicker.css";
 import OffCanvasSidebar from "../../components/OffCanvasSidebar";
+import FormSearch from "../../components/FormSearch";
 
 
 const S_home = () => {
@@ -11,7 +12,8 @@ const S_home = () => {
     <>
       <S_Layout>
         <OffCanvasSidebar />
-        This is student home
+        <FormSearch />
+        List
       </S_Layout>
     </>
   );

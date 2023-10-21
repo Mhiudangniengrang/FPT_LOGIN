@@ -38,8 +38,10 @@ const slotTime = [
 
 export default function Day({ day, rowIdx }) {
 
-    const [dayEvents, setDayEvents] = useState([]);
     const {
+        role,
+        selectedSlot,
+        savedSlots,
         setShowSlotModal,
         setSelectedSlot,
     } = useContext(GlobalContext);
@@ -50,7 +52,7 @@ export default function Day({ day, rowIdx }) {
 
         return isCurrentDay ? Style.dayCurr : '';
     }
-    const handleDayClick = () => {
+    const handleDayClick = (day, timeSlot, subjectSlot, purposeSlot) => {
         setShowSlotModal(true);
         const value = slotTime.find(item => item.slot == 1)
         let time = `${value.start} - ${value.end}`

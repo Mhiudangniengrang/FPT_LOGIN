@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom"; // Import useHistory
 
-import S_Layout from "../../Layouts/S_Layout";
+import L_Layout from "../../Layouts/L_Layout";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import {
@@ -14,7 +14,7 @@ import {
   CardBody,
 } from "react-bootstrap";
 
-function S_UserForm() {
+function L_UserForm() {
   const [formData, setFormData] = useState({
     name: "",
     campus: "",
@@ -33,11 +33,11 @@ function S_UserForm() {
   const handleSubmit = (e) => {
     e.preventDefault();
     // Chuyển hướng đến trang UserInfo và truyền dữ liệu qua state
-    history.push("/s_user_info", { formData: formData });
+    history.push("/l_user_info", { formData: formData });
   };
 
   return (
-    <S_Layout>
+    <L_Layout>
       <Container className="py-2">
         <Row className="justify-content-center align-items-center">
           <Col md={5}>
@@ -95,8 +95,8 @@ function S_UserForm() {
           </Col>
         </Row>
       </Container>
-    </S_Layout>
+    </L_Layout>
   );
 }
 
-export default S_UserForm;
+export default L_UserForm;
