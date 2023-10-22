@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Container, Form, ListGroup, Button } from "react-bootstrap";
-import S_Layout from "../Layouts/S_Layout";
+import S_Layout from "../../Layouts/S_Layout";
 import { TeacherName } from "./S_TeacherName";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
@@ -27,6 +27,12 @@ const S_SearchName = () => {
     console.log(">>check click");
     history.push("/l_view_profile");
   };
+  const handleClickSubject = (subject) => {
+    setSelectedSubject(subject);
+    history.push("/s_course_info");
+  };
+
+
   return (
     <S_Layout>
       <Container className="my-5">
@@ -74,7 +80,7 @@ const S_SearchName = () => {
                         className="mx-1 my-1"
                         icon={faCalendarDays}
                       />{" "}
-                      <div>{teacher.detail}</div>
+                      <div onClick={handleClickSubject}>{teacher.detail}</div>
                       <FontAwesomeIcon
                         className="mx-2 my-1"
                         icon={faMagnifyingGlass}

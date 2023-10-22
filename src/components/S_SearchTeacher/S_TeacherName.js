@@ -8,6 +8,8 @@ export const TeacherName = [
     {
         subject: "CSI105 - Lại Đức Hùng",
         teacher: "Hungld FU HCM Lại Đức Hùng",
+        detail: "CSI105- Computer Organization and Architecture"
+
       },
       {
         subject: "CSI104 - Lại Đức Hùng",

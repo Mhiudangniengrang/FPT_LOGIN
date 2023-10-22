@@ -1,7 +1,7 @@
 import React from "react";
 import { Button, Card } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
-import List from "./S_List";
+import List from "../Schedule/List";
 import S_Layout from "../../Layouts/S_Layout";
 
 class S_Calender_type extends React.Component {

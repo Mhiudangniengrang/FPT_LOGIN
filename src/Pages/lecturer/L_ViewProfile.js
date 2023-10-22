@@ -11,7 +11,6 @@ import {
   CardBody,
 } from "react-bootstrap";
 import L_Aboutme from "../../components/ViewProfile/L_Aboutme";
-import L_EditProfile from "../../components/ViewProfile/L_EditProfile";
 import L_Course from "../../components/ViewProfile/L_Course";
 import L_Layout from "../../Layouts/L_Layout";
 import { useLocation } from "react-router-dom";

@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
-import L_SubjectList from "../../components/SubjectList_userinfo/L_SubjectList";
+import L_SubjectList from "../SubjectList_userinfo/L_SubjectList";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { faBriefcase } from "@fortawesome/free-solid-svg-icons";
-function L_EditProfile(props) {
+function L_EditCourse(props) {
   const [description, setDescription] = useState("");
   const [selectedSubjects, setSelectedSubjects] = useState([]); // Initialize with an empty array for multi-selection
 
@@ -80,4 +80,4 @@ function L_EditProfile(props) {
   );
 }
 
-export default L_EditProfile;
+export default L_EditCourse;
