@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from "react";
-import data from "../../S_Data.json";
+import data from "../S_Data.json";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Button, Form, Card } from "react-bootstrap";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faChevronLeft,
   faChevronRight,
 } from "@fortawesome/free-solid-svg-icons";
 
-function List() {
+function S_HomeStudent() {
   const [currentPage, setCurrentPage] = useState(1);
   const [recordsPerPage, setRecordsPerPage] = useState(5);
   const firstIndex = (currentPage - 1) * recordsPerPage;
@@ -220,4 +221,4 @@ function List() {
   );
 }
 
-export default List;
+export default S_HomeStudent;

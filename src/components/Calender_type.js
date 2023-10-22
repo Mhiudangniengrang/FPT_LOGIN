@@ -4,7 +4,6 @@ import { Button, Card, Stack } from "react-bootstrap";
 import WeeklyCalendar from "./Schedule/Week";
 import Month from "./Schedule/Month";
 import { useState, useEffect, useContext } from "react";
-import CalenderTypeButtons from "../components/Schedule/CalenderTypeButtons"; // Make sure the path is correct
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
