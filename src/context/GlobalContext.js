@@ -11,6 +11,10 @@ const GlobalContext = React.createContext({
     savedSlots: [],
     selectedSlot: null,
     setSelectedSlot: () => { },
+    emptySlots: [],
+    dispatchEmptySlot: ({ type, payload }) => { },
+    setRole: () => { },
+    role: null
 });
 
 export default GlobalContext;

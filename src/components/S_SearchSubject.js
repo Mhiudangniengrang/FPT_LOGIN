@@ -51,8 +51,7 @@ const S_SearchSubject = () => {
             <Col md={4}>
               <Card className="my-2">
                 <Card.Header>
-                  <FontAwesomeIcon className="mx-1" icon={faBriefcase} /> Search
-                  Subject
+                  <FontAwesomeIcon className="mx-1" icon={faBriefcase} /> Search Subject
                 </Card.Header>
               </Card>
             </Col>

@@ -1,15 +1,13 @@
 import React, { useState, useContext } from 'react';
 import { Table } from 'react-bootstrap';
 import GlobalContext from '../../context/GlobalContext';
+import axios from '../../Services/customizeAxios';
 
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import 'react-datepicker/dist/react-datepicker-cssmodules.css';
-import { format, addDays, startOfWeek } from 'date-fns';
-import { getDaysInWeek, getStartOfWeekFormatted, } from '../../Utils/dateUtils';
-import BookPublicOverlay from './BookPublicOverlay';
+import { getDaysInWeek, getFullDaysInWeek } from '../../Utils/dateUtils';
 import { useEffect } from 'react';
-import BookPrivateOverlay from './BookPrivateOverlay';
 
 
 const slotTime = [
@@ -50,35 +48,65 @@ const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Fri
 const timeSlots = ['Slot 1', 'Slot 2', 'Slot 3', 'Slot 4', 'Slot 5', 'Slot 6'];
 
 function WeeklyCalendar() {
-    const { setSelectedSlot, showSlotModal, setShowSlotModal, setDaySelected, savedSlots } = useContext(GlobalContext);
 
-    console.log(savedSlots)
+    const [emptySlot, setEmptySlot] = useState([])
+    useEffect(() => {
+        axios
+            .get("/api/v1/students/emptySlot/lecturer/2")
+            .then((response) => {
+                response.map((slot) => {
+                    setEmptySlot(() => ([
+                        ...emptySlot,
+                        {
+                            lecturerId: slot.lecturerId,
+                            lecturerName: slot.lecturerName,
+                            dateStart: slot.dateStart,
+                            status: slot.status,
+                            timeStart: slot.timeStart,
+                            duration: slot.duration,
+                            roomId: slot.roomId,
+                        },
+                    ]))
+                })
+            })
+            .catch(error => {
+                console.log("Error at Week.js" + error)
+            })
+    }, [])
+
+    const { role, selectedSlot, setSelectedSlot, setShowSlotModal, setDaySelected, savedSlots } = useContext(GlobalContext);
     const [selectedDate, setSelectedDate] = useState(new Date());
 
-    function getDateForCell(day) {
-        const dayStart = startOfWeek(selectedDate);
-        const currentDate = addDays(dayStart, day);
-        return currentDate;
-    }
-    const handleDayClick = (day, timeSlot) => {
+    const handleDayClick = (day, timeSlot, subjectSlot, purposeSlot) => {
 
-        let i = daysOfWeek.indexOf(day);
         let j = timeSlots.indexOf(timeSlot);
-        let currDate = getDateForCell(i);
 
         setShowSlotModal(true);
         const value = slotTime.find(item => item.slot == j + 1)
         let time = `${value.start} - ${value.end}`
         setSelectedSlot(() => ({
             'slot': {
-                teacher: 'hungld',
                 slot: j + 1,
-                date: format(currDate, 'dd/MM/yyy'),
+                date: day,
                 time: `${time}`,
-                room: '610 - NVH',
-                purpose: '',
-                duration: 30,
-                status: 'wait',
+                subject: subjectSlot,
+                purpose: purposeSlot,
+            }
+        }));
+
+    };
+    const handleCreateClick = (day, timeSlot) => {
+
+        let j = timeSlots.indexOf(timeSlot);
+
+        setShowSlotModal(true);
+        const value = slotTime.find(item => item.slot == j + 1)
+        let time = `${value.start} - ${value.end}`
+        setSelectedSlot(() => ({
+            'slot': {
+                slot: j + 1,
+                date: day,
+                time: `${time}`,
             }
         }));
 
@@ -86,7 +114,6 @@ function WeeklyCalendar() {
 
     return (
         <div>
-            {showSlotModal && <BookPublicOverlay />}
             <Table responsive striped bordered>
                 <thead>
                     <tr>
@@ -120,18 +147,27 @@ function WeeklyCalendar() {
 
                 </thead>
                 <tbody >
-                    {timeSlots.map(slot => (
-                        <tr key={slot}>
+                    {timeSlots.map((slot, idx) => (
+                        <tr key={idx}>
                             <td>{slot}</td>
-                            {daysOfWeek.map(day => (
+                            {getFullDaysInWeek(selectedDate).map((day) => (
                                 <td
-                                    onClick={() => handleDayClick(day, slot)}
-                                    key={day}>
+                                    key={`${day}-${slot}`}
+                                    onClick={() => handleCreateClick(day, slot)}
+                                >
+                                    {
+                                        emptySlot.map((meeting) => {
+                                            (meeting.dateStart === day && 1 + 1 == 2) && (
+                                                <>
+
+                                                </>
+                                            )
+                                        })
+                                    }
                                 </td>
                             ))}
                         </tr>
                     ))}
-
                 </tbody>
             </Table>
         </div >

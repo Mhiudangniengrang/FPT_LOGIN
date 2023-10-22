@@ -27,7 +27,6 @@ const Calender_type = () => {
   const {
     setMonthIndex,
     monthIndex,
-    showSlotModal,
     daySelected,
     setDaySelected,
   } = useContext(GlobalContext);

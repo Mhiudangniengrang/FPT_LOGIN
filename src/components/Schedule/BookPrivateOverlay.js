@@ -38,17 +38,6 @@ function BookPrivateOverlay() {
     const handleSubmit = (e) => {
         e.preventDefault();
         const calendarSlot = {
-            // title,
-            // description,
-            // label: selectedLabel,
-            // day: daySelected.valueOf(),
-            // id: selectedEvent ? selectedEvent.id : Date.now(),
-            //  < p > Lecturer: { slotData.teacher }</p>
-            //                 <p>Slot: {slotData.slot}</p>
-            //                 <p>Date : {getDateFormat(slotData.date)}</p>
-            //                 <p>Time : {slotData.time}</p>
-            //                 <p>Room: {slotData.room}</p>
-            //                 <p>Status: {slotData.status}</p>
             teacher: selectedSlot['slot'].teacher,
             slot: selectedSlot['slot'].slot,
             time: selectedSlot['slot'].time,
