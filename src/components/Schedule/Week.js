@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { Table } from 'react-bootstrap';
+import { Stack, Table } from 'react-bootstrap';
 import GlobalContext from '../../context/GlobalContext';
 import axios from '../../Services/customizeAxios';
 
@@ -51,30 +51,27 @@ function WeeklyCalendar() {
 
     const [emptySlot, setEmptySlot] = useState([])
     useEffect(() => {
+        let ignore = false;
         axios
-            .get("/api/v1/students/emptySlot/lecturer/2")
+            .get("/api/v1/user/emptySlot/lecturer/2")
             .then((response) => {
                 response.map((slot) => {
-                    setEmptySlot(() => ([
-                        ...emptySlot,
-                        {
-                            lecturerId: slot.lecturerId,
-                            lecturerName: slot.lecturerName,
-                            dateStart: slot.dateStart,
-                            status: slot.status,
-                            timeStart: slot.timeStart,
-                            duration: slot.duration,
-                            roomId: slot.roomId,
-                        },
+                    // if (!ignore) {
+                    setEmptySlot((prevSlot) => ([
+                        ...prevSlot,
+                        slot
                     ]))
+                    // }
                 })
             })
             .catch(error => {
-                console.log("Error at Week.js" + error)
+                console.log("Error at Week.js " + error)
             })
+        // return () => { ignore = true }
     }, [])
 
     const { role, selectedSlot, setSelectedSlot, setShowSlotModal, setDaySelected, savedSlots } = useContext(GlobalContext);
+    console.log(role)
     const [selectedDate, setSelectedDate] = useState(new Date());
 
     const handleDayClick = (day, timeSlot, subjectSlot, purposeSlot) => {
@@ -120,7 +117,24 @@ function WeeklyCalendar() {
                         <th rowSpan={'2'}
                             style={{ width: '200px' }}
                         >
-                            <h6>Choose date</h6>
+                            <Stack direction='horizontal' gap='3'
+                                style={{
+                                    padding: '10px',
+                                    alignItems: 'center'
+                                }}
+                            >
+                                <h6
+                                    style={{
+                                        margin: '0'
+                                    }}
+                                >Choose date</h6>
+                                <button onClick={() => setSelectedDate(new Date())}
+                                    style={{
+                                        padding: '0 15px',
+                                        border: '1px solid #333'
+                                    }}
+                                >now</button>
+                            </Stack>
                             <DatePicker
                                 onChange={(date) => {
                                     setShowSlotModal(false),
@@ -147,21 +161,37 @@ function WeeklyCalendar() {
 
                 </thead>
                 <tbody >
+                    {console.log(emptySlot)}
                     {timeSlots.map((slot, idx) => (
                         <tr key={idx}>
                             <td>{slot}</td>
                             {getFullDaysInWeek(selectedDate).map((day) => (
                                 <td
                                     key={`${day}-${slot}`}
-                                    onClick={() => handleCreateClick(day, slot)}
+                                    onClick={() => {
+                                        if (role === "lecturer") handleCreateClick(day, slot)
+                                    }}
                                 >
                                     {
                                         emptySlot.map((meeting) => {
-                                            (meeting.dateStart === day && 1 + 1 == 2) && (
-                                                <>
-
-                                                </>
-                                            )
+                                            {
+                                                if (meeting.dateStart === day && meeting.slotTimeId == slot.charAt(5)) {
+                                                    switch (role) {
+                                                        case "student":
+                                                            {
+                                                                return (
+                                                                    <div>student meeting schedule</div>
+                                                                )
+                                                                break;
+                                                            }
+                                                        case "lecturer":
+                                                            {
+                                                                return (<div>lecturer meeting schedule</div>)
+                                                                break;
+                                                            }
+                                                    }
+                                                } return null
+                                            }
                                         })
                                     }
                                 </td>
