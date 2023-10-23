@@ -42,9 +42,12 @@ const dropdownItems = [
 
 const L_Header = () => {
 
-  const [activePage, setActivePage] = useState(null);
-  const { setShowSlotModal, showSlotModal } = useContext(GlobalContext)
+  const { showSlotModal, setShowSlotModal, setSelectedSlot } = useContext(GlobalContext)
 
+  console.log(showSlotModal)
+  const handleCreateClick = () => {
+    setShowSlotModal(true);
+  }
   return (
     <Stack className={Style.container}>
       <div className={Style.div1}>
@@ -100,14 +103,13 @@ const L_Header = () => {
           variant="light"
           style={{ borderRadius: "10px" }}
 
-          onClick={() => setShowSlotModal(true)}
+          onClick={() => handleCreateClick()}
         >
           <FontAwesomeIcon
             icon={faCirclePlus}
             style={{ color: "#fa8334", paddingRight: "10px" }}
           />
           Create Slot
-
         </Button>
       </Stack>
       <Stack direction="horizontal" gap={5} className={Style.div3}>

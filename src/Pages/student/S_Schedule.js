@@ -22,12 +22,7 @@ const path = [
 ]
 
 const S_Schedule = () => {
-    const { showSlotModal, setRole } = useContext(GlobalContext);
-
-    useEffect(() => {
-        setRole('student');
-    }, []);
-
+    const { showSlotModal } = useContext(GlobalContext);
 
     return (
         <>
