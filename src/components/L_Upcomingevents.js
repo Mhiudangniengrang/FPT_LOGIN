@@ -1,51 +1,37 @@
-import React, { useState } from "react";
-import data from "../S_Data.json"; // Replace with the correct path to your data file
-import "bootstrap/dist/css/bootstrap.min.css";
-import { Button, Form, Card } from "react-bootstrap";
-import dayjs from "dayjs";
+import { Container, Button, Form, Card } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faChevronLeft,
   faChevronRight,
+  faCalendarDays
 } from "@fortawesome/free-solid-svg-icons";
-function List() {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [recordsPerPage, setRecordsPerPage] = useState(5);
-  const [currentDate, setCurrentDate] = useState(dayjs()); // Initialize currentDate using Day.js
-  const firstIndex = (currentPage - 1) * recordsPerPage;
-  const lastIndex = firstIndex + recordsPerPage;
-
-  // Filter data to include only items with the same date as currentDate
-  const filteredData = data.filter((record) => {
-    const recordDate = dayjs(record.date, "DD/MM/YYYY"); // Adjust the date format
-    return (
-      recordDate.date() === currentDate.date() &&
-      recordDate.month() === currentDate.month() &&
-      recordDate.year() === currentDate.year()
-    );
-  });
-
-  const records = filteredData.slice(firstIndex, lastIndex);
-
-  function handleRecordsPerPageChange(e) {
-    setRecordsPerPage(parseInt(e.target.value));
-    setCurrentPage(1);
-  }
-
-  function nextDate() {
-    const newDate = currentDate.add(1, "day");
-    setCurrentDate(newDate);
-    setCurrentPage(1); // Reset to the first page when changing the date
-  }
-
-  function previousDate() {
-    const newDate = currentDate.subtract(1, "day");
-    setCurrentDate(newDate);
-    setCurrentPage(1); // Reset to the first page when changing the date
-  }
+const L_Upcomingevents = (props) => {
+  const {
+    recordsPerPage,
+    handleRecordsPerPageChange,
+    previousDate,
+    nextDate,
+    records,
+    currentDate,
+  } = props;
 
   return (
     <div>
+      <Card className="my-2 w-25  ">
+        <Card.Header>
+          <h3 className="text-lg">
+            <FontAwesomeIcon className=" mx-2" size ="1x"icon={faCalendarDays} />
+            Events
+          </h3>
+        </Card.Header>
+      </Card>
+      <Container>
+        <div className="custom-dashed-line my-3"></div>{" "}
+        {/* Add a custom dashed line */}
+        <h4>Upcoming events</h4>
+        <div className="custom-dashed-line my-3"></div>{" "}
+        {/* Add another custom dashed line */}
+      </Container>
       <Card className="text-center my-5">
         <Card.Body>
           <div className="d-flex align-items-center">
@@ -69,7 +55,7 @@ function List() {
             <Button variant="secondary" onClick={previousDate}>
               <FontAwesomeIcon icon={faChevronLeft} />
             </Button>{" "}
-            <h2>{currentDate.format("dddd, DD/MM/YYYY")}</h2>
+            <h5>{currentDate.format("dddd, DD/MM/YYYY")}</h5>
             <Button variant="secondary" onClick={nextDate}>
               <FontAwesomeIcon icon={faChevronRight} />
             </Button>
@@ -79,7 +65,7 @@ function List() {
             <thead>
               <tr>
                 <th>No</th>
-                <th>Lecture</th>
+                <th>Student</th>
                 <th>Date</th>
                 <th>Time Start</th>
                 <th>Slot</th>
@@ -93,7 +79,7 @@ function List() {
               {records.map((record, i) => (
                 <tr key={i}>
                   <td>{record.no}</td>
-                  <td>{record.lecture}</td>
+                  <td>{record.student}</td>
                   <td>{record.date}</td>
                   <td>{record.timestart}</td>
                   <td>{record.slot}</td>
@@ -115,6 +101,5 @@ function List() {
       </Card>
     </div>
   );
-}
-
-export default List;
+};
+export default L_Upcomingevents;

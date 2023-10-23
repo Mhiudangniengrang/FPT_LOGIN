@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import S_SubjectList from "../SubjectList_userinfo/S_SubjectList";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBriefcase } from "@fortawesome/free-solid-svg-icons";
+
 function S_EditProfile(props) {
   const [selectedSubjects, setSelectedSubjects] = useState([]); // Initialize with an empty array for multi-selection
   const [name, setName] = useState(props.currentName); // Initialize the name state with the prop value

@@ -7,6 +7,7 @@ import {
   faChevronLeft,
   faChevronRight,
 } from "@fortawesome/free-solid-svg-icons";
+import S_TitleList from "../List/S_TitleList";
 
 function List() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -112,26 +113,12 @@ function List() {
 
   return (
     <div>
-      <div className="d-flex justify-content-between">
-        <Button onClick={handlePrev}>
-          <FontAwesomeIcon icon={faChevronLeft} />
-        </Button>
-        <h3
-          style={{
-            marginLeft: "1rem",
-            fontSize: "1.25rem",
-            lineHeight: "1.75rem",
-            fontWeight: 700,
-            color: "#6B7280",
-          }}
-          className={activeIndex === 0 ? "" : ""}
-        >
-          {options[activeIndex]}
-        </h3>
-        <Button onClick={handleNext}>
-          <FontAwesomeIcon icon={faChevronRight} />
-        </Button>
-      </div>
+      <S_TitleList
+        handlePrev={handlePrev}
+        handleNext={handleNext}
+        options={options}
+        activeIndex={activeIndex}
+      />
 
       <Card className="text-center my-5">
         <Card.Body>

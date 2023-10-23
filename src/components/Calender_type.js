@@ -19,16 +19,13 @@ import {
 } from "../Utils/dateUtils";
 import GlobalContext from "../context/GlobalContext";
 import List from "./Schedule/List";
+import S_TitleList from "./List/S_TitleList";
 
 const Calender_type = () => {
   const [activeButton, setActiveButton] = useState("week");
   const [currenMonth, setCurrentMonth] = useState(getMonth());
-  const {
-    setMonthIndex,
-    monthIndex,
-    daySelected,
-    setDaySelected,
-  } = useContext(GlobalContext);
+  const { setMonthIndex, monthIndex, daySelected, setDaySelected } =
+    useContext(GlobalContext);
   useEffect(() => {
     setCurrentMonth(getMonth(monthIndex));
   }, [monthIndex]);
@@ -77,7 +74,14 @@ const Calender_type = () => {
             getStartOfWeekFormatted(daySelected) +
               " - " +
               getEndOfWeekFormatted(daySelected)}
-          {activeButton === "list" && <div>hi</div>}
+          {activeButton === "list" && (
+            <S_TitleList
+              handlePrev={handlePrev}
+              handleNext={handleNext}
+              options={options}
+              activeIndex={activeIndex}
+            />
+          )}
         </h2>
         <Stack direction="horizontal">
           {activeButton === "month" && (

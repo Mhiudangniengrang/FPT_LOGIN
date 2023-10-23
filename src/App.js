@@ -21,7 +21,6 @@ import S_SearchName from "./components/S_SearchTeacher/S_SearchName";
 import Calender_type from "./components/Calender_type";
 import L_ViewTeaching from "./Pages/lecturer/L_ViewTeaching";
 import L_ViewMeeting from "./Pages/lecturer/L_ViewMeeting";
-import S_HomeStudent from "./components/S_HomeStudent";
 
 function App() {
   return (
@@ -40,9 +39,7 @@ function App() {
           <Route path="/student_home">
             <S_home />
           </Route>
-          <Route path="/s_student_home">
-            <S_HomeStudent/>
-          </Route>
+
           <Route path="/calender_type">
             <Calender_type />
           </Route>

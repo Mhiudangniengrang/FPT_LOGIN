@@ -1,14 +1,16 @@
 import React, { useState } from "react";
-import data from "../S_Data.json"; // Replace with the correct path to your data file
+import data from "../L_Data.json"; // Replace with the correct path to your data file
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Button, Form, Card } from "react-bootstrap";
+import { Container, Button, Form, Card } from "react-bootstrap";
 import dayjs from "dayjs";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faChevronLeft,
   faChevronRight,
 } from "@fortawesome/free-solid-svg-icons";
-function List() {
+import L_Upcomingevents from "./L_Upcomingevents"; // Import the L_Requestingevents component
+
+function L_HomeTeacher() {
   const [currentPage, setCurrentPage] = useState(1);
   const [recordsPerPage, setRecordsPerPage] = useState(5);
   const [currentDate, setCurrentDate] = useState(dayjs()); // Initialize currentDate using Day.js
@@ -46,6 +48,22 @@ function List() {
 
   return (
     <div>
+      <L_Upcomingevents
+        recordsPerPage={recordsPerPage}
+        handleRecordsPerPageChange={handleRecordsPerPageChange}
+        previousDate={previousDate}
+        nextDate={nextDate}
+        records={records}
+        currentDate={currentDate}
+      />
+      
+      <Container>
+        <div className="custom-dashed-line my-3"></div>{" "}
+        {/* Add a custom dashed line */}
+        <h4>Requesting events</h4>
+        <div className="custom-dashed-line my-3"></div>{" "}
+        {/* Add another custom dashed line */}
+      </Container>
       <Card className="text-center my-5">
         <Card.Body>
           <div className="d-flex align-items-center">
@@ -69,7 +87,7 @@ function List() {
             <Button variant="secondary" onClick={previousDate}>
               <FontAwesomeIcon icon={faChevronLeft} />
             </Button>{" "}
-            <h2>{currentDate.format("dddd, DD/MM/YYYY")}</h2>
+            <h5>{currentDate.format("dddd, DD/MM/YYYY")}</h5>
             <Button variant="secondary" onClick={nextDate}>
               <FontAwesomeIcon icon={faChevronRight} />
             </Button>
@@ -79,7 +97,7 @@ function List() {
             <thead>
               <tr>
                 <th>No</th>
-                <th>Lecture</th>
+                <th>Student</th>
                 <th>Date</th>
                 <th>Time Start</th>
                 <th>Slot</th>
@@ -93,7 +111,7 @@ function List() {
               {records.map((record, i) => (
                 <tr key={i}>
                   <td>{record.no}</td>
-                  <td>{record.lecture}</td>
+                  <td>{record.student}</td>
                   <td>{record.date}</td>
                   <td>{record.timestart}</td>
                   <td>{record.slot}</td>
@@ -113,8 +131,10 @@ function List() {
           {/* ... (your pagination code) */}
         </Card.Body>
       </Card>
+      <hr /> {/* Đường line ngang */}
+      {/* Include the L_Requestingevents component */}
     </div>
   );
 }
 
-export default List;
+export default L_HomeTeacher;

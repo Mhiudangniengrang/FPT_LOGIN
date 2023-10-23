@@ -10,7 +10,6 @@ import {
   Image,
   CardBody,
 } from "react-bootstrap";
-import S_Aboutme from "../../components/ViewProfile/S_Course";
 import S_EditProfile from "../../components/ViewProfile/S_EditProfile";
 import S_Layout from "../../Layouts/S_Layout";
 import { useLocation } from "react-router-dom";

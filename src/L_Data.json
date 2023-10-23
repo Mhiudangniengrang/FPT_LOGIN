@@ -12,18 +12,18 @@
     },
     {"no": "2",
     "student": "tuannmse171153",
-    "date" : "6/10/2023",
+    "date" : "10/23/2023",
     "timestart" : "20:30 - 22:00",
     "slot" : "2",
     "room": "607",
     "subject":"SWP391",
     "duration": "30 minutes",
-    "status" :"Accepted"
-    
+    "status" :"Waiting"
+
     },
     {"no": "3",
     "student": "tuannmse171153",
-    "date" : "6/10/2023",
+    "date" : "10/19/2023",
     "timestart" : "20:30 - 22:00",
     "slot" : "2",
     "room": "607",
@@ -33,7 +33,7 @@
     },
     {"no": "4",
     "student": "tuannmse171153",
-    "date" : "6/10/2023",
+    "date" : "10/18/2023",
     "timestart" : "20:30 - 22:00",
     "slot" : "2",
     "room": "607",
