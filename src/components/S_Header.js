@@ -19,7 +19,7 @@ import CustomNavDropdown from "./DropDownStack";
 import S_ViewProfile from "../Pages/student/S_ViewProfile"; // Adjust the path as needed
 const dropdownItems = [
   {
-    link: "",
+    link: "/s_view_schedule",
     desc: "View Schedule",
   },
   {

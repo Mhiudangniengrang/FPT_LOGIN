@@ -18,10 +18,8 @@ const path = [
 ]
 const L_ViewMeeting = () => {
 
-    const { showSlotModal, setRole } = useContext(GlobalContext)
-    useEffect(() => {
-        setRole('student');
-    }, []);
+    const { showSlotModal } = useContext(GlobalContext)
+
     return (
         <L_Layout>
             {showSlotModal && <CreateSlot />}
