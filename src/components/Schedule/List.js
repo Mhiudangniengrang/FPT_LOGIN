@@ -1,31 +1,92 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import data from "../../S_Data.json";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Button, Form, Card } from "react-bootstrap";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faChevronLeft,
+  faChevronRight,
+} from "@fortawesome/free-solid-svg-icons";
+import S_TitleList from "../List/S_TitleList";
 
-function S_List() {
+function List() {
   const [currentPage, setCurrentPage] = useState(1);
   const [recordsPerPage, setRecordsPerPage] = useState(5);
-  const [isEditing, setIsEditing] = useState(false);
-  const [editingIndex, setEditingIndex] = useState(null);
-  const [editedSubject, setEditedSubject] = useState("");
   const firstIndex = (currentPage - 1) * recordsPerPage;
   const lastIndex = firstIndex + recordsPerPage;
-  const records = data.slice(firstIndex, lastIndex);
   const npage = Math.ceil(data.length / recordsPerPage);
   const numbers = [...Array(npage + 1).keys()].slice(1);
   const options = ["Summer-2023", "Fall-2023", "Spring-2023"];
   const [activeIndex, setActiveIndex] = useState(1);
+  const [selectedTerm, setSelectedTerm] = useState("Fall-2023"); // Default term
+  const [filteredData, setFilteredData] = useState([]);
 
+  const terms = {
+    "Summer-2023": { startDate: "5/5", endDate: "25/7" },
+    "Fall-2023": { startDate: "5/9", endDate: "25/11" },
+    "Spring-2023": { startDate: "5/1", endDate: "25/3" },
+  };
+
+  useEffect(() => {
+    const termInfo = terms[selectedTerm];
+    const termStartDateParts = termInfo.startDate.split("/");
+    const termEndDateParts = termInfo.endDate.split("/");
+    const termStartDate = new Date(
+      2023,
+      parseInt(termStartDateParts[1]) - 1, // Subtract 1 from month because it's 0-based
+      parseInt(termStartDateParts[0])
+    );
+    const termEndDate = new Date(
+      2023,
+      parseInt(termEndDateParts[1]) - 1,
+      parseInt(termEndDateParts[0])
+    );
+
+    const termData = data.filter((record) => {
+      const recordDateParts = record.date.split("/");
+      const recordDate = new Date(
+        2023,
+        parseInt(recordDateParts[1]) - 1,
+        parseInt(recordDateParts[0])
+      );
+
+      return recordDate >= termStartDate && recordDate <= termEndDate;
+    });
+
+    setFilteredData(termData);
+  }, [selectedTerm]);
+  const handleSpringTerm = () => {
+    setSelectedTerm("Spring-2023");
+    setCurrentPage(1);
+    setActiveIndex(2); // Update to match the index of "Spring-2023"
+  };
+
+  const handleSummerTerm = () => {
+    setSelectedTerm("Summer-2023");
+    setCurrentPage(1);
+    setActiveIndex(0); // Update to match the index of "Summer-2023"
+  };
+
+  const handleFallTerm = () => {
+    setSelectedTerm("Fall-2023");
+    setCurrentPage(1);
+    setActiveIndex(1); // Update to match the index of "Fall-2023"
+  };
+
+  // The handleNext and handlePrev functions are updated as follows
   const handleNext = () => {
+    setCurrentPage(1);
     setActiveIndex((prevIndex) => (prevIndex + 1) % options.length);
+    setSelectedTerm(options[(activeIndex + 1) % options.length]);
   };
 
   const handlePrev = () => {
-    setActiveIndex((prevIndex) =>
-      prevIndex === 0 ? options.length - 1 : prevIndex - 1
+    setCurrentPage(1);
+    setActiveIndex(
+      (prevIndex) => (prevIndex - 1 + options.length) % options.length
+    );
+    setSelectedTerm(
+      options[(activeIndex - 1 + options.length) % options.length]
     );
   };
 
@@ -50,50 +111,14 @@ function S_List() {
     setCurrentPage(1);
   }
 
-  function handleEditClick(index) {
-    setIsEditing(true);
-    setEditingIndex(index);
-    setEditedSubject(records[index].subject);
-    console.log("Edit clicked for index:", index);
-  }
-
-  //   function handleDeleteClick(index) {
-
-  //   }
-
-  function handleSaveClick(index) {
-    records[index].subject = editedSubject;
-    setIsEditing(false);
-    setEditingIndex(null);
-
-    // Show a notification
-    toast.success("Changes saved successfully", {
-      position: "top-right",
-      autoClose: 2000, // You can adjust the duration
-    });
-  }
-
   return (
     <div>
-      <ToastContainer />
-
-      <div className="d-flex justify-content-between">
-        <Button onClick={handlePrev}>Previous</Button>
-        <h3
-          style={{
-            marginLeft: "1rem",
-            fontSize: "1.25rem",
-            lineHeight: "1.75rem",
-            fontWeight: 700,
-            color: "#6B7280",
-          }}
-          className={activeIndex === 0 ? "" : ""}
-        >
-          {options[activeIndex]}
-        </h3>
-
-        <Button onClick={handleNext}>Next</Button>
-      </div>
+      <S_TitleList
+        handlePrev={handlePrev}
+        handleNext={handleNext}
+        options={options}
+        activeIndex={activeIndex}
+      />
 
       <Card className="text-center my-5">
         <Card.Body>
@@ -122,71 +147,33 @@ function S_List() {
                 <th>Date</th>
                 <th>Time Start</th>
                 <th>Slot</th>
+                <th>Room</th>
                 <th>Subject</th>
                 <th>Duration</th>
                 <th>Status</th>
-                <th>Action</th>
               </tr>
             </thead>
             <tbody>
-              {records.map((record, i) => (
+              {filteredData.map((record, i) => (
                 <tr key={i}>
                   <td>{record.no}</td>
                   <td>{record.lecture}</td>
                   <td>{record.date}</td>
                   <td>{record.timestart}</td>
                   <td>{record.slot}</td>
-                  <td>
-                    {isEditing && editingIndex === i ? (
-                      <input
-                        type="text"
-                        value={editedSubject}
-                        onChange={(e) => setEditedSubject(e.target.value)}
-                      />
-                    ) : (
-                      record.subject
-                    )}
-                  </td>
+                  <td>{record.room}</td>
+                  <td>{record.subject}</td>
                   <td>{record.duration}</td>
                   <td>
-                    {record.status === "Accepted" ? (
-                      <div className="text-success">Accepted</div>
-                    ) : (
-                      <div className="text-danger">Rejected</div>
-                    )}
-                  </td>
-                  <td>
-                    {isEditing && editingIndex === i ? (
-                      <Button
-                        className="mx-2"
-                        variant="primary"
-                        onClick={() => handleSaveClick(i)}
-                      >
-                        Save
-                      </Button>
-                    ) : (
-                      <Button
-                        className="mx-2"
-                        variant="success"
-                        onClick={() => handleEditClick(i)}
-                        disabled={isEditing}
-                      >
-                        Edit
-                      </Button>
-                    )}
-                    <Button
-                      variant="danger"
-                      //   onClick={() => handleDeleteClick(i)}
-                      disabled={isEditing}
-                    >
-                      Delete
-                    </Button>
+                    {" "}
+                    {record.status === "Accepted"}
+                    <div className="text-success">Accepted</div>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
-          <nav className="d-flex justify-content-center">
+          <div className="d-flex justify-content-center">
             <ul className="pagination">
               <li className="page-item">
                 <a href="#" className="page-link" onClick={prePage}>
@@ -213,11 +200,11 @@ function S_List() {
                 </a>
               </li>
             </ul>
-          </nav>
+          </div>
         </Card.Body>
       </Card>
     </div>
   );
 }
 
-export default S_List;
+export default List;

@@ -8,17 +8,15 @@ import {
   FormGroup,
   Button,
 } from "react-bootstrap";
-import { useLocation,useHistory  } from "react-router-dom";
+import { useLocation, useHistory } from "react-router-dom";
 import L_Layout from "../../Layouts/L_Layout";
 import L_SubjectList from "../../components/SubjectList_userinfo/L_SubjectList";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
-
 function L_UserInfo() {
   const location = useLocation();
-  const formData = location.state.formData;
   const history = useHistory();
-
+  const formData = location.state.formData;
   const subjects = [
     { id: 1, name: "CEA201 - Computer Organization and Architecture" },
     { id: 2, name: "CSI104 - Introduction to Computing" },
@@ -31,9 +29,9 @@ function L_UserInfo() {
     // Add more subjects here
   ];
   const [filteredSubjects, setFilteredSubjects] = useState(subjects);
-  const [major, setMajor] = useState("Select Major"); // Default major
-  const [selectedSubjects, setSelectedSubjects] = useState([]); // Initialize with an empty array for multi-selection
-  const [enteredID, setEnteredID] = useState(""); // Initialize with an empty string
+  const [major, setMajor] = useState("Select Major");
+  const [selectedSubjects, setSelectedSubjects] = useState([]);
+  const [enteredID, setEnteredID] = useState("");
 
   const handleEnteredIDChange = (event) => {
     setEnteredID(event.target.value);
@@ -50,14 +48,29 @@ function L_UserInfo() {
   };
 
   const handleSubjectSelection = (subject) => {
-    setSelectedSubjects([...selectedSubjects, subject]);
+    // Kiểm tra xem môn học đã được chọn trước đó chưa
+    if (
+      !selectedSubjects.some(
+        (selectedSubject) => selectedSubject.id === subject.id
+      )
+    ) {
+      setSelectedSubjects([...selectedSubjects, subject]);
+    }
+    // Nếu môn học đã được chọn, bạn có thể xử lý theo ý muốn, ví dụ: thông báo lỗi hoặc không thêm vào danh sách.
+    else {
+      // Xử lý trường hợp môn học đã được chọn
+      // Ví dụ: alert("Môn học đã được chọn trước đó");
+    }
   };
   const handleClickSave = () => {
     // Handle saving the selected subjects (e.g., send to server or another component)
     console.log("Selected Subjects:", selectedSubjects);
 
-    // Redirect to S_ViewProfile and pass selectedSubjects as state
-    history.push("/l_view_profile", { selectedSubjects: selectedSubjects });
+    // Truyền tên (name) từ formData sang trang S_ViewProfile
+    history.push("/l_view_profile", {
+      selectedSubjects: selectedSubjects,
+      name: formData.name,
+    });
   };
   return (
     <L_Layout>
@@ -77,14 +90,13 @@ function L_UserInfo() {
                   <p>Campus: {formData.campus}</p>
                   <p>Role: {formData.role}</p>
                   <p>
-                    Lecture ID:{" "}
+                    Student ID:{" "}
                     <input
                       className="rounded border mx-2"
                       type="text"
                       placeholder=" EnterID"
                       value={enteredID}
                       onChange={handleEnteredIDChange}
-                      required
                     />
                   </p>
                   <FormGroup>
@@ -95,27 +107,28 @@ function L_UserInfo() {
                       name="major"
                       value={major}
                       onChange={handleMajorChange}
-                      required
                     >
-                      <option value="Select Major">Select Major</option>
-                      <option value="">
+                      <option value="" disabled hidden>
+                        Select Major
+                      </option>{" "}
+                      <option value="Software Engineering (Kĩ thuật phần mềm)">
                         Software Engineering (Kĩ thuật phần mềm)
                       </option>
-                      <option value="">
+                      <option value="Artificial Intelligence (AI) (Trí tuệ nhân tạo (AI))">
                         Artificial Intelligence (AI) (Trí tuệ nhân tạo (AI))
                       </option>
-                      <option value="">
+                      <option value="Information Assurance (An toàn thông tin)">
                         Information Assurance (An toàn thông tin)
                       </option>
-                      <option value="">
+                      <option value="Information System - IS (Hệ thống thông tin)">
                         Information System - IS (Hệ thống thông tin)
                       </option>
-                      <option value="">
+                      <option value="Digital Art & Design (Thiết kế Mỹ thuật số)">
                         Digital Art & Design (Thiết kế Mỹ thuật số)
                       </option>
                     </select>
                   </FormGroup>
-                  <p className="my-3">Your teaching subjects:</p>
+                  <p className="my-3">Your current subjects:</p>
                   {selectedSubjects.map((subject) => (
                     <li key={subject.id}>{subject.name}</li>
                   ))}
@@ -123,7 +136,6 @@ function L_UserInfo() {
                     subjects={filteredSubjects}
                     onSearch={handleSearch}
                     onSubjectSelect={handleSubjectSelection}
-                    required
                   />
                   <Button onClick={handleClickSave}>Save</Button>
                   <Button className="mx-2" variant="secondary">

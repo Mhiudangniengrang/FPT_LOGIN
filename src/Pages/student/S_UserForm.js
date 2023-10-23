@@ -68,7 +68,9 @@ function S_UserForm() {
                       value={formData.campus}
                       onChange={handleChange}
                     >
-                      <option value="">Select Campus</option>
+                      <option value="" disabled hidden>
+                        Select Campus
+                      </option>{" "}
                       <option value="FPT_DN">FPT_DN</option>
                       <option value="FPT_HCM">FPT_HCM</option>
                     </Form.Control>
@@ -81,7 +83,9 @@ function S_UserForm() {
                       value={formData.role}
                       onChange={handleChange}
                     >
-                      <option value="">Select Role</option>
+                      <option value="" disabled hidden>
+                        Select Role
+                      </option>
                       <option value="Student">Student</option>
                       <option value="Lecture">Lecture</option>
                     </Form.Control>

@@ -4,6 +4,7 @@ import S_Layout from "../../Layouts/S_Layout";
 import "react-datepicker/dist/react-datepicker.css";
 import OffCanvasSidebar from "../../components/OffCanvasSidebar";
 import FormSearch from "../../components/FormSearch";
+import S_HomeStudent from "../../components/S_HomeStudent";
 
 
 const S_home = () => {
@@ -13,7 +14,7 @@ const S_home = () => {
       <S_Layout>
         <OffCanvasSidebar />
         <FormSearch />
-        List
+       <S_HomeStudent/>
       </S_Layout>
     </>
   );

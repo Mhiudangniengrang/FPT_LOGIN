@@ -48,16 +48,30 @@ function S_UserInfo() {
   };
 
   const handleSubjectSelection = (subject) => {
-    setSelectedSubjects([...selectedSubjects, subject]);
+    // Kiểm tra xem môn học đã được chọn trước đó chưa
+    if (
+      !selectedSubjects.some(
+        (selectedSubject) => selectedSubject.id === subject.id
+      )
+    ) {
+      setSelectedSubjects([...selectedSubjects, subject]);
+    }
+    // Nếu môn học đã được chọn, bạn có thể xử lý theo ý muốn, ví dụ: thông báo lỗi hoặc không thêm vào danh sách.
+    else {
+      // Xử lý trường hợp môn học đã được chọn
+      // Ví dụ: alert("Môn học đã được chọn trước đó");
+    }
   };
   const handleClickSave = () => {
     // Handle saving the selected subjects (e.g., send to server or another component)
     console.log("Selected Subjects:", selectedSubjects);
 
-    // Redirect to S_ViewProfile and pass selectedSubjects as state
-    history.push("/s_view_profile", { selectedSubjects: selectedSubjects });
+    // Truyền tên (name) từ formData sang trang S_ViewProfile
+    history.push("/s_view_profile", {
+      selectedSubjects: selectedSubjects,
+      name: formData.name,
+    });
   };
-
   return (
     <S_Layout>
       <Container className="py-2">
@@ -94,20 +108,22 @@ function S_UserInfo() {
                       value={major}
                       onChange={handleMajorChange}
                     >
-                      <option value="Select Major">Select Major</option>
-                      <option value="">
+                      <option value="" disabled hidden>
+                        Select Major
+                      </option>{" "}
+                      <option value="Software Engineering (Kĩ thuật phần mềm)">
                         Software Engineering (Kĩ thuật phần mềm)
                       </option>
-                      <option value="">
+                      <option value="Artificial Intelligence (AI) (Trí tuệ nhân tạo (AI))">
                         Artificial Intelligence (AI) (Trí tuệ nhân tạo (AI))
                       </option>
-                      <option value="">
+                      <option value="Information Assurance (An toàn thông tin)">
                         Information Assurance (An toàn thông tin)
                       </option>
-                      <option value="">
+                      <option value="Information System - IS (Hệ thống thông tin)">
                         Information System - IS (Hệ thống thông tin)
                       </option>
-                      <option value="">
+                      <option value="Digital Art & Design (Thiết kế Mỹ thuật số)">
                         Digital Art & Design (Thiết kế Mỹ thuật số)
                       </option>
                     </select>

@@ -10,34 +10,48 @@ import {
   Image,
   CardBody,
 } from "react-bootstrap";
-import L_Aboutme from "../../components/ViewProfile/L_Aboutme";
 import L_EditProfile from "../../components/ViewProfile/L_EditProfile";
-import L_Course from "../../components/ViewProfile/L_Course";
 import L_Layout from "../../Layouts/L_Layout";
 import { useLocation } from "react-router-dom";
+import L_Course from "../../components/ViewProfile/L_Course";
 
 function L_ViewProfile() {
-  const [activeTab, setActiveTab] = useState("aboutMe");
-  const [description, setDescription] = useState("");
+  const [activeTab, setActiveTab] = useState("course");
   const [course, setCourse] = useState([]);
+  const [name, setName] = useState(""); // Tên người dùng
 
   const location = useLocation();
-  const state = location.state;
+  const state = location.state; // Initialize the state variable
 
   useEffect(() => {
+    if (state && state.name) {
+      // Kiểm tra xem có tên (name) trong location.state hay không
+      setName(state.name);
+    }
+
+    // Cập nhật các thông tin khác
     if (state && state.selectedSubjects) {
       setCourse(state.selectedSubjects);
     }
   }, [state]);
-
-  const handleUpdateProfile = (description, selectedSubjects) => {
+  const handleUpdateProfile = (selectedSubjects) => {
     const course = selectedSubjects.map((subject) => ({
       id: subject.id,
       name: subject.name,
     }));
-    setDescription(description);
+
     setCourse(course);
   };
+  const breadScrumData = [
+    {
+      route: "/lecturer_home",
+      text: "Home",
+    },
+    {
+      route: "/l_view_profile",
+      text: "View Profile",
+    },
+  ];
 
   return (
     <L_Layout>
@@ -58,41 +72,34 @@ function L_ViewProfile() {
                 <Row>
                   <Col md={6} className="py-2">
                     <h5>Name:</h5>
-                    <p>Hungld FU HCM Lại Đức Hùng</p>
+                    <p>{name || "Write a name here."}</p>
                     <h5>Email Address:</h5>
-                    <p>HungLD@fpt.edu.vn</p>
+                    <p>HungLD@fpt.edu.vn</p>{" "}
                   </Col>
                   <Col md={6}>
                     <Button
-                      variant={activeTab === "aboutMe" ? "success" : "dark"}
-                      onClick={() => setActiveTab("aboutMe")}
-                    >
-                      About me
-                    </Button>
-                    <Button
-                      className="px-3 mx-2"
-                      variant={activeTab === "course" ? "success" : "dark"}
+                      className="mx-2"
+                      variant={activeTab === "course" ? "warning" : "secondary"}
                       onClick={() => setActiveTab("course")}
                     >
                       Course
                     </Button>
+
                     <Button
-                      variant={activeTab === "editprofile" ? "success" : "dark"}
+                      variant={
+                        activeTab === "editprofile" ? "warning" : "secondary"
+                      }
                       onClick={() => setActiveTab("editprofile")}
                     >
                       Edit profile
                     </Button>
                     <Card className="my-3">
                       <CardBody>
-                        {activeTab === "aboutMe" && (
-                          <L_Aboutme
-                            description={description}
-                            course={course}
-                          />
-                        )}
                         {activeTab === "course" && <L_Course course={course} />}
                         {activeTab === "editprofile" && (
                           <L_EditProfile
+                            onUpdateName={(newName) => setName(newName)}
+                            currentName={name}
                             onUpdateProfile={handleUpdateProfile}
                           />
                         )}
