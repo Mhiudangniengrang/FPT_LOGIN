@@ -8,6 +8,7 @@ import reportWebVitals from './reportWebVitals';
 import ContextWrapper from './context/ContextWrapper';
 
 ReactDOM.render(
+
   <React.StrictMode>
     <ContextWrapper>
       <App />

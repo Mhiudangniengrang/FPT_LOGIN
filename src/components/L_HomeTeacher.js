@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import data from "../L_Data.json"; // Replace with the correct path to your data file
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Container, Button, Form, Card } from "react-bootstrap";
@@ -9,13 +9,31 @@ import {
   faChevronRight,
 } from "@fortawesome/free-solid-svg-icons";
 import L_Upcomingevents from "./L_Upcomingevents"; // Import the L_Requestingevents component
+import axios from '../Services/customizeAxios'
 
+
+const accessToken = typeof window !== null ? localStorage.getItem('accessToken') : null
 function L_HomeTeacher() {
   const [currentPage, setCurrentPage] = useState(1);
   const [recordsPerPage, setRecordsPerPage] = useState(5);
   const [currentDate, setCurrentDate] = useState(dayjs()); // Initialize currentDate using Day.js
   const firstIndex = (currentPage - 1) * recordsPerPage;
   const lastIndex = firstIndex + recordsPerPage;
+
+
+  useEffect(() => {
+    axios
+      .get(`/api/v1/requests/student/`, {
+        headers: { Authorization: `Bearer ${accessToken}` }
+      }).then(res => {
+        res.map((request) => {
+          //
+        })
+      }).catch((error) => {
+        console.log("Error lecturer home", error);
+      })
+
+  }, [accessToken])
 
   // Filter data to include only items with the same date as currentDate
   const filteredData = data.filter((record) => {
@@ -56,7 +74,7 @@ function L_HomeTeacher() {
         records={records}
         currentDate={currentDate}
       />
-      
+
       <Container>
         <div className="custom-dashed-line my-3"></div>{" "}
         {/* Add a custom dashed line */}

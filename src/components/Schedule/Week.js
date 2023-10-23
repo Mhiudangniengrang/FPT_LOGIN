@@ -47,31 +47,28 @@ const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Fri
 
 const timeSlots = ['Slot 1', 'Slot 2', 'Slot 3', 'Slot 4', 'Slot 5', 'Slot 6'];
 
+const lecturerId = 2
 function WeeklyCalendar() {
 
     const [emptySlot, setEmptySlot] = useState([])
     useEffect(() => {
-        let ignore = false;
         axios
-            .get("/api/v1/user/emptySlot/lecturer/2")
+            .get(`/api/v1/user/emptySlot/lecturer/${lecturerId}`)
             .then((response) => {
                 response.map((slot) => {
-                    // if (!ignore) {
                     setEmptySlot((prevSlot) => ([
                         ...prevSlot,
                         slot
                     ]))
-                    // }
+
                 })
             })
             .catch(error => {
                 console.log("Error at Week.js " + error)
             })
-        // return () => { ignore = true }
     }, [])
 
-    const { role, selectedSlot, setSelectedSlot, setShowSlotModal, setDaySelected, savedSlots } = useContext(GlobalContext);
-    console.log(role)
+    const { role, selectedSlot, setSelectedSlot, setShowSlotModal, setDaySelected, savedSlots, emptySlots } = useContext(GlobalContext);
     const [selectedDate, setSelectedDate] = useState(new Date());
 
     const handleDayClick = (day, timeSlot, subjectSlot, purposeSlot) => {
@@ -161,7 +158,6 @@ function WeeklyCalendar() {
 
                 </thead>
                 <tbody >
-                    {console.log(emptySlot)}
                     {timeSlots.map((slot, idx) => (
                         <tr key={idx}>
                             <td>{slot}</td>
@@ -186,7 +182,7 @@ function WeeklyCalendar() {
                                                             }
                                                         case "lecturer":
                                                             {
-                                                                return (<div>lecturer meeting schedule</div>)
+                                                                return (<div>{meeting.status}</div>)
                                                                 break;
                                                             }
                                                     }

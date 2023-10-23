@@ -20,6 +20,7 @@ import { NavLink } from "react-router-dom";
 import HorizontalStack from "./HorizontalStack";
 import CustomNavDropdown from "./DropDownStack";
 import GlobalContext from "../context/GlobalContext";
+import { getDateFormat } from "../Utils/dateUtils";
 
 const dropdownItems = [
   {
@@ -42,11 +43,17 @@ const dropdownItems = [
 
 const L_Header = () => {
 
-  const { showSlotModal, setShowSlotModal, setSelectedSlot } = useContext(GlobalContext)
+  const { daySelected, setShowSlotModal, setSelectedSlot } = useContext(GlobalContext)
 
-  console.log(showSlotModal)
   const handleCreateClick = () => {
     setShowSlotModal(true);
+    let date = getDateFormat(new Date())
+    console.log('date' + date)
+    setSelectedSlot(() => ({
+      'slot': {
+        date: date,
+      }
+    }));
   }
   return (
     <Stack className={Style.container}>

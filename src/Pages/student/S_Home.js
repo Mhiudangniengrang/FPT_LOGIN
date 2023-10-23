@@ -9,12 +9,13 @@ import S_HomeStudent from "../../components/S_HomeStudent";
 
 const S_home = () => {
 
+
   return (
     <>
       <S_Layout>
         <OffCanvasSidebar />
         <FormSearch />
-       <S_HomeStudent/>
+        <S_HomeStudent />
       </S_Layout>
     </>
   );

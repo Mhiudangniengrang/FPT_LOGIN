@@ -4,22 +4,22 @@ import Style from '../../assets/style/team.module.scss'
 const members = [
     {
         fullname: "Tran Minh Loc",
-        email: "loctmse171246@fpt,edu.vn",
+        email: "loctmse171246@fp.edu.vn",
         desc: "ReactJS/React Bootstrap"
     },
     {
         fullname: "Nguyen Minh Nhat",
-        email: "loctmse171246@fpt,edu.vn",
+        email: "nhatnmse171301@fp.edu.vn",
         desc: "SpringBoot/RestAPI"
     },
     {
         fullname: "Nguyen Vu Truong Huy",
-        email: "loctmse171246@fpt,edu.vn",
+        email: "6@fp.edu.vn",
         desc: "SpringBoot/RestAPI"
     },
     {
         fullname: "Duong Minh Hieu",
-        email: "loctmse171246@fpt,edu.vn",
+        email: "@fp.edu.vn",
         desc: "ReactJS/React Bootstrap"
     },
 ]
@@ -33,7 +33,7 @@ function Team() {
                 {
                     members.map(member => {
                         return (
-                            <div className={Style.member} key={member.email}>
+                            <div key={member.fullname} className={Style.member}>
                                 <div className={Style.profileImg}><span>{member.fullname.charAt(0)}</span></div>
                                 <h5>{member.fullname}</h5>
                                 <h6>{member.email}</h6>
