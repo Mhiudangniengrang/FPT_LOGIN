@@ -1,4 +1,4 @@
-export const teachersname = [
+export const teachers = [
     {
         subject: "CEA201",
         teachers: [

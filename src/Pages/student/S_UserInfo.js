@@ -7,16 +7,16 @@ import {
   CardBody,
   FormGroup,
   Button,
+  Form,
 } from "react-bootstrap";
-import { useLocation, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import S_Layout from "../../Layouts/S_Layout";
 import S_SubjectList from "../../components/SubjectList_userinfo/S_SubjectList";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
+
 function S_UserInfo() {
-  const location = useLocation();
   const history = useHistory();
-  const formData = location.state.formData;
   const subjects = [
     { id: 1, name: "SWP391 - Lại Đức Hùng" },
     { id: 2, name: "PRN211 - Nguyễn Thế Hoàng" },
@@ -72,6 +72,18 @@ function S_UserInfo() {
       name: formData.name,
     });
   };
+  const [formData, setFormData] = useState({
+    name: "",
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
   return (
     <S_Layout>
       <Container className="py-2">
@@ -86,19 +98,17 @@ function S_UserInfo() {
             <Card className="px-2">
               <CardBody>
                 <div>
-                  <p>Your Name: {formData.name}</p>
-                  <p>Campus: {formData.campus}</p>
-                  <p>Role: {formData.role}</p>
-                  <p>
-                    Student ID:{" "}
-                    <input
-                      className="rounded border mx-2"
+                  <Form.Group className="d-flex align-items-center">
+                    <Form.Label>Your Name</Form.Label>
+                    <Form.Control
+                      className="w-50 mb-2 mx-2"
                       type="text"
-                      placeholder=" EnterID"
-                      value={enteredID}
-                      onChange={handleEnteredIDChange}
+                      name="name"
+                      value={formData.name}
+                      onChange={handleChange}
                     />
-                  </p>
+                  </Form.Group>
+
                   <FormGroup>
                     <label htmlFor="major">Major:</label>
                     <select

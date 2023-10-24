@@ -10,9 +10,7 @@ import L_home from "./Pages/lecturer/L_Home";
 import S_home from "./Pages/student/S_Home";
 import S_ViewProfile from "./Pages/student/S_ViewProfile";
 import L_ViewProfile from "./Pages/lecturer/L_ViewProfile";
-import S_UserForm from "./Pages/student/S_UserForm";
 import S_Schedule from "./Pages/student/S_Schedule";
-import L_UserForm from "./Pages/lecturer/L_UserForm";
 import S_ViewTeacherProfile from "./Pages/student/S_ViewTeacherProfile";
 import S_UserInfo from "./Pages/student/S_UserInfo";
 import L_UserInfo from "./Pages/lecturer/L_UserInfo";
@@ -21,6 +19,8 @@ import S_SearchName from "./components/S_SearchTeacher/S_SearchName";
 import Calender_type from "./components/Calender_type";
 import L_ViewTeaching from "./Pages/lecturer/L_ViewTeaching";
 import L_ViewMeeting from "./Pages/lecturer/L_ViewMeeting";
+import S_TeacherSubjectInfo from "./components/S_SearchTeacher/S_TeacherSubjectInfo";
+import L_Schedule from "./Pages/lecturer/L_Schedule";
 
 function App() {
   return (
@@ -43,9 +43,7 @@ function App() {
           <Route path="/calender_type">
             <Calender_type />
           </Route>
-          <Route path="/s_userform">
-            <S_UserForm />
-          </Route>
+
           <Route path="/s_user_info">
             <S_UserInfo />
           </Route>
@@ -55,10 +53,10 @@ function App() {
           <Route path="/s_searchname">
             <S_SearchName />
           </Route>
-
-          <Route path="/l_userform">
-            <L_UserForm />
+          <Route path="/s_course_info">
+            <S_TeacherSubjectInfo />
           </Route>
+
           <Route path="/l_user_info">
             <L_UserInfo />
           </Route>
@@ -73,6 +71,9 @@ function App() {
           </Route>
           <Route path="/s_view_teacher_profile">
             <S_ViewTeacherProfile />
+          </Route>
+          <Route path="/l_view_schedule">
+            <L_Schedule />
           </Route>
           <Route path="/l_view_teaching_schedule">
             <L_ViewTeaching />
