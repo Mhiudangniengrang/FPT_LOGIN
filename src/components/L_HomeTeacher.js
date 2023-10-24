@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import data from "../L_Data.json"; // Replace with the correct path to your data file
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Container, Button, Form, Card } from "react-bootstrap";
@@ -16,6 +16,36 @@ function L_HomeTeacher() {
   const [currentDate, setCurrentDate] = useState(dayjs()); // Initialize currentDate using Day.js
   const firstIndex = (currentPage - 1) * recordsPerPage;
   const lastIndex = firstIndex + recordsPerPage;
+
+  useEffect(() => {
+    axios
+      .get(`/api/v1/requests/student/`, {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      })
+      .then((res) => {
+        res.map((request) => {
+          //
+        });
+      })
+      .catch((error) => {
+        console.log("Error lecturer home", error);
+      });
+  }, [accessToken]);
+
+
+  useEffect(() => {
+    axios
+      .get(`/api/v1/requests/student/`, {
+        headers: { Authorization: `Bearer ${accessToken}` }
+      }).then(res => {
+        res.map((request) => {
+          //
+        })
+      }).catch((error) => {
+        console.log("Error lecturer home", error);
+      })
+
+  }, [accessToken])
 
   // Filter data to include only items with the same date as currentDate
   const filteredData = data.filter((record) => {

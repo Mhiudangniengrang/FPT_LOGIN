@@ -24,7 +24,7 @@ export function subDaysByOne(date) {
 
 // Get the current month and year formatted as 'dd/MM/yyyy'
 export function getDateFormat(date) {
-    return format(date, 'dd/MM/yyyy');
+    return format(date, 'yyyy/MM/dd');
 }
 
 // Get the first day of the month formatted as 'dd/MM/yyyy'

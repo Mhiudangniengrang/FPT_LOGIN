@@ -1,33 +1,89 @@
 import { Stack } from "react-bootstrap";
-
+import axios from "../../Services/customizeAxios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import DatePicker from "react-datepicker";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import Style from "../../assets/style/form.module.scss";
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import GlobalContext from "../../context/GlobalContext";
-
+import TimePicker from "react-time-picker";
+import "react-time-picker/dist/TimePicker.css";
 const subjects = ["SWP301", "SWR301", "SWT301", "PRF192", "CEA201"];
+
+const slotTime = [
+  {
+    slot: "1",
+    start: "7:00",
+    end: "9:15",
+  },
+  {
+    slot: "2",
+    start: "9:30",
+    end: "11:45",
+  },
+  {
+    slot: "3",
+    start: "12:30",
+    end: "14:45",
+  },
+  {
+    slot: "4",
+    start: "15:00",
+    end: "17:15",
+  },
+  {
+    slot: "5",
+    start: "17:30",
+    end: "19:45",
+  },
+  {
+    slot: "6",
+    start: "20:00",
+    end: "22:15",
+  },
+];
 
 function CreateSlot() {
   const {
+    setSelectedSlot,
     daySelected,
     setDaySelected,
     setShowSlotModal,
     selectedSlot,
     dispatchEmptySlot,
   } = useContext(GlobalContext);
-  const [slot, setSlot] = useState(0);
+  const [slot, setSlot] = useState(1);
   const [duration, setDuration] = useState(0);
+  const [time, setTime] = useState(slotTime[slot - 1].start);
+  useEffect(() => {
+    setTime(slotTime[slot - 1].start);
+  }, [slot]);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = async (e) => {
     const emptySlot = {
-      slot: selectedSlot["slot"].slot,
+      slot: slot,
       date: selectedSlot["slot"].date,
-      time: selectedSlot["slot"].time,
+      time_start: time,
+      duration: duration,
     };
     dispatchEmptySlot({ type: "push", payload: emptySlot });
+
+    await axios
+      .post(`/api/v1/slots/lecturer/2`, {
+        slotTimeId: slot,
+        dateStart: selectedSlot["slot"].date,
+        timeStart: time + ":00",
+        duration: "00:" + duration + ":00",
+        roomId: "401NVH",
+      })
+      .then((response) => {
+        console.log("response:");
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log("error at create slot: " + error);
+      });
+
     setShowSlotModal(false);
   };
 
@@ -38,8 +94,35 @@ function CreateSlot() {
     return daySelected;
   };
 
-  const getStep = () => {
-    duration != 0 ? duration * 60 : 0;
+  const getStartTime = () => {
+    return slot != 0 ? (
+      <span>
+        {slotTime[slot - 1].start} - {slotTime[slot - 1].end}
+      </span>
+    ) : (
+      <span></span>
+    );
+  };
+
+  const getMin = () => {
+    console.log(slotTime[slot - 1].start);
+
+    return slotTime[slot - 1].start;
+  };
+
+  const getMax = () => {
+    console.log(slotTime[slot - 1].end);
+    return slotTime[slot - 1].end;
+  };
+
+  const handleSetSelectedSlot = (e) => {
+    return {
+      slot: {
+        ...e["slot"],
+        time_start: time + ":00",
+        duration: duration,
+      },
+    };
   };
   return (
     <>
@@ -115,6 +198,9 @@ function CreateSlot() {
                     placeholder="Choose slot"
                     onChange={(e) => {
                       setDuration(e.target.value);
+                      setSelectedSlot((selectedSlot) =>
+                        handleSetSelectedSlot(selectedSlot)
+                      );
                     }}
                   >
                     <option value={15}>15 minutes</option>
@@ -123,6 +209,28 @@ function CreateSlot() {
                   </select>
                 </div>
                 <div>
+                  <label htmlFor="time">Start time: {getStartTime()}</label>
+                  <div
+                    style={{
+                      width: "200px",
+                    }}
+                  >
+                    <TimePicker
+                      required
+                      clearIcon
+                      disableClock="true"
+                      minTime={getMin()}
+                      maxTime={getMax()}
+                      onChange={(value) => {
+                        setTime(value);
+                        setSelectedSlot((selectedSlot) =>
+                          handleSetSelectedSlot(selectedSlot)
+                        );
+                      }}
+                      value={time}
+                    />
+                  </div>
+
                   <div>
                     <label htmlFor="room">Room:</label>
                     <select id="room" placeholder="Choose room"></select>
@@ -137,6 +245,7 @@ function CreateSlot() {
           </Stack>
         </div>
       </div>
+      {console.log(selectedSlot)}
     </>
   );
 }

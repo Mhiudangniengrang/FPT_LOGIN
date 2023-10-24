@@ -20,6 +20,7 @@ import { NavLink } from "react-router-dom";
 import HorizontalStack from "./HorizontalStack";
 import CustomNavDropdown from "./DropDownStack";
 import GlobalContext from "../context/GlobalContext";
+import { getDateFormat } from "../Utils/dateUtils";
 
 const dropdownItems = [
   {
@@ -41,13 +42,19 @@ const dropdownItems = [
 ];
 
 const L_Header = () => {
+  const { daySelected, setShowSlotModal, setSelectedSlot } =
+    useContext(GlobalContext);
 
-  const { showSlotModal, setShowSlotModal, setSelectedSlot } = useContext(GlobalContext)
-
-  console.log(showSlotModal)
   const handleCreateClick = () => {
     setShowSlotModal(true);
-  }
+    let date = getDateFormat(new Date());
+    console.log("date" + date);
+    setSelectedSlot(() => ({
+      slot: {
+        date: date,
+      },
+    }));
+  };
   return (
     <Stack className={Style.container}>
       <div className={Style.div1}>
@@ -64,11 +71,7 @@ const L_Header = () => {
               icon={faUser}
               style={{ color: "#000000", paddingRight: " 5px" }}
             />
-            <NavLink
-              to="/l_view_profile"
-            >
-              View Profile
-            </NavLink>
+            <NavLink to="/l_view_profile">View Profile</NavLink>
           </NavDropdown.Item>
           <NavDropdown.Item>
             <FontAwesomeIcon
@@ -102,7 +105,6 @@ const L_Header = () => {
           className="ms-auto"
           variant="light"
           style={{ borderRadius: "10px" }}
-
           onClick={() => handleCreateClick()}
         >
           <FontAwesomeIcon
@@ -128,7 +130,6 @@ const L_Header = () => {
       </Stack>
     </Stack>
   );
-}
-
+};
 
 export default L_Header;
