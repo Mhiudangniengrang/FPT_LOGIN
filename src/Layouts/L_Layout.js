@@ -4,13 +4,15 @@ import Footer from "../components/Footer";
 import Container from 'react-bootstrap/Container';
 import { useEffect, useContext } from "react";
 import GlobalContext from "../context/GlobalContext";
+import CreateSlot from "../components/Schedule/CreateSlot";
 
 const L_Layout = ({ children }) => {
-    const { setRole } = useContext(GlobalContext)
+    const { setRole, showSlotModal } = useContext(GlobalContext)
     useEffect(() => {
         setRole("lecturer");
     }, []);
     return (
+
         <Container fluid style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
             <L_Header />
             <Container style={{

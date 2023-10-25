@@ -17,7 +17,7 @@ function App() {
             return (
               <Route
                 key={idx}
-                path={route.path}
+                exact path={route.path}
               >
                 <Page />
               </Route>
@@ -28,13 +28,12 @@ function App() {
             return (
               <Route
                 key={idx}
-                path={route.path}
+                exact path={route.path}
               >
                 <Page />
               </Route>
             )
           })}
-
           {BaseRoutes.map((route, idx) => {
             const Page = route.component
             return (

@@ -19,7 +19,7 @@ import CustomNavDropdown from "./DropDownStack";
 import S_ViewProfile from "../Pages/student/S_ViewProfile"; // Adjust the path as needed
 const dropdownItems = [
   {
-    link: "/s_view_schedule",
+    link: "/student/viewschedule",
     desc: "View Schedule",
   },
   {
@@ -56,14 +56,27 @@ class S_Header extends React.Component {
             title="Student [hieudmse161153]"
             id="nav-dropdown"
           >
-            <NavDropdown.Item>
+            <NavDropdown.Item
+              href="/student/viewprofile"
+            >
               <FontAwesomeIcon
                 icon={faUser}
                 style={{ color: "#000000", paddingRight: " 5px" }}
               />
-
+              View Profile
+            </NavDropdown.Item>
+            <NavDropdown.Item
+              href="/student/viewprofile"
+            >
+              <FontAwesomeIcon
+                icon={faUserPen}
+                style={{ color: "#000000", paddingRight: " 5px" }}
+              />
+              Edit Profile
+            </NavDropdown.Item>
+            <NavDropdown.Item>
               <NavLink
-                to="/s_view_profile"
+                to="/student/viewschedule"
                 style={({ isActive, isPending }) => {
                   return {
                     fontWeight: isActive ? "bold" : "",
@@ -72,22 +85,12 @@ class S_Header extends React.Component {
                   };
                 }}
               >
-                View Profile
+                <FontAwesomeIcon
+                  icon={faCalendarDays}
+                  style={{ color: "#000000", paddingRight: " 5px" }}
+                />
+                View Schedule
               </NavLink>
-            </NavDropdown.Item>
-            <NavDropdown.Item>
-              <FontAwesomeIcon
-                icon={faUserPen}
-                style={{ color: "#000000", paddingRight: " 5px" }}
-              />
-              Edit Profile
-            </NavDropdown.Item>
-            <NavDropdown.Item>
-              <FontAwesomeIcon
-                icon={faCalendarDays}
-                style={{ color: "#000000", paddingRight: " 5px" }}
-              />
-              View Schedule
             </NavDropdown.Item>
             <NavDropdown.Item>
               <FontAwesomeIcon
@@ -104,7 +107,7 @@ class S_Header extends React.Component {
           </h1>
         </Stack>
         <Stack direction="horizontal" gap={5} className={Style.div3}>
-          <HorizontalStack icon={faHouse} text="Home" link="/" />
+          <HorizontalStack icon={faHouse} text="Home" link="/student" />
 
           <CustomNavDropdown
             title="Schedule"

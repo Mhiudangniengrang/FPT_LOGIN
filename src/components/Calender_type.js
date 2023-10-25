@@ -9,7 +9,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { faCaretRight } from "@fortawesome/free-solid-svg-icons";
 import { faCaretLeft } from "@fortawesome/free-solid-svg-icons";
-
+import axios from "../Services/customizeAxios";
 import {
   addDaysByOne,
   getEndOfWeekFormatted,
@@ -24,8 +24,26 @@ import S_TitleList from "./List/S_TitleList";
 const Calender_type = () => {
   const [activeButton, setActiveButton] = useState("week");
   const [currenMonth, setCurrentMonth] = useState(getMonth());
-  const { setMonthIndex, monthIndex, daySelected, setDaySelected } =
+  const { role, setMonthIndex, monthIndex, daySelected, setDaySelected } =
     useContext(GlobalContext);
+  const [roomList, setRoomList] = useState([])
+
+  sessionStorage.setItem('roomList', JSON.stringify(roomList))
+  useEffect(async () => {
+    await axios
+      .get(`/api/v1/slots/lecturer/room`)
+      .then((response) => {
+        response.map((room) => {
+          setRoomList((prevRoom) => ([
+            ...prevRoom,
+            room
+          ]))
+        })
+      }).catch(error => {
+        console.log('Error at calendar type:', error)
+      })
+  }, [])
+
   useEffect(() => {
     setCurrentMonth(getMonth(monthIndex));
   }, [monthIndex]);
@@ -72,8 +90,8 @@ const Calender_type = () => {
             dayjs(new Date(dayjs().year(), monthIndex)).format("MMMM YYYY")}
           {activeButton === "week" &&
             getStartOfWeekFormatted(daySelected) +
-              " - " +
-              getEndOfWeekFormatted(daySelected)}
+            " - " +
+            getEndOfWeekFormatted(daySelected)}
           {activeButton === "list" && (
             <S_TitleList
               handlePrev={handlePrev}
@@ -185,7 +203,7 @@ const Calender_type = () => {
             <Card.Body>
               {/* Content that appears when a button is active */}
               {activeButton === "day" && <p>List content goes here.</p>}
-              {activeButton === "week" && <WeeklyCalendar />}
+              {activeButton === "week" && <WeeklyCalendar isDisable={false} />}
               {activeButton === "month" && <Month month={currenMonth} />}
               {activeButton === "list" && <List />}
             </Card.Body>

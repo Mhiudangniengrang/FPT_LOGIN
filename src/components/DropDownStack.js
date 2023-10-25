@@ -1,5 +1,5 @@
 import React from 'react';
-import { Stack, NavDropdown, NavLink } from 'react-bootstrap';
+import { Stack, NavDropdown } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 function CustomNavDropdown({ title, items, icon }) {
@@ -8,8 +8,8 @@ function CustomNavDropdown({ title, items, icon }) {
             <FontAwesomeIcon icon={icon} style={{ color: "#000000", }} />
             <NavDropdown title={title} id="nav-dropdown">
                 {items.map((item, index) => (
-                    <NavDropdown.Item key={index}>
-                        <NavLink to={item.link}>{item.desc}</NavLink>
+                    <NavDropdown.Item key={index} href={item.link}>
+                        {item.desc}
                     </NavDropdown.Item>
                 ))}
             </NavDropdown>
