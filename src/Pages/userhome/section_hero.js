@@ -48,7 +48,7 @@ function Hero() {
             onSuccess={credentialResponse => {
               console.log("onSucces");
               localStorage.setItem('accessToken', credentialResponse.credential);
-              history.push('/lecturer_home')
+              history.push('/lecturer')
             }}
             onError={() => {
               console.log('Login Failed');

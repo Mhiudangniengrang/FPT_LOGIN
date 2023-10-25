@@ -9,6 +9,7 @@ import {
   faChevronRight,
   faCalendarDays,
 } from "@fortawesome/free-solid-svg-icons";
+import axios from "../Services/customizeAxios"
 
 function L_HomeTeacher() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -16,7 +17,7 @@ function L_HomeTeacher() {
   const [currentDate, setCurrentDate] = useState(dayjs()); // Initialize currentDate using Day.js
   const firstIndex = (currentPage - 1) * recordsPerPage;
   const lastIndex = firstIndex + recordsPerPage;
-
+  const accessToken = typeof window !== null ? localStorage.getItem("accessToken") : null
   useEffect(() => {
     axios
       .get(`/api/v1/requests/student/`, {
@@ -31,21 +32,6 @@ function L_HomeTeacher() {
         console.log("Error lecturer home", error);
       });
   }, [accessToken]);
-
-
-  useEffect(() => {
-    axios
-      .get(`/api/v1/requests/student/`, {
-        headers: { Authorization: `Bearer ${accessToken}` }
-      }).then(res => {
-        res.map((request) => {
-          //
-        })
-      }).catch((error) => {
-        console.log("Error lecturer home", error);
-      })
-
-  }, [accessToken])
 
   // Filter data to include only items with the same date as currentDate
   const filteredData = data.filter((record) => {

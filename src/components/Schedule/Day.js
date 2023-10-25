@@ -2,10 +2,10 @@ import React, { useContext, useState, useEffect } from "react";
 import dayjs from "dayjs";
 import GlobalContext from "../../context/GlobalContext";
 import Style from '../../assets/style/month.module.scss'
+import axios from '../../Services/customizeAxios'
 
-
-export default function Day({ day, rowIdx }) {
-
+export default function Day({ day, rowIdx, slots }) {
+    console.log(slots)
     const {
         role,
         selectedSlot,
@@ -43,7 +43,6 @@ export default function Day({ day, rowIdx }) {
                     setShowSlotModal(true)
                 }}
             >
-                ngu
             </div>
         </div>
     );
