@@ -24,20 +24,16 @@ import { getDateFormat } from "../Utils/dateUtils";
 
 const dropdownItems = [
   {
-    link: "",
+    link: "/lecturer/meetingschedule",
     desc: "View Meeting Schedule",
   },
   {
-    link: "",
+    link: "/lecturer/teachingschedule",
     desc: "View Teaching Schedule",
   },
   {
-    link: "",
+    link: "/lecturer/viewrequest",
     desc: "View Students' Request",
-  },
-  {
-    link: "",
-    desc: "Create slot",
   },
 ];
 
@@ -66,21 +62,28 @@ const L_Header = () => {
           title="Teacher [Hungld]"
           id="nav-dropdown"
         >
-          <NavDropdown.Item>
+          <NavDropdown.Item
+            href="/lecturer/viewprofile"
+          >
             <FontAwesomeIcon
               icon={faUser}
               style={{ color: "#000000", paddingRight: " 5px" }}
             />
-            <NavLink to="/l_view_profile">View Profile</NavLink>
+
+            View Profile
           </NavDropdown.Item>
-          <NavDropdown.Item>
+          <NavDropdown.Item
+            href="/lecturer/viewprofile"
+          >
             <FontAwesomeIcon
               icon={faUserPen}
               style={{ color: "#000000", paddingRight: " 5px" }}
             />
             Edit Profile
           </NavDropdown.Item>
-          <NavDropdown.Item>
+          <NavDropdown.Item
+            href="/lecturer/meetingschedule"
+          >
             <FontAwesomeIcon
               icon={faCalendarDays}
               style={{ color: "#000000", paddingRight: " 5px" }}
@@ -105,17 +108,24 @@ const L_Header = () => {
           className="ms-auto"
           variant="light"
           style={{ borderRadius: "10px" }}
-          onClick={() => handleCreateClick()}
         >
           <FontAwesomeIcon
             icon={faCirclePlus}
             style={{ color: "#fa8334", paddingRight: "10px" }}
           />
-          Create Slot
+          <a href="#create_slot"
+            style={{
+              textDecorationLine: "none",
+              color: "#000",
+            }}
+            onClick={() => handleCreateClick()}
+          >
+            Create Slot
+          </a>
         </Button>
       </Stack>
       <Stack direction="horizontal" gap={5} className={Style.div3}>
-        <HorizontalStack icon={faHouse} text="Home" link="/" />
+        <HorizontalStack icon={faHouse} text="Home" link="/lecturer" />
         <CustomNavDropdown
           title="Schedule"
           icon={faCalendarDays}

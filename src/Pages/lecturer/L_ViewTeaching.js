@@ -20,7 +20,7 @@ const L_ViewTeaching = () => {
     return (
         <L_Layout>
             <Breadcrumbs items={path} />
-            <WeeklyCalendar />
+            <WeeklyCalendar isDisable={true} />
         </L_Layout>
     );
 };

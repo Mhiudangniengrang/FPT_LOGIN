@@ -34,7 +34,7 @@ class S_ViewTeacherProfile extends React.Component {
           </Row>
           <Row>
             <Col md={12}>
-              <Card className="my-4">
+              <Card className="my-4 ">
                 <Card.Body className="py-2 ">
                   <Row>
                     <Col md={6} className="py-1 ">
