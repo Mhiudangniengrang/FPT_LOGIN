@@ -13,7 +13,7 @@ function App() {
       <Router>
         <Switch>
           {StudentRoutes.map((route, idx) => {
-            const Page = route.component
+            const Page = route.component;
             return (
               <Route
                 key={idx}
@@ -21,10 +21,10 @@ function App() {
               >
                 <Page />
               </Route>
-            )
+            );
           })}
           {LecturerRoutes.map((route, idx) => {
-            const Page = route.component
+            const Page = route.component;
             return (
               <Route
                 key={idx}
@@ -32,18 +32,15 @@ function App() {
               >
                 <Page />
               </Route>
-            )
+            );
           })}
           {BaseRoutes.map((route, idx) => {
-            const Page = route.component
+            const Page = route.component;
             return (
-              <Route
-                key={idx}
-                exact path={route.path}
-              >
+              <Route key={idx} exact path={route.path}>
                 <Page />
               </Route>
-            )
+            );
           })}
         </Switch>
       </Router>
@@ -51,5 +48,3 @@ function App() {
   );
 }
 export default App;
-
-

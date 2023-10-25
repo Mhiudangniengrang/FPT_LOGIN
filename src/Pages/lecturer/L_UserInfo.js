@@ -7,25 +7,25 @@ import {
   CardBody,
   FormGroup,
   Button,
+  Form,
 } from "react-bootstrap";
-import { useLocation, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import L_Layout from "../../Layouts/L_Layout";
 import L_SubjectList from "../../components/SubjectList_userinfo/L_SubjectList";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
+
 function L_UserInfo() {
-  const location = useLocation();
   const history = useHistory();
-  const formData = location.state.formData;
   const subjects = [
-    { id: 1, name: "CEA201 - Computer Organization and Architecture" },
-    { id: 2, name: "CSI104 - Introduction to Computing" },
-    { id: 3, name: "CSI105 - Introduction to Computer Science - AI" },
-    { id: 4, name: "SWP391 - Application Development Project" },
-    { id: 5, name: "SWT301 - Software Testing" },
-    { id: 6, name: "PRF192 - Programming Fundamentals Using" },
-    { id: 7, name: "SWE102 - Introduction to Software Engineering" },
-    { id: 8, name: "SWR301 - Software Requirement" },
+    { id: 1, name: "SWP391 - Lại Đức Hùng" },
+    { id: 2, name: "PRN211 - Nguyễn Thế Hoàng" },
+    { id: 3, name: "PRF192 - Lê Thanh Tùng" },
+    { id: 4, name: "SWR302 - Đỗ Tấn Nhàn" },
+    { id: 5, name: "CSD201 - Thân Văn Sử" },
+    { id: 6, name: "CEA201 - Bùi Anh Tuấn" },
+    { id: 7, name: "JPD113 - Trần Anh Kiều" },
+    { id: 8, name: "JPD123 - Nguyễn Hoàng Hiếu" },
     // Add more subjects here
   ];
   const [filteredSubjects, setFilteredSubjects] = useState(subjects);
@@ -72,6 +72,18 @@ function L_UserInfo() {
       name: formData.name,
     });
   };
+  const [formData, setFormData] = useState({
+    name: "",
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
   return (
     <L_Layout>
       <Container className="py-2">
@@ -86,19 +98,17 @@ function L_UserInfo() {
             <Card className="px-2">
               <CardBody>
                 <div>
-                  <p>Your Name: {formData.name}</p>
-                  <p>Campus: {formData.campus}</p>
-                  <p>Role: {formData.role}</p>
-                  <p>
-                    Student ID:{" "}
-                    <input
-                      className="rounded border mx-2"
+                  <Form.Group className="d-flex align-items-center">
+                    <Form.Label>Your Name</Form.Label>
+                    <Form.Control
+                      className="w-50 mb-2 mx-2"
                       type="text"
-                      placeholder=" EnterID"
-                      value={enteredID}
-                      onChange={handleEnteredIDChange}
+                      name="name"
+                      value={formData.name}
+                      onChange={handleChange}
                     />
-                  </p>
+                  </Form.Group>
+
                   <FormGroup>
                     <label htmlFor="major">Major:</label>
                     <select

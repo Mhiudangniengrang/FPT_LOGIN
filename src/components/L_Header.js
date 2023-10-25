@@ -38,19 +38,19 @@ const dropdownItems = [
 ];
 
 const L_Header = () => {
-
-  const { daySelected, setShowSlotModal, setSelectedSlot } = useContext(GlobalContext)
+  const { daySelected, setShowSlotModal, setSelectedSlot } =
+    useContext(GlobalContext);
 
   const handleCreateClick = () => {
     setShowSlotModal(true);
-    let date = getDateFormat(new Date())
-    console.log('date' + date)
+    let date = getDateFormat(new Date());
+    console.log("date" + date);
     setSelectedSlot(() => ({
-      'slot': {
+      slot: {
         date: date,
-      }
+      },
     }));
-  }
+  };
   return (
     <Stack className={Style.container}>
       <div className={Style.div1}>
@@ -140,7 +140,6 @@ const L_Header = () => {
       </Stack>
     </Stack>
   );
-}
-
+};
 
 export default L_Header;

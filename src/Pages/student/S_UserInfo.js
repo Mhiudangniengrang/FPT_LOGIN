@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Container,
   Row,
@@ -7,16 +7,17 @@ import {
   CardBody,
   FormGroup,
   Button,
+  Form,
+  FormControl,
 } from "react-bootstrap";
-import { useLocation, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import S_Layout from "../../Layouts/S_Layout";
 import S_SubjectList from "../../components/SubjectList_userinfo/S_SubjectList";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
+import axios from "../../Services/customizeAxios";
 function S_UserInfo() {
-  const location = useLocation();
   const history = useHistory();
-  const formData = location.state.formData;
   const subjects = [
     { id: 1, name: "SWP391 - Lại Đức Hùng" },
     { id: 2, name: "PRN211 - Nguyễn Thế Hoàng" },
@@ -33,6 +34,19 @@ function S_UserInfo() {
   const [selectedSubjects, setSelectedSubjects] = useState([]);
   const [enteredID, setEnteredID] = useState("");
 
+  const [majors, setMajors] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get("/api/v1/student/searching/majors")
+      .then((response) => {
+        setMajors(response);
+        // console.log(response);
+      })
+      .catch((error) => {
+        console.error("Error fetching majors:", error);
+      });
+  }, []);
   const handleEnteredIDChange = (event) => {
     setEnteredID(event.target.value);
   };
@@ -67,11 +81,23 @@ function S_UserInfo() {
     console.log("Selected Subjects:", selectedSubjects);
 
     // Truyền tên (name) từ formData sang trang S_ViewProfile
-    history.push("/s_view_profile", {
+    history.push("/student/viewprofile", {
       selectedSubjects: selectedSubjects,
       name: formData.name,
     });
   };
+  const [formData, setFormData] = useState({
+    name: "",
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
   return (
     <S_Layout>
       <Container className="py-2">
@@ -86,19 +112,17 @@ function S_UserInfo() {
             <Card className="px-2">
               <CardBody>
                 <div>
-                  <p>Your Name: {formData.name}</p>
-                  <p>Campus: {formData.campus}</p>
-                  <p>Role: {formData.role}</p>
-                  <p>
-                    Student ID:{" "}
-                    <input
-                      className="rounded border mx-2"
+                  <Form.Group className="d-flex align-items-center">
+                    <Form.Label>Your Name</Form.Label>
+                    <Form.Control
+                      className="w-50 mb-2 mx-2"
                       type="text"
-                      placeholder=" EnterID"
-                      value={enteredID}
-                      onChange={handleEnteredIDChange}
+                      name="name"
+                      value={formData.name}
+                      onChange={handleChange}
                     />
-                  </p>
+                  </Form.Group>
+
                   <FormGroup>
                     <label htmlFor="major">Major:</label>
                     <select
@@ -108,24 +132,17 @@ function S_UserInfo() {
                       value={major}
                       onChange={handleMajorChange}
                     >
-                      <option value="" disabled hidden>
+                      <option value="Select Major" disabled hidden>
                         Select Major
-                      </option>{" "}
-                      <option value="Software Engineering (Kĩ thuật phần mềm)">
-                        Software Engineering (Kĩ thuật phần mềm)
                       </option>
-                      <option value="Artificial Intelligence (AI) (Trí tuệ nhân tạo (AI))">
-                        Artificial Intelligence (AI) (Trí tuệ nhân tạo (AI))
-                      </option>
-                      <option value="Information Assurance (An toàn thông tin)">
-                        Information Assurance (An toàn thông tin)
-                      </option>
-                      <option value="Information System - IS (Hệ thống thông tin)">
-                        Information System - IS (Hệ thống thông tin)
-                      </option>
-                      <option value="Digital Art & Design (Thiết kế Mỹ thuật số)">
-                        Digital Art & Design (Thiết kế Mỹ thuật số)
-                      </option>
+                      {majors.map((majorOption) => (
+                        <option
+                          key={majorOption.majorId}
+                          value={majorOption.majorName}
+                        >
+                          {majorOption.majorName}
+                        </option>
+                      ))}
                     </select>
                   </FormGroup>
                   <p className="my-3">Your current subjects:</p>

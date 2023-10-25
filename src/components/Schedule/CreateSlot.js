@@ -1,49 +1,47 @@
-import { Stack } from 'react-bootstrap';
-import axios from '../../Services/customizeAxios';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Stack } from "react-bootstrap";
+import axios from "../../Services/customizeAxios";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import DatePicker from "react-datepicker";
-import { faXmark } from '@fortawesome/free-solid-svg-icons'
-import Style from '../../assets/style/form.module.scss'
-import React, { useState, useContext, useEffect } from 'react';
-import GlobalContext from '../../context/GlobalContext';
-import TimePicker from 'react-time-picker';
-import 'react-time-picker/dist/TimePicker.css';
-const subjects = [
-    'SWP301', 'SWR301', 'SWT301', 'PRF192', 'CEA201'
-]
+import { faXmark } from "@fortawesome/free-solid-svg-icons";
+import Style from "../../assets/style/form.module.scss";
+import React, { useState, useContext, useEffect } from "react";
+import GlobalContext from "../../context/GlobalContext";
+import TimePicker from "react-time-picker";
+import "react-time-picker/dist/TimePicker.css";
+const subjects = ["SWP301", "SWR301", "SWT301", "PRF192", "CEA201"];
 
 const slotTime = [
-    {
-        slot: '1',
-        start: '7:00',
-        end: '9:15'
-    },
-    {
-        slot: '2',
-        start: '9:30',
-        end: '11:45'
-    },
-    {
-        slot: '3',
-        start: '12:30',
-        end: '14:45'
-    },
-    {
-        slot: '4',
-        start: '15:00',
-        end: '17:15'
-    },
-    {
-        slot: '5',
-        start: '17:30',
-        end: '19:45'
-    },
-    {
-        slot: '6',
-        start: '20:00',
-        end: '22:15'
-    },
-]
+  {
+    slot: "1",
+    start: "7:00",
+    end: "9:15",
+  },
+  {
+    slot: "2",
+    start: "9:30",
+    end: "11:45",
+  },
+  {
+    slot: "3",
+    start: "12:30",
+    end: "14:45",
+  },
+  {
+    slot: "4",
+    start: "15:00",
+    end: "17:15",
+  },
+  {
+    slot: "5",
+    start: "17:30",
+    end: "19:45",
+  },
+  {
+    slot: "6",
+    start: "20:00",
+    end: "22:15",
+  },
+];
 
 function CreateSlot() {
 
@@ -78,8 +76,8 @@ function CreateSlot() {
                 console.log("error at create slot: " + error);
             })
 
-        setShowSlotModal(false);
-    };
+    setShowSlotModal(false);
+  };
 
     function subtractDuration() {
         const [hours, minutes] = (slotTime[slot - 1].end).split(':').map(Number);
@@ -94,13 +92,15 @@ function CreateSlot() {
     }
 
 
-    const getStartTime = () => {
-        return slot != 0 ? (
-            <span>{slotTime[slot - 1].start} - {slotTime[slot - 1].end}</span>
-        ) : (
-            <span></span>
-        )
-    }
+  const getStartTime = () => {
+    return slot != 0 ? (
+      <span>
+        {slotTime[slot - 1].start} - {slotTime[slot - 1].end}
+      </span>
+    ) : (
+      <span></span>
+    );
+  };
 
     const getMin = () => {
         return slotTime[slot - 1].start

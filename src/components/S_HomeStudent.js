@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import data from "../S_Data.json"; // Replace with the correct path to your data file
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Button, Form, Card } from "react-bootstrap";
+import { Button, Form, Card, Row, Col } from "react-bootstrap";
 import dayjs from "dayjs";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faChevronLeft,
   faChevronRight,
 } from "@fortawesome/free-solid-svg-icons";
-function List() {
+function S_HomeStudent() {
   const [currentPage, setCurrentPage] = useState(1);
   const [recordsPerPage, setRecordsPerPage] = useState(5);
   const [currentDate, setCurrentDate] = useState(dayjs()); // Initialize currentDate using Day.js
@@ -43,7 +43,40 @@ function List() {
     setCurrentDate(newDate);
     setCurrentPage(1); // Reset to the first page when changing the date
   }
+  const relatedCourses = [
+    {
+      id: 1,
+      name: "PRN211-Lập trình Cross-Platform với .Net",
+      instructor: "SWP391-Lai Duc Hung",
+    },
+    {
+      id: 2,
+      name: "PRN212-React Hooks và React-Bootstrap",
+      instructor: "John Doe",
+    },
+    {
+      id: 3,
+      name: "PRN212-React Hooks và React-Bootstrap",
+      instructor: "John Doe",
+    },
+    {
+      id: 4,
+      name: "PRN212-React Hooks và React-Bootstrap",
+      instructor: "John Doe",
+    },
+    {
+      id: 5,
+      name: "PRN212-React Hooks và React-Bootstrap",
+      instructor: "John Doe",
+    },
+    {
+      id: 6,
+      name: "PRN212-React Hooks và React-Bootstrap",
+      instructor: "John Doe",
+    },
 
+    // Thêm các khóa học khác tại đây
+  ];
   return (
     <div>
       <Card className="text-center my-5">
@@ -113,8 +146,28 @@ function List() {
           {/* ... (your pagination code) */}
         </Card.Body>
       </Card>
+      <div>
+        <Row>
+          <h2 className="mb-1">Related Courses</h2>
+        </Row>
+        <Row>
+          {relatedCourses.map((course) => (
+            <Col key={course.id} md={4}>
+              <Card
+                className="my-2"
+                style={{ width: "100%", paddingTop: "100px" }}
+              >
+                <Card.Body className="pt-5 border-top">
+                  <Card.Title>{course.name}</Card.Title>
+                  <Card.Text>Instructor: {course.instructor}</Card.Text>
+                </Card.Body>
+              </Card>
+            </Col>
+          ))}
+        </Row>
+      </div>
     </div>
   );
 }
 
-export default List;
+export default S_HomeStudent;
