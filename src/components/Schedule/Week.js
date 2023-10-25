@@ -116,6 +116,7 @@ function WeeklyCalendar({ isDisable = false }) {
 
     return (
         <div>
+            {console.log(day)}
             <Table responsive striped bordered>
                 <thead
                     className={Style.thead}
@@ -195,16 +196,7 @@ function WeeklyCalendar({ isDisable = false }) {
                                     className={Style.days}
                                     key={`${day}-${slot}`}
                                 >
-                                    <div
-                                        className={Style.slot}
-                                    // onClick={() => handleDayClick()}
-                                    >
-                                        <span> SWP </span>
-                                        <span>- room 104 -</span>
-                                        <span> (7:30-8:00)</span>
-                                    </div>
-
-                                    {/* {
+                                    {
                                         emptySlot.map((meeting) => {
                                             {
                                                 if (meeting.dateStart === day && meeting.slotTimeId == slot.charAt(5)) {
@@ -218,14 +210,22 @@ function WeeklyCalendar({ isDisable = false }) {
                                                             }
                                                         case "lecturer":
                                                             {
-                                                                return (<div>{meeting.roomId}</div>)
+                                                                return (
+                                                                    <div
+                                                                        className={Style.slot}
+                                                                    // onClick={() => handleDayClick()}
+                                                                    >
+                                                                        <span> SWP </span>
+                                                                        <span>- room 104 -</span>
+                                                                        <span> (7:30-8:00)</span>
+                                                                    </div>)
                                                                 break;
                                                             }
                                                     }
                                                 } return null
                                             }
                                         })
-                                    } */}
+                                    }
                                 </td>
                             ))}
                         </tr>

@@ -159,17 +159,16 @@ function CreateSlot() {
                         <Stack direction='vertical' gap='3'
                         >
                             <div>
+                                {console.log(daySelected)}
                                 <label htmlFor="datepicker">Date:</label>
                                 <DatePicker
                                     id='datepicker'
                                     onChange={(date) => {
-                                        console.log(date)
                                         setDaySelected(date)
                                     }}
                                     minDate={new Date()}
                                     placeholderText='Choose your date'
-                                    selected={new Date(daySelected)}
-                                    value={new Date()}
+                                    selected={daySelected}
                                     dateFormat={'dd/MM/yyyy'}
                                 />
                             </div>
