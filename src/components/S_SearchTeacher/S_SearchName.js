@@ -24,7 +24,7 @@ const S_SearchName = () => {
   }, [searchText]);
   const handleSearch = async () => {
     await axios
-      .get(`/api/v1/student/search/subject`, {
+      .get(`/api/v1/student/searching/subject`, {
         params: {
           keyword: searchText,
         },

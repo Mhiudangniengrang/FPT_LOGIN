@@ -15,7 +15,7 @@ function App() {
           {StudentRoutes.map((route, idx) => {
             const Page = route.component;
             return (
-              <Route key={idx} path={route.path}>
+              <Route key={idx} exact path={route.path}>
                 <Page />
               </Route>
             );
@@ -23,12 +23,11 @@ function App() {
           {LecturerRoutes.map((route, idx) => {
             const Page = route.component;
             return (
-              <Route key={idx} path={route.path}>
+              <Route key={idx} exact path={route.path}>
                 <Page />
               </Route>
             );
           })}
-
           {BaseRoutes.map((route, idx) => {
             const Page = route.component;
             return (
