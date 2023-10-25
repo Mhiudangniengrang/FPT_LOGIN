@@ -36,13 +36,19 @@ const slotTime = [
     },
 ]
 
+const dayEvents = [
+    {
+        dateStart: "2023/10/25",
+    },
+]
+
 export default function Day({ day, rowIdx }) {
 
     const {
         role,
         selectedSlot,
-        savedSlots,
         setShowSlotModal,
+        setDaySelected,
         setSelectedSlot,
     } = useContext(GlobalContext);
 
@@ -52,22 +58,22 @@ export default function Day({ day, rowIdx }) {
 
         return isCurrentDay ? Style.dayCurr : '';
     }
-    const handleDayClick = (day, timeSlot, subjectSlot, purposeSlot) => {
-        setShowSlotModal(true);
-        const value = slotTime.find(item => item.slot == 1)
-        let time = `${value.start} - ${value.end}`
-        setSelectedSlot(() => ({
-            'slot': {
-                teacher: 'hungld',
-                slot: 1,
-                date: day.format("DD-MM-YY"),
-                time: `${time}`,
-                room: '610 - NVH',
-                duration: 30,
-                status: 'wait',
-            }
-        }));
-    };
+    // const handleDayClick = (day, timeSlot, subjectSlot, purposeSlot) => {
+    //     setShowSlotModal(true);
+    //     const value = slotTime.find(item => item.slot == 1)
+    //     let time = `${value.start} - ${value.end}`
+    //     setSelectedSlot(() => ({
+    //         'slot': {
+    //             teacher: 'hungld',
+    //             slot: 1,
+    //             // date: day.format("yyyy/MM/dd"),
+    //             time: `${time}`,
+    //             room: '610 - NVH',
+    //             duration: 30,
+    //             status: 'wait',
+    //         }
+    //     }));
+    // };
 
     return (
         <div className={Style.container}>
@@ -87,7 +93,8 @@ export default function Day({ day, rowIdx }) {
             <div
                 className={Style.daySelect}
                 onClick={() => {
-                    handleDayClick();
+                    setDaySelected(new Date(day.format("DD/MM/YYYY")));
+                    setShowSlotModal(true)
                 }}
             >
                 {/* {dayEvents.map((evt, idx) => (

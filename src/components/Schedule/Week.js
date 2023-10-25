@@ -73,8 +73,9 @@ function WeeklyCalendar({ isDisable = false }) {
     }, [])
 
 
-    const { role, selectedSlot, setSelectedSlot, setShowSlotModal, setDaySelected, savedSlots, emptySlots } = useContext(GlobalContext);
+    const { role, selectedSlot, setSelectedSlot, setShowSlotModal, setDaySelected } = useContext(GlobalContext);
     const [selectedDate, setSelectedDate] = useState(new Date());
+
     const handleDayClick = (day, timeSlot, subjectSlot, purposeSlot) => {
 
         let j = timeSlots.indexOf(timeSlot);
@@ -82,15 +83,15 @@ function WeeklyCalendar({ isDisable = false }) {
         setShowSlotModal(true);
         const value = slotTime.find(item => item.slot == j + 1)
         let time = `${value.start} - ${value.end}`
-        setSelectedSlot(() => ({
-            'slot': {
-                slot: j + 1,
-                date: day,
-                time: `${time}`,
-                subject: subjectSlot,
+        setSelectedSlot(() => (
+            {
+                slotTimeId: j + 1,
+                dateStart: day,
+                timeStart: `${time}`,
+                subjectId: subjectSlot,
                 purpose: purposeSlot,
             }
-        }));
+        ));
 
     };
 
@@ -99,15 +100,19 @@ function WeeklyCalendar({ isDisable = false }) {
         const [date, month] = day.split('/').map(String)
         if (!isDisable) {
             setShowSlotModal(true);
-            setSelectedSlot(() => ({
-                'slot': {
-                    date: year + '/' + month + '/' + date,
-                }
-            }));
+            setDaySelected(new Date(`${year}/${month}/${date}`))
         }
-
     };
 
+    const checkDate = (day) => {
+        let currDay = new Date();
+        let year = dayjs(currDay).year().toString()
+        const [date, month] = day.split('/').map(String)
+        let selectDate = new Date(year + "/" + month + "/" + date)
+
+        if (selectDate >= currDay) { return true }
+        return false;
+    }
 
     return (
         <div>
@@ -161,7 +166,7 @@ function WeeklyCalendar({ isDisable = false }) {
                                 <th key={index}
                                     className={Style.createContain}
                                 >
-                                    {role === "lecturer" && (
+                                    {(role === "lecturer" && checkDate(day)) && (
                                         <span
                                             className={Style.create}
                                             onClick={() => {

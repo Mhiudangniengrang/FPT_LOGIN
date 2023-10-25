@@ -62,17 +62,10 @@ function CreateSlot() {
     }, [slot])
 
     const handleSubmit = async (e) => {
-        const emptySlot = {
-            slot: slot,
-            date: selectedSlot['slot'].date,
-            time_start: time,
-            duration: duration,
-        };
-        dispatchEmptySlot({ type: "push", payload: emptySlot });
 
         await axios.post(`/api/v1/slots/lecturer/2`, {
             slotTimeId: slot,
-            dateStart: selectedSlot['slot'].date,
+            dateStart: selectedSlot.date,
             timeStart: time + ':00',
             duration: '00:' + duration + ':00',
             roomId: selectRoom
@@ -87,13 +80,6 @@ function CreateSlot() {
 
         setShowSlotModal(false);
     };
-
-    const isExistSelectedSlot = () => {
-        if (selectedSlot != null) {
-            return new Date(selectedSlot['slot'].date)
-        }
-        return daySelected
-    }
 
     function subtractDuration() {
         const [hours, minutes] = (slotTime[slot - 1].end).split(':').map(Number);
@@ -134,13 +120,13 @@ function CreateSlot() {
 
     const handleSetSelectedSlot = (e) => {
         return (
-            {
-                'slot': {
-                    ...e['slot'],
+            [
+                {
+                    ...e,
                     time_start: time + ":00",
                     duration: duration,
                 }
-            }
+            ]
         )
     }
     return (
@@ -177,11 +163,13 @@ function CreateSlot() {
                                 <DatePicker
                                     id='datepicker'
                                     onChange={(date) => {
+                                        console.log(date)
                                         setDaySelected(date)
                                     }}
+                                    minDate={new Date()}
                                     placeholderText='Choose your date'
-                                    selected={isExistSelectedSlot()}
-                                    value={isExistSelectedSlot()}
+                                    selected={new Date(daySelected)}
+                                    value={new Date()}
                                     dateFormat={'dd/MM/yyyy'}
                                 />
                             </div>
