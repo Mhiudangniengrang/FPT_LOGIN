@@ -116,7 +116,6 @@ function WeeklyCalendar({ isDisable = false }) {
 
     return (
         <div>
-            {console.log(day)}
             <Table responsive striped bordered>
                 <thead
                     className={Style.thead}
