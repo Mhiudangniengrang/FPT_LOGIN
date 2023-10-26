@@ -1,12 +1,12 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
-import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
+import { useHistory } from "react-router-dom";
 import axios from "../Services/customizeAxios";
-
+import { Button } from "react-bootstrap";
 const FormSearch = () => {
   const [searchText, setSearchText] = useState("");
   const [filterData, setFilterData] = useState("lecturer"); // Corrected the typo in the state name
+  const history = useHistory();
 
   const handleSearchLecture = async (e) => {
     e.preventDefault();
@@ -40,14 +40,19 @@ const FormSearch = () => {
       });
   };
 
+  const handlePass = () => {
+    history.push("/student/searchteacher", {});
+  };
   const handleSearch = async (e) => {
     e.preventDefault();
     if (filterData === "lecturer") {
       // Search for lecturer
       handleSearchLecture(e);
+      handlePass(e);
     } else if (filterData === "subject") {
       // Search for subject
       handleSearchSubject(e);
+      handlePass(e);
     }
   };
 

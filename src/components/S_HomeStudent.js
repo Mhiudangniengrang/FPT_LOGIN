@@ -8,6 +8,8 @@ import {
   faChevronLeft,
   faChevronRight,
 } from "@fortawesome/free-solid-svg-icons";
+import { useHistory } from "react-router-dom";
+
 function S_HomeStudent() {
   const [currentPage, setCurrentPage] = useState(1);
   const [recordsPerPage, setRecordsPerPage] = useState(5);
@@ -77,6 +79,10 @@ function S_HomeStudent() {
 
     // Thêm các khóa học khác tại đây
   ];
+  const history = useHistory();
+  const handleClickProfile = () => {
+    history.push("/lecturer/viewprofile");
+  };
   return (
     <div>
       <Card className="text-center my-5">
@@ -156,6 +162,7 @@ function S_HomeStudent() {
               <Card
                 className="my-2"
                 style={{ width: "100%", paddingTop: "100px" }}
+                onClick={handleClickProfile}
               >
                 <Card.Body className="pt-5 border-top">
                   <Card.Title>{course.name}</Card.Title>
