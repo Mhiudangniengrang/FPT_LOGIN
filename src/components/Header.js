@@ -33,7 +33,7 @@ function Header() {
   return (
     <Navbar fixed="top" bg="light" data-bs-theme="light" >
       <Container style={containerStlye}>
-        <Navbar.Brand href="/home">
+        <Navbar.Brand href="/">
           <img src={Image} alt='logoFPT' width={180} height={40} />
         </Navbar.Brand>
         <Nav>

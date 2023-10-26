@@ -6,6 +6,7 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import BaseRoutes from "./Routers/BaseRoutes";
 import StudentRoutes from "./Routers/StudentRoutes";
 import LecturerRoutes from "./Routers/LecturerRoutes";
+import { DataProvider } from "./context/DataContext";
 
 function App() {
   return (
@@ -19,7 +20,9 @@ function App() {
                 key={idx}
                 exact path={route.path}
               >
-                <Page />
+                <DataProvider>
+                  <Page />
+                </DataProvider>
               </Route>
             );
           })}
@@ -30,7 +33,9 @@ function App() {
                 key={idx}
                 exact path={route.path}
               >
-                <Page />
+                <DataProvider>
+                  <Page />
+                </DataProvider>
               </Route>
             );
           })}

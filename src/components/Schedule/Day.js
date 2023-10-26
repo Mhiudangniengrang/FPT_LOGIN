@@ -2,16 +2,11 @@ import React, { useContext, useState, useEffect } from "react";
 import dayjs from "dayjs";
 import GlobalContext from "../../context/GlobalContext";
 import Style from '../../assets/style/month.module.scss'
-import axios from '../../Services/customizeAxios'
 
 export default function Day({ day, rowIdx, slots }) {
-    console.log(slots)
     const {
-        role,
-        selectedSlot,
         setShowSlotModal,
         setDaySelected,
-        setSelectedSlot,
     } = useContext(GlobalContext);
 
     function getCurrentDayClass() {
@@ -43,6 +38,17 @@ export default function Day({ day, rowIdx, slots }) {
                     setShowSlotModal(true)
                 }}
             >
+                {slots &&
+                    slots.map(slot => (
+                        <>
+                            <div
+                                className={Style.dayEvent}
+                            >
+                                {slot.dateStart} - {slot.slotTimeId}
+                            </div>
+                        </>
+                    ))
+                }
             </div>
         </div>
     );

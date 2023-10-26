@@ -27,25 +27,9 @@ import GlobalContext from "../context/GlobalContext";
 const Calender_type = () => {
   const [activeButton, setActiveButton] = useState("week");
   const [currenMonth, setCurrentMonth] = useState(getMonth());
-  const { role, setMonthIndex, monthIndex, daySelected, setDaySelected } =
+  const { setMonthIndex, monthIndex, daySelected, setDaySelected } =
     useContext(GlobalContext);
-  const [roomList, setRoomList] = useState([])
 
-  sessionStorage.setItem('roomList', JSON.stringify(roomList))
-  useEffect(async () => {
-    await axios
-      .get(`/api/v1/slots/lecturer/room`)
-      .then((response) => {
-        response.map((room) => {
-          setRoomList((prevRoom) => ([
-            ...prevRoom,
-            room
-          ]))
-        })
-      }).catch(error => {
-        console.log('Error at calendar type:', error)
-      })
-  }, [])
 
   useEffect(() => {
     setCurrentMonth(getMonth(monthIndex));
@@ -182,6 +166,7 @@ const Calender_type = () => {
       <div>
         <h2
           style={{
+            padding: '0',
             marginLeft: "1rem",
             fontSize: "1.25rem",
             lineHeight: "1.75rem",
@@ -213,7 +198,7 @@ const Calender_type = () => {
                 {options[activeIndex]}
               </h3>
               <Button
-                
+
                 variant="secondary"
                 onClick={handleNext}
               >

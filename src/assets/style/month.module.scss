@@ -1,8 +1,8 @@
 .container {
     display: flex;
     flex-direction: column;
+    max-height: 60vh;
     border-width: 1px;
-    height: 18vh;
     border-color: #E5E7EB;
 
     .header {
@@ -37,6 +37,7 @@
         flex: 1;
 
         .dayEvent {
+            background-color: rgba($color: #20B2AA, $alpha: 0.4);
             padding: 0.25rem;
             margin-bottom: 0.25rem;
             margin-right: 0.75rem;

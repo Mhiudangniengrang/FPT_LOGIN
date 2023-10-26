@@ -13,46 +13,46 @@ import dayjs from 'dayjs';
 
 
 const slotTime = [
-  {
-    slot: "1",
-    start: "7:00",
-    end: "9:15",
-  },
-  {
-    slot: "2",
-    start: "9:30",
-    end: "11:45",
-  },
-  {
-    slot: "3",
-    start: "12:30",
-    end: "14:45",
-  },
-  {
-    slot: "4",
-    start: "15:00",
-    end: "17:15",
-  },
-  {
-    slot: "5",
-    start: "17:30",
-    end: "19:45",
-  },
-  {
-    slot: "6",
-    start: "20:00",
-    end: "22:15",
-  },
+    {
+        slot: "1",
+        start: "7:00",
+        end: "9:15",
+    },
+    {
+        slot: "2",
+        start: "9:30",
+        end: "11:45",
+    },
+    {
+        slot: "3",
+        start: "12:30",
+        end: "14:45",
+    },
+    {
+        slot: "4",
+        start: "15:00",
+        end: "17:15",
+    },
+    {
+        slot: "5",
+        start: "17:30",
+        end: "19:45",
+    },
+    {
+        slot: "6",
+        start: "20:00",
+        end: "22:15",
+    },
 ];
 
 const daysOfWeek = [
-  "Sunday",
-  "Monday",
-  "Tuesday",
-  "Wednesday",
-  "Thursday",
-  "Friday",
-  "Saturday",
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
 ];
 
 const timeSlots = ["Slot 1", "Slot 2", "Slot 3", "Slot 4", "Slot 5", "Slot 6"];
@@ -81,11 +81,11 @@ function WeeklyCalendar({ isDisable = false }) {
     }, [])
 
 
-    const { role, selectedSlot, setSelectedSlot, setShowSlotModal, setDaySelected } = useContext(GlobalContext);
+    const { role, setShowSlotModal, setDaySelected } = useContext(GlobalContext);
     const [selectedDate, setSelectedDate] = useState(new Date());
 
-  const handleDayClick = (day, timeSlot, subjectSlot, purposeSlot) => {
-    let j = timeSlots.indexOf(timeSlot);
+    const handleDayClick = (day, timeSlot, subjectSlot, purposeSlot) => {
+        let j = timeSlots.indexOf(timeSlot);
 
         setShowSlotModal(true);
         const value = slotTime.find(item => item.slot == j + 1)

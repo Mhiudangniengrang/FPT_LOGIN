@@ -20,7 +20,6 @@ import { NavLink } from "react-router-dom";
 import HorizontalStack from "./HorizontalStack";
 import CustomNavDropdown from "./DropDownStack";
 import GlobalContext from "../context/GlobalContext";
-import { getDateFormat } from "../Utils/dateUtils";
 
 const dropdownItems = [
   {
@@ -38,18 +37,12 @@ const dropdownItems = [
 ];
 
 const L_Header = () => {
-  const { daySelected, setShowSlotModal, setSelectedSlot } =
+  const { daySelected, setShowSlotModal, setDaySelected } =
     useContext(GlobalContext);
 
   const handleCreateClick = () => {
     setShowSlotModal(true);
-    let date = getDateFormat(new Date());
-    console.log("date" + date);
-    setSelectedSlot(() => ({
-      slot: {
-        date: date,
-      },
-    }));
+    setDaySelected(new Date)
   };
   return (
     <Stack className={Style.container}>
@@ -108,20 +101,14 @@ const L_Header = () => {
           className="ms-auto"
           variant="light"
           style={{ borderRadius: "10px" }}
+          onClick={() => handleCreateClick()}
         >
           <FontAwesomeIcon
             icon={faCirclePlus}
             style={{ color: "#fa8334", paddingRight: "10px" }}
+
           />
-          <a href="#create_slot"
-            style={{
-              textDecorationLine: "none",
-              color: "#000",
-            }}
-            onClick={() => handleCreateClick()}
-          >
-            Create Slot
-          </a>
+          Create Slot
         </Button>
       </Stack>
       <Stack direction="horizontal" gap={5} className={Style.div3}>

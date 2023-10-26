@@ -8,65 +8,75 @@ import React, { useState, useContext, useEffect } from "react";
 import GlobalContext from "../../context/GlobalContext";
 import TimePicker from "react-time-picker";
 import "react-time-picker/dist/TimePicker.css";
-const subjects = ["SWP301", "SWR301", "SWT301", "PRF192", "CEA201"];
+import dayjs from "dayjs";
+import { useData } from "../../context/DataContext";
 
 const slotTime = [
-  {
-    slot: "1",
-    start: "7:00",
-    end: "9:15",
-  },
-  {
-    slot: "2",
-    start: "9:30",
-    end: "11:45",
-  },
-  {
-    slot: "3",
-    start: "12:30",
-    end: "14:45",
-  },
-  {
-    slot: "4",
-    start: "15:00",
-    end: "17:15",
-  },
-  {
-    slot: "5",
-    start: "17:30",
-    end: "19:45",
-  },
-  {
-    slot: "6",
-    start: "20:00",
-    end: "22:15",
-  },
+    {
+        slot: "1",
+        start: "7:00",
+        end: "9:15",
+    },
+    {
+        slot: "2",
+        start: "9:30",
+        end: "11:45",
+    },
+    {
+        slot: "3",
+        start: "12:30",
+        end: "14:45",
+    },
+    {
+        slot: "4",
+        start: "15:00",
+        end: "17:15",
+    },
+    {
+        slot: "5",
+        start: "17:30",
+        end: "19:45",
+    },
+    {
+        slot: "6",
+        start: "20:00",
+        end: "22:15",
+    },
 ];
 
 function CreateSlot() {
 
-    const { setSelectedSlot, daySelected, setDaySelected, setShowSlotModal, selectedSlot, dispatchEmptySlot } = useContext(GlobalContext)
-    const [roomFilter, setRoomFilter] = useState([]);
+    const { rooms } = useData();
+    const { daySelected, setDaySelected, setShowSlotModal } = useContext(GlobalContext)
     const [address, setAddress] = useState(null)
     const [slot, setSlot] = useState(1)
     const [duration, setDuration] = useState(15)
     const [selectRoom, setSelectRoom] = useState(null)
     const [time, setTime] = useState(slotTime[slot - 1].start);
-    const roomList = typeof window != null ? JSON.parse(sessionStorage.getItem('roomList')) : null
 
+    const getFilterRoom = () => {
+        const matchingRoom = rooms.reduce((accumulator, room) => {
+            if (room.address === address) {
+                return [...accumulator, room];
+            }
+            return accumulator
+        }, [])
+        return matchingRoom
+    }
 
     useEffect(() => {
         setTime(slotTime[slot - 1].start)
     }, [slot])
 
-    const handleSubmit = async (e) => {
-
+    const handleSubmit = async () => {
+        setShowSlotModal(false);
         await axios.post(`/api/v1/slots/lecturer/2`, {
             slotTimeId: slot,
-            dateStart: selectedSlot.date,
+            dateStart: dayjs(daySelected).format("YYYY-MM-DD"),
             timeStart: time + ':00',
             duration: '00:' + duration + ':00',
-            roomId: selectRoom
+            roomId: selectRoom,
+            mode: 'Public'
         }).then((response) => {
             console.log("response:");
             console.log(response);
@@ -76,8 +86,7 @@ function CreateSlot() {
                 console.log("error at create slot: " + error);
             })
 
-    setShowSlotModal(false);
-  };
+    };
 
     function subtractDuration() {
         const [hours, minutes] = (slotTime[slot - 1].end).split(':').map(Number);
@@ -92,15 +101,15 @@ function CreateSlot() {
     }
 
 
-  const getStartTime = () => {
-    return slot != 0 ? (
-      <span>
-        {slotTime[slot - 1].start} - {slotTime[slot - 1].end}
-      </span>
-    ) : (
-      <span></span>
-    );
-  };
+    const getStartTime = () => {
+        return slot != 0 ? (
+            <span>
+                {slotTime[slot - 1].start} - {slotTime[slot - 1].end}
+            </span>
+        ) : (
+            <span></span>
+        );
+    };
 
     const getMin = () => {
         return slotTime[slot - 1].start
@@ -115,20 +124,9 @@ function CreateSlot() {
     }
 
     const isDisabled = (address) => {
-        return address != null ? true : false
+        return address == null ? true : false
     }
 
-    const handleSetSelectedSlot = (e) => {
-        return (
-            [
-                {
-                    ...e,
-                    time_start: time + ":00",
-                    duration: duration,
-                }
-            ]
-        )
-    }
     return (
         <div className={Style.box}>
             <div className={Style.box_content}
@@ -196,7 +194,6 @@ function CreateSlot() {
                                     placeholder='Choose slot'
                                     onChange={(e) => {
                                         setDuration(e.target.value);
-                                        setSelectedSlot((selectedSlot) => handleSetSelectedSlot(selectedSlot))
                                     }}
                                 >
                                     <option value={15}>15 minutes</option>
@@ -219,7 +216,6 @@ function CreateSlot() {
                                         maxTime={getMax()}
                                         onChange={(value) => {
                                             setTime(value);
-                                            setSelectedSlot((selectedSlot) => handleSetSelectedSlot(selectedSlot));
                                         }}
                                         value={time}
                                     />
@@ -254,7 +250,7 @@ function CreateSlot() {
                                             Select Room
                                         </option>
                                         {
-                                            roomFilter.map(room => {
+                                            getFilterRoom().map(room => {
                                                 return (<option key={room.roomId} value={room.roomId}>{room.roomId}</option>)
                                             })
                                         }

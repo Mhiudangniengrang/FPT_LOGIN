@@ -7,12 +7,6 @@ const GlobalContext = React.createContext({
     setDaySelected: (day) => { },
     showSlotModal: false,
     setShowSlotModal: () => { },
-    dispatchCalSlot: ({ type, payload }) => { },
-    savedSlots: [],
-    selectedSlot: null,
-    setSelectedSlot: () => { },
-    emptySlots: [],
-    dispatchEmptySlot: ({ type, payload }) => { },
     setRole: () => { },
     role: null
 });
