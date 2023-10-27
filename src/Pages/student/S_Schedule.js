@@ -13,11 +13,11 @@ import Breadcrumbs from "../../components/BreadcrumpCus";
 const path = [
     {
         text: 'Home',
-        route: '/student_home'
+        route: '/student'
     },
     {
         text: 'View Schedule',
-        route: '/s_view_schedule'
+        route: '/student/viewschedule'
     },
 ]
 

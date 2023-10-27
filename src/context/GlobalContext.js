@@ -7,6 +7,8 @@ const GlobalContext = React.createContext({
     setDaySelected: (day) => { },
     showSlotModal: false,
     setShowSlotModal: () => { },
+    selectedSlot: null,
+    setSelectedSlot: () => { },
     setRole: () => { },
     role: null
 });

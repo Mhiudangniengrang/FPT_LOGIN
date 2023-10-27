@@ -24,7 +24,7 @@ const L_ViewMeeting = () => {
         <L_Layout>
             {showSlotModal && <CreateSlot />}
             <Breadcrumbs items={path} />
-            <Calender_type />
+            {/* list */}
         </L_Layout>
     );
 };

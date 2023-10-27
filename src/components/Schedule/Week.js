@@ -81,25 +81,12 @@ function WeeklyCalendar({ isDisable = false }) {
     }, [])
 
 
-    const { role, setShowSlotModal, setDaySelected } = useContext(GlobalContext);
+    const { role, setShowSlotModal, setDaySelected, setSelectedSlot } = useContext(GlobalContext);
     const [selectedDate, setSelectedDate] = useState(new Date());
 
-    const handleDayClick = (day, timeSlot, subjectSlot, purposeSlot) => {
-        let j = timeSlots.indexOf(timeSlot);
-
+    const handleStudentDayClick = (meeting) => {
         setShowSlotModal(true);
-        const value = slotTime.find(item => item.slot == j + 1)
-        let time = `${value.start} - ${value.end}`
-        setSelectedSlot(() => (
-            {
-                slotTimeId: j + 1,
-                dateStart: day,
-                timeStart: `${time}`,
-                subjectId: subjectSlot,
-                purpose: purposeSlot,
-            }
-        ));
-
+        setSelectedSlot(meeting);
     };
 
     const handleCreateClick = (day) => {
@@ -133,7 +120,7 @@ function WeeklyCalendar({ isDisable = false }) {
                         >
                             <Stack direction='horizontal' gap='3'
                                 style={{
-                                    padding: '10px',
+                                    padding: '10px 0',
                                 }}
                             >
                                 <div>
@@ -210,7 +197,12 @@ function WeeklyCalendar({ isDisable = false }) {
                                                         case "student":
                                                             {
                                                                 return (
-                                                                    <div>student meeting schedule</div>
+                                                                    <div
+                                                                        className={Style.slot}
+                                                                        onClick={() => handleStudentDayClick(meeting)}
+                                                                    >
+                                                                        student view teacher schedule
+                                                                    </div>
                                                                 )
                                                                 break;
                                                             }

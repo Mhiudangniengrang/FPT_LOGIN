@@ -37,11 +37,20 @@ const slotTime = [
         end: '22:15'
     },
 ]
+
+
 export default function ContextWrapper(props) {
     const [monthIndex, setMonthIndex] = useState(dayjs().month());
     const [showSlotModal, setShowSlotModal] = useState(false)
     const [daySelected, setDaySelected] = useState(new Date());
+    const [selectedSlot, setSelectedSlot] = useState(null);
     const [role, setRole] = useState(null)
+
+    useEffect(() => {
+        if (!showSlotModal) {
+            setSelectedSlot(null);
+        }
+    }, [showSlotModal]);
 
     return (
         <GlobalContext.Provider
@@ -52,6 +61,8 @@ export default function ContextWrapper(props) {
                 setShowSlotModal,
                 daySelected,
                 setDaySelected,
+                selectedSlot,
+                setSelectedSlot,
                 role,
                 setRole,
             }}

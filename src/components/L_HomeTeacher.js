@@ -20,13 +20,12 @@ function L_HomeTeacher() {
   const accessToken = typeof window !== null ? localStorage.getItem("accessToken") : null
   useEffect(() => {
     axios
-      .get(`/api/v1/requests/student/`, {
-        headers: { Authorization: `Bearer ${accessToken}` },
+      .get(`/api/v1/students`, {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
       })
       .then((res) => {
-        res.map((request) => {
-          //
-        });
+        console.log(res)
       })
       .catch((error) => {
         console.log("Error lecturer home", error);

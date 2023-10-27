@@ -31,7 +31,7 @@ class S_ViewTeacherAboutme extends React.Component {
                 <div style={{ float: "left", width: "50%", padding: "15px" }}>
                   <FontAwesomeIcon icon={faBriefcase} /> SWR301 - Software
                   Requirement
-                  
+
                   <br />
                   <FontAwesomeIcon icon={faBriefcase} /> SWP391 - Application
                   Development Project
@@ -56,9 +56,6 @@ class S_ViewTeacherAboutme extends React.Component {
             </div>
             <div>
               {" "}
-              <Button className="mx-2" variant="primary">
-                Book Slot
-              </Button>
               <Button variant="primary">Send Request</Button>
             </div>
           </CardBody>

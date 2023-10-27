@@ -46,7 +46,7 @@ function Hero() {
         <GoogleOAuthProvider clientId="557005058309-0088dfrc1trmtp5sn1im019as1rt3ofq.apps.googleusercontent.com">
           <GoogleLogin
             onSuccess={credentialResponse => {
-              console.log("onSucces");
+              console.log("onSuccess");
               localStorage.setItem('accessToken', credentialResponse.credential);
               history.push('/lecturer')
             }}

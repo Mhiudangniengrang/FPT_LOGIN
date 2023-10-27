@@ -15,33 +15,19 @@ const subjects = [
 
 function BookPublicOverlay() {
 
-    const { setShowSlotModal, selectedSlot, dispatchCalSlot, setSelectedSlot } = useContext(GlobalContext)
+    const { setShowSlotModal, selectedSlot, setSelectedSlot } = useContext(GlobalContext)
     const [purpose, setPurpose] = useState(
-        selectedSlot['slot'] ? selectedSlot['slot'].description : ""
+        selectedSlot ? selectedSlot.description : ""
     );
     const [subject, setSubject] = useState(
-        selectedSlot['slot'] ? selectedSlot['slot'].subject : ""
+        selectedSlot ? selectedSlot.subjectId : ""
     );
 
-    const slotData = selectedSlot['slot']
-
-    useEffect(() => {
-        setSelectedSlot(selectedSlot)
-    }, [selectedSlot])
-    console.log(selectedSlot['slot'])
+    console.log("BookPublicOverLay")
+    console.log(selectedSlot)
     const handleSubmit = (e) => {
         e.preventDefault();
-        const calendarSlot = {
-            teacher: selectedSlot['slot'].teacher,
-            slot: selectedSlot['slot'].slot,
-            date: selectedSlot['slot'].date,
-            time: selectedSlot['slot'].time,
-            subject: subject,
-            room: selectedSlot['slot'].room,
-            purpose: purpose,
-            status: 'booked',
-        };
-        dispatchCalSlot({ type: "push", payload: calendarSlot });
+
         setShowSlotModal(false);
     };
 
@@ -75,11 +61,11 @@ function BookPublicOverlay() {
                                 onClick={() => setShowSlotModal(false)} />
                         </Stack>
                         <Stack direction='vertical'>
-                            <p>Lecturer: {slotData.teacher}</p>
-                            <p>Slot: {slotData.slot}</p>
-                            <p>Date : {slotData.date}</p>
-                            <p>Time : {slotData.time}</p>
-                            <p>Room: {slotData.room}</p>
+                            <p>Lecturer: {selectedSlot.teacher}</p>
+                            <p>Slot: {selectedSlot.slot}</p>
+                            <p>Date : {selectedSlot.date}</p>
+                            <p>Time : {selectedSlot.time}</p>
+                            <p>Room: {selectedSlot.room}</p>
 
                             <label htmlFor='form'>Choose your subject:</label>
                             <div className={Style.subjects}>
@@ -90,7 +76,7 @@ function BookPublicOverlay() {
                                                 value={subject}
                                                 onClick={() => {
                                                     setSubject(subject);
-                                                    selectedSlot['slot']['subject'] = subject
+                                                    selectedSlot.subjectId = subject
                                                 }}
 
                                             />
@@ -111,13 +97,13 @@ function BookPublicOverlay() {
                                         placeholder='Enter your purpose (200 words)'
                                         onChange={(e) => {
                                             setPurpose(e.target.value);
-                                            selectedSlot['slot']['purpose'] = e.target.value;
+                                            selectedSlot.description = e.target.value;
                                         }}
-                                        value={selectedSlot['slot']['purpose']}
+                                        value={selectedSlot.description}
                                         required
                                     >
                                     </textarea>
-                                    {selectedSlot['slot'].status !== 'Booked' && (
+                                    {selectedSlot.status !== 'Booked' && (
 
                                         <button className={Style.book_btn} type='submit' >Book</button>
                                     )}
