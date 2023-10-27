@@ -99,7 +99,7 @@ const FormSearch = () => {
           type="submit"
           onClick={(e) => handleSearch(e)} // Call the common handler for both lecturer and subject search
         >
-          Go
+          Search
         </Button>
       </form>
     </div>
