@@ -17,14 +17,13 @@ const List = () => {
         },
       })
       .then((response) => {
-        setList(response.content); // Use response.data to set the array
+        setList(response.content); 
       })
       .catch((error) => {
         console.log("Error at list :" + error);
       });
   }, []);
   useEffect(() => {
-    // Gọi API bằng Axios và lấy dữ liệu
     axios
       .get("/api/v1/semesters")
       .then((response) => {
