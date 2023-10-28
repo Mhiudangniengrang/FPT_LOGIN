@@ -1,19 +1,18 @@
 import React from "react";
 import Style from '../../assets/style/connect_section.module.scss';
-import ButtonLink from "../../components/ButtonLink";
 
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { GoogleLogin } from "@react-oauth/google";
 import axios from "../../Services/customizeAxios";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
-import { useData } from "../../context/DataContext";
+import { useContext } from "react";
+import GlobalContext from "../../context/GlobalContext";
 export default function Connect_section() {
     const history = useHistory();
-    const { setAccessTokenContext } = useData();
+    const { setAccessToken } = useContext(GlobalContext);
     const handleLoginSuccess = (credentialResponse) => {
         const accessToken = credentialResponse.credential;
-        // localStorage.setItem("accessToken", accessToken);
-        setAccessTokenContext(accessToken)
+        setAccessToken(accessToken)
         axios
             .get("/api/v1/user/userId", {
                 headers: {

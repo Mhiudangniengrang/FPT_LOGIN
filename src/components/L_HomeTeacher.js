@@ -10,6 +10,8 @@ import {
   faCalendarDays,
 } from "@fortawesome/free-solid-svg-icons";
 import axios from "../Services/customizeAxios"
+import { useContext } from "react";
+import GlobalContext from "../context/GlobalContext";
 
 function L_HomeTeacher() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -17,12 +19,13 @@ function L_HomeTeacher() {
   const [currentDate, setCurrentDate] = useState(dayjs()); // Initialize currentDate using Day.js
   const firstIndex = (currentPage - 1) * recordsPerPage;
   const lastIndex = firstIndex + recordsPerPage;
-  const accessToken = typeof window !== null ? localStorage.getItem("accessToken") : null
+  const { accessToken } = useContext(GlobalContext)
   useEffect(() => {
     axios
-      .get(`/api/v1/students`, {
-        'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
+      .get(`/api/v1/user/userId`, {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+        }
       })
       .then((res) => {
         console.log(res)
@@ -30,7 +33,7 @@ function L_HomeTeacher() {
       .catch((error) => {
         console.log("Error lecturer home", error);
       });
-  }, [accessToken]);
+  }, []);
 
   const filteredData = data.filter((record) => {
     const recordDate = dayjs(record.date, "DD/MM/YYYY"); // Adjust the date format

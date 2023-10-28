@@ -1,41 +1,24 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import axios from '../Services/customizeAxios';
-import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
+import GlobalContext from './GlobalContext';
 const DataContext = createContext();
 
-export const DataProvider = ({ children, loginUser }) => {
-    console.log("Data context ne")
-    const [accessToken, setAccessToken] = useState(null);
+export const DataProvider = ({ children, role }) => {
     const [rooms, setRooms] = useState([]);
     const [lecturerId, setLecturerId] = useState(null);
     const [emptySlots, setEmptySlots] = useState([]);
-    const history = useHistory()
+    const [authorize, setAuthorize] = useState(null);
 
+    const { loginUser } = useContext(GlobalContext)
+    const accessToken = typeof window !== null ? localStorage.getItem('accessToken') : null
+    console.log("data")
+    console.log(loginUser)
+    console.log(role)
     useEffect(() => {
-        const expiresIn = 3600;
-
-        const tokenExpirationTimestamp = Date.now() + expiresIn * 1000;
-
-        if (Date.now() >= tokenExpirationTimestamp) {
-            console.log('Access token has expired');
-            setAccessToken(null)
-        }
-    }, []);
-
-    useEffect(() => {
-        console.log("check access")
-        console.log(accessToken)
-        if (accessToken == null) {
-            console.log("return home")
-            history.push("/")
-        }
-    }, [accessToken]);
-
-
-    const setAccessTokenContext = (token) => {
-        setAccessToken(token);
-    };
-
+        if (loginUser != null && (loginUser.roleName === role)) {
+            setAuthorize(true)
+        } else setAuthorize(false)
+    })
     const getRoom = () => {
         axios
             .get(`/api/v1/slots/lecturer/room`)
@@ -78,8 +61,7 @@ export const DataProvider = ({ children, loginUser }) => {
             setEmptySlots,
             lecturerId,
             setLecturerId,
-            accessToken,
-            setAccessTokenContext
+            authorize
         }}>
             {children}
         </DataContext.Provider >

@@ -1,5 +1,6 @@
 
 import React from "react";
+
 const GlobalContext = React.createContext({
     monthIndex: 0,
     setMonthIndex: (index) => { },
@@ -9,8 +10,9 @@ const GlobalContext = React.createContext({
     setShowSlotModal: () => { },
     selectedSlot: null,
     setSelectedSlot: () => { },
-    setRole: () => { },
-    role: null
+    setLoginUser: () => { },
+    loginUser: null,
+    accessToken: null,
 });
 
 export default GlobalContext;

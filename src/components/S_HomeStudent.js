@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import data from "../S_Data.json"; // Replace with the correct path to your data file
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Button, Form, Card, Row, Col, Tab, Tabs, Stack } from "react-bootstrap";
@@ -10,6 +10,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useHistory } from "react-router-dom";
 import axios from "../Services/customizeAxios";
+import GlobalContext from "../context/GlobalContext";
 
 function S_HomeStudent() {
 
@@ -18,19 +19,23 @@ function S_HomeStudent() {
   const [currentDate, setCurrentDate] = useState(dayjs()); // Initialize currentDate using Day.js
   const firstIndex = (currentPage - 1) * recordsPerPage;
   const lastIndex = firstIndex + recordsPerPage;
+  const { accessToken } = useContext(GlobalContext)
+  useEffect(() => {
+    axios
+      .get(`/api/v1/user/userId`, {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+        }
+      })
+      .then((res) => {
+        console.log(res)
+      })
+      .catch((error) => {
+        console.log("Error lecturer home", error);
+      });
+  }, []);
 
-  // useEffect(() => {
-  //   axios
-  //     .get("/api/v1/slots")
-  //     .then((res) => {
-  //       console.log(res)
-  //     })
-  //     .catch(error => {
-  //       console.log("error at student home" + error)
-  //     })
-  // })
 
-  // Filter data to include only items with the same date as currentDate
   const filteredData = data.filter((record) => {
     const recordDate = dayjs(record.date, "DD/MM/YYYY"); // Adjust the date format
     return (

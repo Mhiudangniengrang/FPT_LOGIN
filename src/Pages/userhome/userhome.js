@@ -5,23 +5,23 @@ import Feature from "./section_feature";
 import Connect_section from "./connect_section";
 import Team from "./team_section";
 import Footer from "../../components/Footer";
-import { DataProvider } from "../../context/DataContext";
+import { useEffect } from "react";
 
-class Userhome extends React.Component {
-    render() {
-        return (
-            <>
-                <Header />
-                <DataProvider>
-                    <Hero />
-                    <Connect_section />
-                </DataProvider>
-                <Feature />
-                <Team />
-                <Footer />
-            </>
-        );
-    }
+function Userhome() {
+    useEffect(() => {
+        localStorage.removeItem("accessToken")
+    }, [])
+    return (
+        <>
+            <Header />
+            <Hero />
+            <Connect_section />
+            <Feature />
+            <Team />
+            <Footer />
+        </>
+    );
+
 }
 
 export default Userhome;

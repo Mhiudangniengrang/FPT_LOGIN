@@ -1,50 +1,41 @@
 import { useState, useEffect, useReducer } from "react";
 import GlobalContext from "./GlobalContext";
-
 import dayjs from "dayjs";
-
-
-
-const slotTime = [
-    {
-        name: '1',
-        start: '07:00',
-        end: '09:15'
-    },
-    {
-        name: '2',
-        start: '09:30',
-        end: '11:45'
-    },
-    {
-        name: '3',
-        start: '12:30',
-        end: '14:45'
-    },
-    {
-        name: '4',
-        start: '15:00',
-        end: '17:15'
-    },
-    {
-        name: '5',
-        start: '17:30',
-        end: '19:45'
-    },
-    {
-        slot: '6',
-        start: '20:00',
-        end: '22:15'
-    },
-]
-
+import axios from "../Services/customizeAxios";
 
 export default function ContextWrapper(props) {
     const [monthIndex, setMonthIndex] = useState(dayjs().month());
     const [showSlotModal, setShowSlotModal] = useState(false)
     const [daySelected, setDaySelected] = useState(new Date());
     const [selectedSlot, setSelectedSlot] = useState(null);
-    const [role, setRole] = useState(null)
+    const [loading, setLoading] = useState(true);
+
+    const accessToken = typeof window !== null ? localStorage.getItem('accessToken') : null
+    const [loginUser, setLoginUser] = useState(async () => {
+        await axios
+            .get("/api/v1/user/userId", {
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`,
+                }
+            })
+            .then((response) => {
+                setLoginUser(response)
+                setLoading(false)
+            })
+            .catch(error => {
+                setLoading(false)
+                console.log("Error getting user data:", error);
+            });
+    });
+
+    useEffect(() => {
+        const expiresIn = 3600;
+        const tokenExpirationTimestamp = Date.now() + expiresIn * 1000;
+        if (Date.now() >= tokenExpirationTimestamp) {
+            console.log('Access token has expired');
+            localStorage.clear
+        }
+    }, [accessToken]);
 
     useEffect(() => {
         if (!showSlotModal) {
@@ -52,6 +43,9 @@ export default function ContextWrapper(props) {
         }
     }, [showSlotModal]);
 
+    if (loading) {
+        return <div>Loading...</div>; // Display a loading message or spinner
+    }
     return (
         <GlobalContext.Provider
             value={{
@@ -63,8 +57,9 @@ export default function ContextWrapper(props) {
                 setDaySelected,
                 selectedSlot,
                 setSelectedSlot,
-                role,
-                setRole,
+                loginUser,
+                setLoginUser,
+                accessToken,
             }}
         >
             {props.children}

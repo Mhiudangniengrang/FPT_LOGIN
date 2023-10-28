@@ -20,7 +20,7 @@ function App() {
                 key={idx}
                 exact path={route.path}
               >
-                <DataProvider>
+                <DataProvider role={"STUDENT"}>
                   <Page />
                 </DataProvider>
               </Route>
@@ -33,7 +33,7 @@ function App() {
                 key={idx}
                 exact path={route.path}
               >
-                <DataProvider>
+                <DataProvider role={"LECTURER"}>
                   <Page />
                 </DataProvider>
               </Route>

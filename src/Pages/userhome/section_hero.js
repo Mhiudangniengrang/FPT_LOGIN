@@ -5,7 +5,8 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import { GoogleLogin } from "@react-oauth/google";
 import axios from "../../Services/customizeAxios";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
-import { useData } from "../../context/DataContext";
+import { useContext } from "react";
+import GlobalContext from "../../context/GlobalContext";
 var heroData = [
   {
     id: 1,
@@ -32,11 +33,9 @@ var heroData = [
 
 function Hero() {
   const history = useHistory();
-  const { setAccessTokenContext } = useData();
   const handleLoginSuccess = (credentialResponse) => {
     const accessToken = credentialResponse.credential;
-    console.log(accessToken)
-    setAccessTokenContext(accessToken)
+    localStorage.setItem('accessToken', accessToken)
     axios
       .get("/api/v1/user/userId", {
         headers: {
