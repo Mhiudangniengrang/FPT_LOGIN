@@ -1,24 +1,53 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import axios from '../Services/customizeAxios';
+import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 const DataContext = createContext();
 
-export const DataProvider = ({ children }) => {
+export const DataProvider = ({ children, loginUser }) => {
     console.log("Data context ne")
+    const [accessToken, setAccessToken] = useState(null);
     const [rooms, setRooms] = useState([]);
     const [lecturerId, setLecturerId] = useState(null);
     const [emptySlots, setEmptySlots] = useState([]);
-    useEffect(async () => {
-        await axios
+    const history = useHistory()
+
+    useEffect(() => {
+        const expiresIn = 3600;
+
+        const tokenExpirationTimestamp = Date.now() + expiresIn * 1000;
+
+        if (Date.now() >= tokenExpirationTimestamp) {
+            console.log('Access token has expired');
+            setAccessToken(null)
+        }
+    }, []);
+
+    useEffect(() => {
+        console.log("check access")
+        console.log(accessToken)
+        if (accessToken == null) {
+            console.log("return home")
+            history.push("/")
+        }
+    }, [accessToken]);
+
+
+    const setAccessTokenContext = (token) => {
+        setAccessToken(token);
+    };
+
+    const getRoom = () => {
+        axios
             .get(`/api/v1/slots/lecturer/room`)
             .then((response) => {
-                console.log(response)
                 setRooms(response)
             }).catch(error => {
                 console.log('Error at Data Context:', error)
             })
-    }, [])
+    }
 
-    useEffect(async () => {
+
+    const getEmptySlots = async () => {
         if (lecturerId != null) {
             await axios
                 .get(`/api/v1/user/emptySlot/lecturer/${lecturerId}`)
@@ -34,21 +63,33 @@ export const DataProvider = ({ children }) => {
                     console.log("Error at Week.js " + error)
                 })
         }
-    }, [setLecturerId, setEmptySlots])
+    }
+
+    useEffect(() => {
+        setEmptySlots([])
+        getEmptySlots()
+    }, [lecturerId])
 
 
     return (
         <DataContext.Provider value={{
-            axios,
             rooms,
             emptySlots,
             setEmptySlots,
             lecturerId,
-            setLecturerId
+            setLecturerId,
+            accessToken,
+            setAccessTokenContext
         }}>
             {children}
-        </DataContext.Provider>
+        </DataContext.Provider >
     );
 };
 
-export const useData = () => useContext(DataContext);
+export const useData = () => {
+    const contextValue = useContext(DataContext);
+    if (contextValue === undefined) {
+        throw new Error('useData must be used within a DataProvider');
+    }
+    return contextValue;
+};

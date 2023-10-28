@@ -170,8 +170,10 @@ h2 {
 
 .nav-tabs{
   border-bottom:3px solid #000;
+  margin-top: 20px;
 }
 .nav-tabs>.nav-item{
+  font-size: 25px;
   color: #333;
   background-color: #dfdfdf;
   margin-right: 10px;
@@ -186,7 +188,7 @@ h2 {
 }
 .nav-tabs>.nav-item .active{
   color: #fff;
-  background-color: #000000;
+  background-color: #181515;
 }
 
 

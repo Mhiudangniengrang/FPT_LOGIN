@@ -63,7 +63,7 @@ const FormSearch = () => {
   };
 
   return (
-    <Container className="my-5">
+    <Container>
       <div>
         <div
           style={{
@@ -71,7 +71,7 @@ const FormSearch = () => {
             display: "flex",
             justifyContent: "flex-start",
             alignItems: "center",
-            padding: "40px 0",
+            paddingBottom: "40px",
           }}
         >
           <label className="pe-2" id="search_label" htmlFor="search">

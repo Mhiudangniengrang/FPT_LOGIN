@@ -3,9 +3,9 @@ import styles from "../../assets/style/hero.module.scss";
 import Carousel from "react-bootstrap/Carousel";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { GoogleLogin } from "@react-oauth/google";
-import { useHistory } from "react-router-dom";
-import axios from "axios";
-
+import axios from "../../Services/customizeAxios";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import { useData } from "../../context/DataContext";
 var heroData = [
   {
     id: 1,
@@ -32,6 +32,25 @@ var heroData = [
 
 function Hero() {
   const history = useHistory();
+  const { setAccessTokenContext } = useData();
+  const handleLoginSuccess = (credentialResponse) => {
+    const accessToken = credentialResponse.credential;
+    console.log(accessToken)
+    setAccessTokenContext(accessToken)
+    axios
+      .get("/api/v1/user/userId", {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+        }
+      })
+      .then((response) => {
+        console.log("Student")
+        history.push(`/${response.roleName}`)
+      })
+      .catch(error => {
+        console.log("Error getting user data:", error);
+      });
+  };
 
   return (
     <section
@@ -51,14 +70,7 @@ function Hero() {
         <span className="d-block text-start">Login with FPT.EDU.VN</span>
         <GoogleOAuthProvider clientId="557005058309-0088dfrc1trmtp5sn1im019as1rt3ofq.apps.googleusercontent.com">
           <GoogleLogin
-            onSuccess={(credentialResponse) => {
-              console.log("onSucces");
-              localStorage.setItem(
-                "accessToken",
-                credentialResponse.credential
-              );
-              history.push("/lecturer");
-            }}
+            onSuccess={handleLoginSuccess}
             onError={() => {
               console.log("Login Failed");
             }}

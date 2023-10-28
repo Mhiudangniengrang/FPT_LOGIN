@@ -40,9 +40,6 @@ function Header() {
           <Nav.Link to="/#overview" style={overViewStyle}>Overview</Nav.Link>
           <Nav.Link to="/#features">Features</Nav.Link>
         </Nav>
-        <div>
-          <ButtonLink text="Login" link="/login" style={buttonStyle} />
-        </div>
       </Container>
     </Navbar >
   )

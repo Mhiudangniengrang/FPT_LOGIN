@@ -8,11 +8,11 @@ import CreateSlot from "../../components/Schedule/CreateSlot";
 
 const path = [
     {
-        route: '/lecturer_home',
+        route: '/lecturer',
         text: 'Home',
     },
     {
-        route: '/l_view_meeting_schedule',
+        route: '/lecturer/meetingschedule',
         text: 'View Meeting Schedule',
     },
 ]
