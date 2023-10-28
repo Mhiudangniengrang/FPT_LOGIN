@@ -37,7 +37,7 @@ class S_ViewTeacherProfile extends React.Component {
               <Card className="my-4 ">
                 <Card.Body className="py-2 ">
                   <Row>
-                    <Col md={6} className="py-1 ">
+                    <Col md={6} className="py-1 text-center my-5 ">
                       <h5>ID:</h5>
                       <p>HungLD</p>
                       <h5>Name:</h5>

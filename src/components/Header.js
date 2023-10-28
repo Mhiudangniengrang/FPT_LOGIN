@@ -5,7 +5,6 @@ import Navbar from 'react-bootstrap/Navbar';
 import '../assets/style/home.css'
 import Image from "../assets/image/logo.png";
 import ButtonLink from './ButtonLink';
-import Language from './Language';
 
 function Header() {
 
@@ -42,7 +41,6 @@ function Header() {
           <Nav.Link to="/#features">Features</Nav.Link>
         </Nav>
         <div>
-          <Language />
           <ButtonLink text="Login" link="/login" style={buttonStyle} />
         </div>
       </Container>

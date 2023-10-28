@@ -13,9 +13,8 @@ const StudentRoutes = [
   { path: "/student/viewprofile", component: S_ViewProfile },
   { path: "/student/search/profileteacher", component: S_ViewTeacherProfile },
   { path: "/student/lecturer/viewschedule", component: S_ViewTeacherSchedule },
-  { path: "/student/searchsubject", component: S_SearchSubject },
-  { path: "/student/searchteacher", component: S_SearchName },
   { path: "/student/viewschedule", component: S_Schedule },
+
 ];
 
 export default StudentRoutes;
