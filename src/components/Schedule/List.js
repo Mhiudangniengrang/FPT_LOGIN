@@ -2,91 +2,54 @@ import React, { useEffect, useState } from "react";
 import axios from "../../Services/customizeAxios";
 import { Button } from "react-bootstrap";
 
-const List = () => {
+const List = (props) => {
+  const { semesters, currentSemesterIndex } = props;
   const [list, setList] = useState([]);
-  const [semesters, setSemesters] = useState([]);
-  const [currentSemesterIndex, setCurrentSemesterIndex] = useState(0);
+
   useEffect(() => {
+    const userId = 2;
+    const semesterId = 2;
+
     axios
-      .get("/api/v1/slots", {
-        params: {
-          pageNo: list,
-          pageSize: list,
-          sortBy: list,
-          sortDir: list,
-        },
-      })
+      .get(`/api/v1/user/emptySlot/user/${userId}/semester/${semesterId}`)
       .then((response) => {
-        setList(response.content); // Use response.data to set the array
+        setList(response);
       })
       .catch((error) => {
-        console.log("Error at list :" + error);
+        console.log("Error at list: " + error);
       });
-  }, []);
-  useEffect(() => {
-    // Gọi API bằng Axios và lấy dữ liệu
+
     axios
-      .get("/api/v1/semesters")
+      .get("/api/v1/user/semester")
       .then((response) => {
-        console.log(response);
-        // setSemesters(response);
+        setSemesters(response);
       })
       .catch((error) => {
-        console.error("Lỗi khi gọi API: ", error);
+        console.error("Error when calling API: ", error);
       });
   }, []);
-  useEffect(() => {
-    if (semesters.length > 0) {
-      // Find the "Fall 2023" semester
-      const fallSemester = semesters.find(
-        (semester) => semester.semesterName === "Fall 2023"
-      );
 
-      if (fallSemester) {
-        // Filter slots based on the Fall 2023 semester's date range
-        const filteredSlots = list.filter((slot) => {
-          const slotDate = new Date(slot.dateStart);
-          return (
-            slotDate >= new Date(fallSemester.dateStart) &&
-            slotDate <= new Date(fallSemester.dateEnd)
-          );
-        });
-        setList(filteredSlots);
-      }
-    }
-  }, [list, semesters, currentSemesterIndex]);
+  if (!semesters?.length) {
+    return (
+      <div>
+        <p>No semesters available.</p>
+      </div>
+    );
+  }
 
-  const handleClickPrev = () => {
-    if (semesters.length > 0) {
-      if (currentSemesterIndex === 0) {
-        setCurrentSemesterIndex(semesters.length - 1);
-      } else {
-        setCurrentSemesterIndex(currentSemesterIndex - 1);
-      }
+  const filteredList = list.filter((item) => {
+    const semester = semesters[currentSemesterIndex];
+    if (semester) {
+      const startDate = new Date(semester.dateStart);
+      const endDate = new Date(semester.dateEnd);
+      const itemDate = new Date(item.dateStart);
+      return itemDate >= startDate && itemDate <= endDate;
     }
-  };
-
-  const handleClickNext = () => {
-    if (semesters.length > 0) {
-      if (currentSemesterIndex === semesters.length - 1) {
-        setCurrentSemesterIndex(0);
-      } else {
-        setCurrentSemesterIndex(currentSemesterIndex + 1);
-      }
-    }
-  };
+    return false;
+  });
 
   return (
     <div>
-      <div className="d-flex justify-content-between">
-        <Button variant="secondary" onClick={handleClickPrev}>
-          Previous
-        </Button>
-        <div>{semesters[currentSemesterIndex]?.semesterName}</div>
-        <Button variant="secondary" onClick={handleClickNext}>
-          Next
-        </Button>
-      </div>
       <table className="table text-center">
         <thead>
           <tr>
@@ -102,7 +65,7 @@ const List = () => {
           </tr>
         </thead>
         <tbody>
-          {list.map((record, i) => (
+          {filteredList.map((record, i) => (
             <tr key={i}>
               <td>{record.lecturerId}</td>
               <td>{record.lecturerName}</td>

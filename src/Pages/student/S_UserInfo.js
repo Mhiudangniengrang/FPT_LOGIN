@@ -31,7 +31,7 @@ function S_UserInfo() {
   ];
   const [filteredSubjects, setFilteredSubjects] = useState(subjects);
   const [major, setMajor] = useState("Select Major");
-  const [selectedSubjects, setSelectedSubjects] = useState([]);
+  const [selectedSubjects, setSelectedSubjects] = useState("");
   const [enteredID, setEnteredID] = useState("");
 
   const [majors, setMajors] = useState([]);
@@ -47,35 +47,26 @@ function S_UserInfo() {
         console.error("Error fetching majors:", error);
       });
   }, []);
-  const handleEnteredIDChange = (event) => {
-    setEnteredID(event.target.value);
-  };
-  const handleSearch = (searchTerm) => {
-    const filtered = subjects.filter((subject) =>
-      subject.name.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-    setFilteredSubjects(filtered);
+  const handleSearchSubject = async () => {
+    const majorId = 2;
+    axios
+      .get(`/api/v1/student/searching/subjects/major/${majorId}`)
+
+      .then((res) => {
+        // res.map((subject) => {
+        //   setSelectedSubjects((prev) => [...prev, subject]);
+        // });
+        console.log(res);
+      })
+      .catch((error) => {
+        console.error("Error", error);
+      });
   };
 
   const handleMajorChange = (event) => {
     setMajor(event.target.value);
   };
 
-  const handleSubjectSelection = (subject) => {
-    // Kiểm tra xem môn học đã được chọn trước đó chưa
-    if (
-      !selectedSubjects.some(
-        (selectedSubject) => selectedSubject.id === subject.id
-      )
-    ) {
-      setSelectedSubjects([...selectedSubjects, subject]);
-    }
-    // Nếu môn học đã được chọn, bạn có thể xử lý theo ý muốn, ví dụ: thông báo lỗi hoặc không thêm vào danh sách.
-    else {
-      // Xử lý trường hợp môn học đã được chọn
-      // Ví dụ: alert("Môn học đã được chọn trước đó");
-    }
-  };
   const handleClickSave = () => {
     // Handle saving the selected subjects (e.g., send to server or another component)
     console.log("Selected Subjects:", selectedSubjects);
@@ -97,7 +88,10 @@ function S_UserInfo() {
       [name]: value,
     });
   };
-
+  const handleSearch = async (e) => {
+    e.preventDefault();
+    handleSearchSubject();
+  };
   return (
     <S_Layout>
       <Container className="py-2">
@@ -146,14 +140,22 @@ function S_UserInfo() {
                     </select>
                   </FormGroup>
                   <p className="my-3">Your current subjects:</p>
-                  {selectedSubjects.map((subject) => (
-                    <li key={subject.id}>{subject.name}</li>
-                  ))}
-                  <S_SubjectList
-                    subjects={filteredSubjects}
-                    onSearch={handleSearch}
-                    onSubjectSelect={handleSubjectSelection}
-                  />
+                  <div className="d-flex align-items-center">
+                    <FormControl
+                      type="text"
+                      className="w-75 my-3 "
+                      placeholder="Search subjects..."
+                      value={selectedSubjects}
+                      onChange={(e) => setSelectedSubjects(e.target.value)}
+                    />
+                    <Button
+                      className="mx-1 py-2 text-end"
+                      variant="secondary"
+                      onClick={handleSearch}
+                    >
+                      Submit
+                    </Button>
+                  </div>
                   <Button onClick={handleClickSave}>Save</Button>
                   <Button className="mx-2" variant="secondary">
                     Cancel

@@ -17,7 +17,6 @@ import GlobalContext from "../context/GlobalContext";
 import axios from "../Services/customizeAxios";
 
 const Calender_type = () => {
- 
   const [activeButton, setActiveButton] = useState("week");
   const [currentMonth, setCurrentMonth] = useState(getMonth());
   const { role, setMonthIndex, monthIndex, daySelected, setDaySelected } =
@@ -54,11 +53,41 @@ const Calender_type = () => {
         : dayjs().month()
     );
   }
+  const [semesters, setSemesters] = useState([]);
+  const [currentSemesterIndex, setCurrentSemesterIndex] = useState(0);
 
-  
+  useEffect(() => {
+    // Gọi API bằng Axios và lấy dữ liệu
+    axios
+      .get("/api/v1/user/semester")
+      .then((response) => {
+        // console.log(response);
+        setSemesters(response);
+      })
+      .catch((error) => {
+        console.error("Lỗi khi gọi API: ", error);
+      });
+  }, []);
+  const handleClickPrev = () => {
+    if (semesters.length > 0) {
+      if (currentSemesterIndex === 0) {
+        setCurrentSemesterIndex(semesters.length - 1);
+      } else {
+        setCurrentSemesterIndex(currentSemesterIndex - 1);
+      }
+    }
+  };
 
-  
-  
+  const handleClickNext = () => {
+    if (semesters.length > 0) {
+      if (currentSemesterIndex === semesters.length - 1) {
+        setCurrentSemesterIndex(0);
+      } else {
+        setCurrentSemesterIndex(currentSemesterIndex + 1);
+      }
+    }
+  };
+
   return (
     <>
       <div>
@@ -78,7 +107,16 @@ const Calender_type = () => {
               " - " +
               getEndOfWeekFormatted(daySelected)}
           {activeButton === "list" && (
-           <div>hi</div>
+            // <div>PASSED</div>
+            <div className="d-flex justify-content-between">
+              <Button variant="secondary" onClick={handleClickPrev}>
+                Previous
+              </Button>
+              <div>{semesters[currentSemesterIndex]?.semesterName}</div>
+              <Button variant="secondary" onClick={handleClickNext}>
+                Next
+              </Button>
+            </div>
           )}
         </h2>
         <Stack direction="horizontal">
@@ -184,7 +222,12 @@ const Calender_type = () => {
               {activeButton === "day" && <p>List content goes here.</p>}
               {activeButton === "week" && <WeeklyCalendar isDisable={false} />}
               {activeButton === "month" && <Month month={currentMonth} />}
-              {activeButton === "list" && <List />}
+              {activeButton === "list" && (
+                <List
+                  semesters={semesters}
+                  currentSemesterIndex={currentSemesterIndex}
+                />
+              )}
             </Card.Body>
           </div>
         )}
