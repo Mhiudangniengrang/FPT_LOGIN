@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import data from "../S_Data.json"; // Replace with the correct path to your data file
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Button, Form, Card, Row, Col } from "react-bootstrap";
 import dayjs from "dayjs";
@@ -17,17 +16,8 @@ function S_HomeStudent() {
   const firstIndex = (currentPage - 1) * recordsPerPage;
   const lastIndex = firstIndex + recordsPerPage;
 
-  // Filter data to include only items with the same date as currentDate
-  const filteredData = data.filter((record) => {
-    const recordDate = dayjs(record.date, "DD/MM/YYYY"); // Adjust the date format
-    return (
-      recordDate.date() === currentDate.date() &&
-      recordDate.month() === currentDate.month() &&
-      recordDate.year() === currentDate.year()
-    );
-  });
 
-  const records = filteredData.slice(firstIndex, lastIndex);
+
 
   function handleRecordsPerPageChange(e) {
     setRecordsPerPage(parseInt(e.target.value));
@@ -37,13 +27,13 @@ function S_HomeStudent() {
   function nextDate() {
     const newDate = currentDate.add(1, "day");
     setCurrentDate(newDate);
-    setCurrentPage(1); // Reset to the first page when changing the date
+    setCurrentPage(1); 
   }
 
   function previousDate() {
     const newDate = currentDate.subtract(1, "day");
     setCurrentDate(newDate);
-    setCurrentPage(1); // Reset to the first page when changing the date
+    setCurrentPage(1); 
   }
   const relatedCourses = [
     {
@@ -128,28 +118,9 @@ function S_HomeStudent() {
                 <th>Status</th>
               </tr>
             </thead>
-            <tbody>
-              {records.map((record, i) => (
-                <tr key={i}>
-                  <td>{record.no}</td>
-                  <td>{record.lecture}</td>
-                  <td>{record.date}</td>
-                  <td>{record.timestart}</td>
-                  <td>{record.slot}</td>
-                  <td>{record.room}</td>
-                  <td>{record.subject}</td>
-                  <td>{record.duration}</td>
-                  <td>
-                    {" "}
-                    {record.status === "Accepted"}
-                    <div className="text-success">Accepted</div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
+            
           </table>
 
-          {/* ... (your pagination code) */}
         </Card.Body>
       </Card>
       <div>

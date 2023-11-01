@@ -7,11 +7,10 @@ const List = (props) => {
   const [list, setList] = useState([]);
 
   useEffect(() => {
-    const userId = 2;
-    const semesterId = 2;
+    const studentId = 6;
 
     axios
-      .get(`/api/v1/user/emptySlot/user/${userId}/semester/${semesterId}`)
+      .get(`/api/v1/subject/admin/bookedSlot/homePage/${studentId}`)
       .then((response) => {
         setList(response);
       })

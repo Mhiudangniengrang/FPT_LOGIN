@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import data from "../L_Data.json"; // Replace with the correct path to your data file
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Container, Button, Form, Card } from "react-bootstrap";
 import dayjs from "dayjs";

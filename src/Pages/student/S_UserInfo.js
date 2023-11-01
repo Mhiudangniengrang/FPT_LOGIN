@@ -12,27 +12,13 @@ import {
 } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
 import S_Layout from "../../Layouts/S_Layout";
-import S_SubjectList from "../../components/SubjectList_userinfo/S_SubjectList";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import axios from "../../Services/customizeAxios";
 function S_UserInfo() {
   const history = useHistory();
-  const subjects = [
-    { id: 1, name: "SWP391 - Lại Đức Hùng" },
-    { id: 2, name: "PRN211 - Nguyễn Thế Hoàng" },
-    { id: 3, name: "PRF192 - Lê Thanh Tùng" },
-    { id: 4, name: "SWR302 - Đỗ Tấn Nhàn" },
-    { id: 5, name: "CSD201 - Thân Văn Sử" },
-    { id: 6, name: "CEA201 - Bùi Anh Tuấn" },
-    { id: 7, name: "JPD113 - Trần Anh Kiều" },
-    { id: 8, name: "JPD123 - Nguyễn Hoàng Hiếu" },
-    // Add more subjects here
-  ];
-  const [filteredSubjects, setFilteredSubjects] = useState(subjects);
   const [major, setMajor] = useState("Select Major");
   const [selectedSubjects, setSelectedSubjects] = useState("");
-  const [enteredID, setEnteredID] = useState("");
 
   const [majors, setMajors] = useState([]);
 
@@ -68,10 +54,8 @@ function S_UserInfo() {
   };
 
   const handleClickSave = () => {
-    // Handle saving the selected subjects (e.g., send to server or another component)
     console.log("Selected Subjects:", selectedSubjects);
 
-    // Truyền tên (name) từ formData sang trang S_ViewProfile
     history.push("/student/viewprofile", {
       selectedSubjects: selectedSubjects,
       name: formData.name,
@@ -88,7 +72,7 @@ function S_UserInfo() {
       [name]: value,
     });
   };
-  const handleSearch = async (e) => {
+  const handleSearch = (e) => {
     e.preventDefault();
     handleSearchSubject();
   };
@@ -140,21 +124,38 @@ function S_UserInfo() {
                     </select>
                   </FormGroup>
                   <p className="my-3">Your current subjects:</p>
-                  <div className="d-flex align-items-center">
-                    <FormControl
-                      type="text"
-                      className="w-75 my-3 "
-                      placeholder="Search subjects..."
-                      value={selectedSubjects}
-                      onChange={(e) => setSelectedSubjects(e.target.value)}
-                    />
-                    <Button
-                      className="mx-1 py-2 text-end"
-                      variant="secondary"
-                      onClick={handleSearch}
+                  <div
+                    style={{
+                      maxWidth: "30vw",
+                      display: "flex",
+                      justifyContent: "flex-start",
+                      alignItems: "center",
+                      paddingBottom: "40px",
+                    }}
+                  >
+                    <label className="pe-2" id="search_label" htmlFor="search">
+                      Search for:{" "}
+                    </label>
+                    <form
+                      id="search"
+                      className="form pe-0"
+                      style={{ display: "flex", flex: "1" }}
                     >
-                      Submit
-                    </Button>
+                      <input
+                        type="text"
+                        placeholder="Search"
+                        className="me-2 p-1"
+                        value={selectedSubjects}
+                        onChange={(e) => setSelectedSubjects(e.target.value)}
+                      />
+                      <Button
+                        variant="secondary"
+                        type="submit"
+                        onClick={handleSearch}
+                      >
+                        Go
+                      </Button>
+                    </form>
                   </div>
                   <Button onClick={handleClickSave}>Save</Button>
                   <Button className="mx-2" variant="secondary">
