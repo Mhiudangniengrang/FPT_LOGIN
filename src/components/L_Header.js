@@ -83,7 +83,9 @@ const L_Header = () => {
             />
             View Meeting
           </NavDropdown.Item>
-          <NavDropdown.Item>
+          <NavDropdown.Item
+            href="/"
+          >
             <FontAwesomeIcon
               icon={faRightFromBracket}
               style={{ color: "#050505", paddingRight: " 5px" }}

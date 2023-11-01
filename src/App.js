@@ -7,6 +7,7 @@ import BaseRoutes from "./Routers/BaseRoutes";
 import StudentRoutes from "./Routers/StudentRoutes";
 import LecturerRoutes from "./Routers/LecturerRoutes";
 import { DataProvider } from "./context/DataContext";
+import PageLoading from "./components/PageLoad";
 
 function App() {
   return (

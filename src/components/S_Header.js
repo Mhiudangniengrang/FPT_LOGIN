@@ -92,7 +92,9 @@ class S_Header extends React.Component {
                 View Schedule
               </NavLink>
             </NavDropdown.Item>
-            <NavDropdown.Item>
+            <NavDropdown.Item
+              href="/"
+            >
               <FontAwesomeIcon
                 icon={faRightFromBracket}
                 style={{ color: "#050505", paddingRight: " 5px" }}

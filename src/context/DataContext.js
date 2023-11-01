@@ -1,25 +1,43 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import axios from '../Services/customizeAxios';
 import GlobalContext from './GlobalContext';
+import PageLoading from "../components/PageLoad";
 const DataContext = createContext();
 
 export const DataProvider = ({ children, role }) => {
     const [rooms, setRooms] = useState([]);
-    const [lecturerId, setLecturerId] = useState(null);
     const [emptySlots, setEmptySlots] = useState([]);
-    const [authorize, setAuthorize] = useState(null);
-
-    const { loginUser } = useContext(GlobalContext)
+    const [authorize, setAuthorize] = useState(false);
+    const [loading, setLoading] = useState(true);
+    const [lecturerId, setLecturerId] = useState(null)
     const accessToken = typeof window !== null ? localStorage.getItem('accessToken') : null
-    console.log("data")
-    console.log(loginUser)
-    console.log(role)
+    const [loginUser, setLoginUser] = useState({})
+
+    useEffect(async () => {
+        await axios
+            .get("/api/v1/user/userId", {
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`,
+                }
+            })
+            .then(res => {
+                setLoginUser(res)
+                setLoading(false)
+
+            }).catch(error => {
+                setLoading(false)
+                console.log("Erorr at getting user ", error)
+            })
+    }, [])
+
     useEffect(() => {
-        if (loginUser != null && (loginUser.roleName === role)) {
+        if (loginUser.roleName === role) {
+            console.log("setAuthorize")
             setAuthorize(true)
         } else setAuthorize(false)
-    })
-    const getRoom = () => {
+    }, [loginUser])
+
+    useEffect(() => {
         axios
             .get(`/api/v1/slots/lecturer/room`)
             .then((response) => {
@@ -27,41 +45,21 @@ export const DataProvider = ({ children, role }) => {
             }).catch(error => {
                 console.log('Error at Data Context:', error)
             })
-    }
-
-
-    const getEmptySlots = async () => {
-        if (lecturerId != null) {
-            await axios
-                .get(`/api/v1/user/emptySlot/lecturer/${lecturerId}`)
-                .then((response) => {
-                    response.map((slot) => {
-                        setEmptySlots((prevSlot) => ([
-                            ...prevSlot,
-                            slot
-                        ]))
-                    })
-                })
-                .catch(error => {
-                    console.log("Error at Week.js " + error)
-                })
-        }
-    }
-
-    useEffect(() => {
-        setEmptySlots([])
-        getEmptySlots()
     }, [lecturerId])
 
-
+    if (loading) {
+        return <PageLoading />;
+    }
     return (
         <DataContext.Provider value={{
             rooms,
             emptySlots,
             setEmptySlots,
+            authorize,
+            loginUser,
+            accessToken,
             lecturerId,
-            setLecturerId,
-            authorize
+            setLecturerId
         }}>
             {children}
         </DataContext.Provider >

@@ -6,8 +6,9 @@ function Breadcrumbs({ items }) {
         <Breadcrumb
             style={{
                 backgroundColor: 'rgb(231 231 231)',
-                padding: '10px',
+                paddingTop: '10px',
                 display: 'inline-block',
+                marginBottom: '20px'
             }}
         >
             {items.map((item, index) => (

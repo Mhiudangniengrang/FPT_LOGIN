@@ -8,6 +8,7 @@ import Unauthorize from "../Pages/errors/Unauthorize";
 const L_Layout = ({ children }) => {
 
   const { authorize } = useData()
+
   return (
     <>
       {authorize !== null && (

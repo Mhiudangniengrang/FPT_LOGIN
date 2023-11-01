@@ -1,13 +1,12 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import S_Layout from "../../Layouts/S_Layout"
 import WeeklyCalendar from "../../components/Schedule/Week";
-import { Breadcrumb } from "react-bootstrap";
 
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import Breadcrumbs from "../../components/BreadcrumpCus";
-import { useData } from "../../context/DataContext";
-
+import GlobalContext from "../../context/GlobalContext";
+import BookPublicOverLay from "../../components/Schedule/BookPublicOverlay"
 const path = [
     {
         route: '/student',
@@ -24,11 +23,11 @@ const path = [
 ]
 
 const S_ViewTeacherSchedule = () => {
-
     const [key, setKey] = useState('meeting');
-    const { emptySlots } = useData()
+    const { showSlotModal } = useContext(GlobalContext)
     return (
         <>
+            {showSlotModal && <BookPublicOverLay />}
             <S_Layout>
                 <Breadcrumbs items={path} />
                 <Tabs

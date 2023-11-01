@@ -13,6 +13,12 @@ const GlobalContext = React.createContext({
     setLoginUser: () => { },
     loginUser: null,
     accessToken: null,
+    lecturerId: null,
+    setLecturerId: () => { },
+    selectedLecturer: null,
+    setSelectedLecturer: () => { },
+    emptySlots: null,
+    setEmptySlots: () => { }
 });
 
 export default GlobalContext;

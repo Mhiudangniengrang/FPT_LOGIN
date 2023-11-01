@@ -9,9 +9,13 @@ import {
   faChevronRight,
   faCalendarDays,
 } from "@fortawesome/free-solid-svg-icons";
-import axios from "../Services/customizeAxios"
+import axios from "../Services/customizeAxios";
+import { useData } from "../context/DataContext";
+import Style from "../assets/style/form.module.scss"
 import { useContext } from "react";
 import GlobalContext from "../context/GlobalContext";
+
+import { useHistory } from "react-router-dom";
 
 function L_HomeTeacher() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -19,22 +23,19 @@ function L_HomeTeacher() {
   const [currentDate, setCurrentDate] = useState(dayjs()); // Initialize currentDate using Day.js
   const firstIndex = (currentPage - 1) * recordsPerPage;
   const lastIndex = firstIndex + recordsPerPage;
-  const { accessToken } = useContext(GlobalContext)
+  const [requestSlot, setRequestSlot] = useState([])
+  const { setSelectedSlot } = useContext(GlobalContext)
+  const { loginUser } = useData()
+  console.log(loginUser)
   useEffect(() => {
-    axios
-      .get(`/api/v1/user/userId`, {
-        headers: {
-          'Authorization': `Bearer ${accessToken}`,
-        }
-      })
-      .then((res) => {
+    axios.get(`/api/v1/requests/lecturer/${loginUser.userId}`)
+      .then(res => {
         console.log(res)
+        setRequestSlot(res)
+      }).catch(error => {
+        console.log("Error at lecturer home:", error)
       })
-      .catch((error) => {
-        console.log("Error lecturer home", error);
-      });
-  }, []);
-
+  }, [])
   const filteredData = data.filter((record) => {
     const recordDate = dayjs(record.date, "DD/MM/YYYY"); // Adjust the date format
     return (
@@ -61,6 +62,11 @@ function L_HomeTeacher() {
     const newDate = currentDate.subtract(1, "day");
     setCurrentDate(newDate);
     setCurrentPage(1); // Reset to the first page when changing the date
+  }
+  const history = useHistory()
+  const handleRequest = (record) => {
+    setSelectedSlot(record)
+    history.push('lecturer/viewschedule')
   }
 
   return (
@@ -162,56 +168,44 @@ function L_HomeTeacher() {
       </Container>
 
       <Row>
-        <Col xs={8}>
+        <Col>
           <Card className="text-center my-5">
             <Card.Body>
-              <div className="d-flex align-items-center">
-                Show{" "}
-                <Form.Select
-                  className="w-25"
-                  aria-label="Default select example"
-                  as="select"
-                  size="sm"
-                  onChange={handleRecordsPerPageChange}
-                  value={recordsPerPage}
-                >
-                  <option value="5">5</option>
-                  <option value="10">10</option>
-                  <option value="20">20</option>
-                </Form.Select>{" "}
-                entries
-              </div>
-
-              <div className="d-flex justify-content-between align-items-center">
-                <Button variant="secondary" onClick={previousDate}>
-                  <FontAwesomeIcon icon={faChevronLeft} />
-                </Button>{" "}
-                <h5>{currentDate.format("dddd, DD/MM/YYYY")}</h5>
-                <Button variant="secondary" onClick={nextDate}>
-                  <FontAwesomeIcon icon={faChevronRight} />
-                </Button>
-              </div>
-
 
               <table className="table text-center">
                 <thead>
                   <tr>
                     <th>No</th>
-                    <th>Student</th>
+                    <th>Student's ID</th>
+                    <th>Student's name</th>
                     <th>Subject</th>
+                    <th>Purpose</th>
+                    <th>Request at</th>
                     <th>Status</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {records.map((record, i) => (
-                    <tr key={i}>
-                      <td>{record.no}</td>
-                      <td>{record.student}</td>
-                      <td>{record.subject}</td>
+                  {requestSlot.map((record, i) => (
+                    <tr
+                      className={Style.tableRowOnClick}
+                      key={i}
+                      onClick={() => handleRequest(record)}
+                    >
+                      <td>{i + 1}</td>
+                      <td>{record.studentId}</td>
+                      <td>{record.studentName}</td>
+                      <td>{record.subjectId}</td>
+                      <td>{record.requestContent}</td>
+                      <td>{dayjs(record.createAt).format('DD-MM-YYYY')}</td>
                       <td>
-                        {" "}
-                        {record.status === "Accepted"}
-                        <div className="text-success">Accepted</div>
+                        {record.requestStatus === "PENDING"}
+                        <div
+                          style={{
+                            background: 'rgba(255,255,0,0.7)',
+                            color: '#7781ff',
+                            fontWeight: '600',
+                          }}
+                        >Pending</div>
                       </td>
                     </tr>
                   ))}
@@ -219,10 +213,6 @@ function L_HomeTeacher() {
               </table>
             </Card.Body>
           </Card>
-        </Col>
-
-        <Col>
-
         </Col>
       </Row>
 

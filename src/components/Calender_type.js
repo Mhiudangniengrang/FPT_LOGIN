@@ -14,13 +14,12 @@ import {
   subDaysByOne,
 } from "../Utils/dateUtils";
 import GlobalContext from "../context/GlobalContext";
-import axios from "../Services/customizeAxios";
 
 const Calender_type = () => {
 
   const [activeButton, setActiveButton] = useState("week");
   const [currentMonth, setCurrentMonth] = useState(getMonth());
-  const { role, setMonthIndex, monthIndex, daySelected, setDaySelected } =
+  const { setMonthIndex, monthIndex, daySelected, setDaySelected } =
     useContext(GlobalContext);
 
   useEffect(() => {
@@ -54,9 +53,6 @@ const Calender_type = () => {
         : dayjs().month()
     );
   }
-
-
-
 
 
   return (

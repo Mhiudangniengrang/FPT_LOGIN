@@ -43,7 +43,10 @@ function Hero() {
         }
       })
       .then((response) => {
-        console.log("Student")
+        sessionStorage.setItem('role', response.roleName)
+        if (response.roleName === "LECTURER") {
+          sessionStorage.setItem('lecturerId', response.userId)
+        }
         history.push(`/${response.roleName}`)
       })
       .catch(error => {

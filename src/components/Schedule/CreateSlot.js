@@ -47,13 +47,15 @@ const slotTime = [
 function CreateSlot() {
 
     const { rooms } = useData();
-    const { daySelected, setDaySelected, setShowSlotModal } = useContext(GlobalContext)
+    const { daySelected, setDaySelected, setShowSlotModal, selectedSlot } = useContext(GlobalContext)
+    console.log(selectedSlot)
     const [address, setAddress] = useState(null)
     const [slot, setSlot] = useState(1)
     const [duration, setDuration] = useState(15)
     const [selectRoom, setSelectRoom] = useState(null)
     const [time, setTime] = useState(slotTime[slot - 1].start);
 
+    const lecturerId = typeof window != null ? sessionStorage.getItem("lecturerId") : null
     const getFilterRoom = () => {
         const matchingRoom = rooms.reduce((accumulator, room) => {
             if (room.address === address) {
@@ -70,13 +72,15 @@ function CreateSlot() {
 
     const handleSubmit = async () => {
         setShowSlotModal(false);
-        await axios.post(`/api/v1/slots/lecturer/2`, {
+        await axios.post(`/api/v1/slots/lecturer/${lecturerId}`, {
+            emptySlotId: 103,
             slotTimeId: slot,
             dateStart: dayjs(daySelected).format("YYYY-MM-DD"),
             timeStart: time + ':00',
             duration: '00:' + duration + ':00',
             roomId: selectRoom,
-            mode: 'Public'
+            mode: 'Public',
+            status: "OPEN"
         }).then((response) => {
             console.log("response:");
             console.log(response);
@@ -87,6 +91,10 @@ function CreateSlot() {
             })
 
     };
+
+    const handleUpdate = () => {
+
+    }
 
     function subtractDuration() {
         const [hours, minutes] = (slotTime[slot - 1].end).split(':').map(Number);
@@ -127,142 +135,290 @@ function CreateSlot() {
         return address == null ? true : false
     }
 
+    const parseDuration = (d) => {
+        const input = d;
+        const [hours, minutes, seconds] = input.split(":");
+        const formattedTime = parseInt(minutes);
+        return formattedTime;
+    }
+
     return (
         <div className={Style.box}>
-            <div className={Style.box_content}
+            {!selectedSlot ? (
+                <div className={Style.box_content}
 
-                style={{
-                    width: '300px',
-                    height: 'auto'
-                }}
+                    style={{
+                        width: '300px',
+                        height: 'auto'
+                    }}
 
-            >
-                <Stack direction='vertical' gap='2' className={Style.object}>
-                    <Stack className='pb-2 pe-2' direction='horizontal' gap='2'>
-                        <h4
-                            style={{ margin: '0' }}
-                        >Create slot</h4>
-                        <FontAwesomeIcon
-                            icon={faXmark}
-                            className='ms-auto'
-                            style={{ color: "#000000", cursor: 'pointer' }}
-                            onClick={() => {
-                                setDaySelected(new Date());
-                                setShowSlotModal(false)
-                            }}
-                        />
-                    </Stack>
+                >
+                    <Stack direction='vertical' gap='2' className={Style.object}>
+                        <Stack className='pb-2 pe-2' direction='horizontal' gap='2'>
+                            <h4
+                                style={{ margin: '0' }}
+                            >Create slot</h4>
+                            <FontAwesomeIcon
+                                icon={faXmark}
+                                className='ms-auto'
+                                style={{ color: "#000000", cursor: 'pointer' }}
+                                onClick={() => {
+                                    setDaySelected(new Date());
+                                    setShowSlotModal(false)
+                                }}
+                            />
+                        </Stack>
 
-                    <form>
-                        <Stack direction='vertical' gap='3'
-                        >
-                            <div>
-                                {console.log(daySelected)}
-                                <label htmlFor="datepicker">Date:</label>
-                                <DatePicker
-                                    id='datepicker'
-                                    onChange={(date) => {
-                                        setDaySelected(date)
-                                    }}
-                                    minDate={new Date()}
-                                    placeholderText='Choose your date'
-                                    selected={daySelected}
-                                    dateFormat={'dd/MM/yyyy'}
-                                />
-                            </div>
-                            <div>
-                                <label htmlFor="slot">Slot:</label>
-                                <select
-                                    id='slot'
-                                    name='slot time'
-                                    placeholder='Choose slot'
-                                    onChange={(e) => { setSlot(e.target.value) }}
-                                >
-                                    <option value={1}>Slot 1</option>
-                                    <option value={2}>Slot 2</option>
-                                    <option value={3}>Slot 3</option>
-                                    <option value={4}>Slot 4</option>
-                                    <option value={5}>Slot 5</option>
-                                    <option value={6}>Slot 6</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label htmlFor="duration">Duration:</label>
-                                <select
-                                    id='duration'
-                                    name='slot time'
-                                    placeholder='Choose slot'
-                                    onChange={(e) => {
-                                        setDuration(e.target.value);
-                                    }}
-                                >
-                                    <option value={15}>15 minutes</option>
-                                    <option value={30}>30 minutes</option>
-                                    <option value={45}>45 minutes</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label htmlFor="time">Start time: {getStartTime()}</label>
-                                <div
-                                    style={{
-                                        width: '200px'
-                                    }}
-                                >
-                                    <TimePicker
-                                        required
-                                        clearIcon
-                                        disableClock="true"
-                                        minTime={getMin()}
-                                        maxTime={getMax()}
-                                        onChange={(value) => {
-                                            setTime(value);
+                        <form>
+                            <Stack direction='vertical' gap='3'
+                            >
+                                <div>
+                                    <label htmlFor="datepicker">Date:</label>
+                                    <DatePicker
+                                        id='datepicker'
+                                        onChange={(date) => {
+                                            setDaySelected(date)
                                         }}
-                                        value={time}
+                                        minDate={new Date()}
+                                        placeholderText='Choose your date'
+                                        selected={daySelected}
+                                        dateFormat={'dd/MM/yyyy'}
                                     />
                                 </div>
                                 <div>
-                                    <label htmlFor='address'>Address:</label>
+                                    <label htmlFor="slot">Slot:</label>
                                     <select
-                                        id='address'
-                                        onChange={e => handleAddressChange(e)}
+                                        id='slot'
+                                        name='slot time'
+                                        placeholder='Choose slot'
+                                        onChange={(e) => { setSlot(e.target.value) }}
                                     >
-                                        <option defaultChecked>
-                                            Select Address
-                                        </option>
-                                        <option value={'FPT University'}>
-                                            FPT University
-                                        </option>
-                                        <option value={'Nha Van Hoa'}>
-                                            Nha van hoa
-                                        </option>
-
+                                        <option value={1}>Slot 1</option>
+                                        <option value={2}>Slot 2</option>
+                                        <option value={3}>Slot 3</option>
+                                        <option value={4}>Slot 4</option>
+                                        <option value={5}>Slot 5</option>
+                                        <option value={6}>Slot 6</option>
                                     </select>
                                 </div>
                                 <div>
-                                    <label htmlFor="room">Room:</label>
+                                    <label htmlFor="duration">Duration:</label>
                                     <select
-                                        id='room'
-                                        placeholder='Choose room'
-                                        disabled={isDisabled(address)}
-                                        onChange={e => { setSelectRoom(e.target.value) }}
+                                        id='duration'
+                                        name='slot time'
+                                        placeholder='Choose slot'
+                                        onChange={(e) => {
+                                            setDuration(e.target.value);
+                                        }}
                                     >
-                                        <option defaultChecked>
-                                            Select Room
-                                        </option>
-                                        {
-                                            getFilterRoom().map(room => {
-                                                return (<option key={room.roomId} value={room.roomId}>{room.roomId}</option>)
-                                            })
-                                        }
+                                        <option value={15}>15 minutes</option>
+                                        <option value={30}>30 minutes</option>
+                                        <option value={45}>45 minutes</option>
                                     </select>
                                 </div>
-                            </div>
-                        </Stack>
-                    </form>
+                                <div>
+                                    <label htmlFor="time">Start time: {getStartTime()}</label>
+                                    <div
+                                        style={{
+                                            width: '200px'
+                                        }}
+                                    >
+                                        <TimePicker
+                                            required
+                                            clearIcon
+                                            disableClock="true"
+                                            minTime={getMin()}
+                                            maxTime={getMax()}
+                                            onChange={(value) => {
+                                                setTime(value);
+                                            }}
+                                            value={time}
+                                        />
+                                    </div>
+                                    <div>
+                                        <label htmlFor='address'>Address:</label>
+                                        <select
+                                            id='address'
+                                            onChange={e => handleAddressChange(e)}
+                                        >
+                                            <option defaultChecked>
+                                                Select Address
+                                            </option>
+                                            <option value={'FPT University'}>
+                                                FPT University
+                                            </option>
+                                            <option value={'Nha Van Hoa'}>
+                                                Nha van hoa
+                                            </option>
 
-                    <button className={Style.book_btn} onClick={(e) => handleSubmit(e)}>Create</button>
-                </Stack>
-            </div>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label htmlFor="room">Room:</label>
+                                        <select
+                                            id='room'
+                                            placeholder='Choose room'
+                                            disabled={isDisabled(address)}
+                                            onChange={e => { setSelectRoom(e.target.value) }}
+                                        >
+                                            <option defaultChecked>
+                                                Select Room
+                                            </option>
+                                            {
+                                                getFilterRoom().map(room => {
+                                                    return (<option key={room.roomId} value={room.roomId}>{room.roomId}</option>)
+                                                })
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                            </Stack>
+                        </form>
+
+                        <button className={Style.book_btn} onClick={(e) => handleSubmit(e)}>Create</button>
+                    </Stack>
+                </div>
+            ) : (
+                <div className={Style.box_content}
+
+                    style={{
+                        width: '300px',
+                        height: 'auto'
+                    }}
+
+                >
+                    <Stack direction='vertical' gap='2' className={Style.object}>
+                        <Stack className='pb-2 pe-2' direction='horizontal' gap='2'>
+                            <h4
+                                style={{ margin: '0' }}
+                            >View slot</h4>
+                            <FontAwesomeIcon
+                                icon={faXmark}
+                                className='ms-auto'
+                                style={{ color: "#000000", cursor: 'pointer' }}
+                                onClick={() => {
+                                    setDaySelected(new Date());
+                                    setShowSlotModal(false)
+                                }}
+                            />
+                        </Stack>
+
+                        <form>
+                            <Stack direction='vertical' gap='3'
+                            >
+                                <div>
+                                    <label htmlFor="datepicker">Date:</label>
+                                    <DatePicker
+                                        id='datepicker'
+                                        onChange={(date) => {
+                                            setDaySelected(date)
+                                        }}
+                                        minDate={new Date()}
+                                        placeholderText='Choose your date'
+                                        selected={new Date(selectedSlot.dateStart)}
+                                        dateFormat={'dd/MM/yyyy'}
+                                        disable="true"
+                                    />
+                                </div>
+                                <div>
+                                    <label htmlFor="slot">Slot:</label>
+                                    <select
+                                        id='slot'
+                                        name='slot time'
+                                        placeholder='Choose slot'
+                                        onChange={(e) => { setSlot(e.target.value) }}
+                                        defaultValue={selectedSlot.slotTimeId}
+                                    >
+                                        <option value={1}>Slot 1</option>
+                                        <option value={2}>Slot 2</option>
+                                        <option value={3}>Slot 3</option>
+                                        <option value={4}>Slot 4</option>
+                                        <option value={5}>Slot 5</option>
+                                        <option value={6}>Slot 6</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label htmlFor="duration">Duration:</label>
+                                    <select
+                                        id='duration'
+                                        name='slot time'
+                                        placeholder='Choose slot'
+                                        onChange={(e) => {
+                                            setDuration(e.target.value);
+                                        }}
+                                        defaultValue={parseDuration(selectedSlot.duration)}
+                                        disabled="true"
+                                    >
+                                        <option value={15}>15 minutes</option>
+                                        <option value={30}>30 minutes</option>
+                                        <option value={45}>45 minutes</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label htmlFor="time">Start time: {getStartTime()}</label>
+                                    <div
+                                        style={{
+                                            width: '200px'
+                                        }}
+                                    >
+                                        <TimePicker
+                                            required
+                                            disableClock="true"
+                                            clearIcon
+                                            minTime={getMin()}
+                                            maxTime={getMax()}
+                                            onChange={(value) => {
+                                                setTime(value);
+                                            }}
+                                            value={selectedSlot.timeStart}
+                                            disabled="true"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label htmlFor='address'>Address:</label>
+                                        <select
+                                            id='address'
+                                            onChange={e => handleAddressChange(e)}
+                                        >
+                                            <option defaultChecked>
+                                                Select Address
+                                            </option>
+                                            <option value={'FPT University'}>
+                                                FPT University
+                                            </option>
+                                            <option value={'Nha Van Hoa'}>
+                                                Nha van hoa
+                                            </option>
+
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label htmlFor="room">Room:</label>
+                                        <select
+                                            id='room'
+                                            placeholder='Choose room'
+                                            disabled={isDisabled(address)}
+                                            onChange={e => { setSelectRoom(e.target.value) }}
+                                        >
+                                            <option defaultChecked>
+                                                {selectedSlot.roomId}
+                                            </option>
+                                            {
+                                                getFilterRoom().map(room => {
+                                                    return (<option key={room.roomId} value={room.roomId}>{room.roomId}</option>)
+                                                })
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                            </Stack>
+                        </form>
+
+                        <button className={Style.book_btn} onClick={(e) => handleUpdate(e)}>Update</button>
+                    </Stack>
+                </div>
+            )
+            }
         </div>
     );
 }

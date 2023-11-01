@@ -8,14 +8,16 @@ import Style from '../../assets/style/form.module.scss'
 import { useContext, useEffect } from 'react';
 import GlobalContext from '../../context/GlobalContext';
 import { useState } from 'react';
-
+import { useData } from '../../context/DataContext';
+import axios from '../../Services/customizeAxios'
 const subjects = [
-    'SWP301', 'SWR301', 'SWT301', 'PRF192', 'CEA201'
+    'SWP391', 'MATH101', 'JPN301'
 ]
 
 function BookPublicOverlay() {
-
-    const { setShowSlotModal, selectedSlot, setSelectedSlot } = useContext(GlobalContext)
+    const { loginUser } = useData()
+    console.log(loginUser)
+    const { setShowSlotModal, selectedSlot } = useContext(GlobalContext)
     const [purpose, setPurpose] = useState(
         selectedSlot ? selectedSlot.description : ""
     );
@@ -27,91 +29,185 @@ function BookPublicOverlay() {
     console.log(selectedSlot)
     const handleSubmit = (e) => {
         e.preventDefault();
-
+        console.log(subject)
+        console.log(purpose)
+        axios
+            .put(`/api/v1/students/emptySlot/${selectedSlot.emptySlotId}/student/${loginUser.userId}/subject/${subject}`,
+                {
+                    subjectId: subject,
+                    description: purpose,
+                }
+            ).then(res => [
+                console.log(res)
+            ]).catch(err => {
+                console.log(err)
+            })
         setShowSlotModal(false);
     };
 
     return (
         <>
             <div className={Style.box}>
-                <div className={Style.box_content}>
-                    <div
-                        style={{
-                            width: '30px',
-                            height: '15px',
-                            borderRadius: "10px",
-                            background: "#40BC4C",
-                            margin: '5px 10px 10px 10px',
-                        }}
-                    >
-                    </div>
+                {selectedSlot.status === "OPEN" ? (
+                    <div className={Style.box_content}>
+                        <div
+                            style={{
+                                width: '30px',
+                                height: '15px',
+                                borderRadius: "10px",
+                                background: "#40BC4C",
+                                margin: '5px 10px 10px 10px',
+                            }}
+                        >
+                        </div>
 
-                    <Stack direction='vertical' gap='2'>
-                        <Stack className='pb-2 pe-2' direction='horizontal' gap='2'>
-                            <h4
-                                style={{ margin: '0' }}
-                            >Book slot</h4>
-                            <FontAwesomeIcon icon={faXmark}
+                        <Stack direction='vertical' gap='2'>
+                            <Stack className='pb-2 pe-2' direction='horizontal' gap='2'>
+                                <h4
+                                    style={{ margin: '0' }}
+                                >Book slot</h4>
+                                <FontAwesomeIcon icon={faXmark}
 
-                                className='ms-auto'
-                                style={{
-                                    color: "#000000",
-                                    cursor: 'pointer',
-                                }}
-                                onClick={() => setShowSlotModal(false)} />
-                        </Stack>
-                        <Stack direction='vertical'>
-                            <p>Lecturer: {selectedSlot.teacher}</p>
-                            <p>Slot: {selectedSlot.slot}</p>
-                            <p>Date : {selectedSlot.date}</p>
-                            <p>Time : {selectedSlot.time}</p>
-                            <p>Room: {selectedSlot.room}</p>
+                                    className='ms-auto'
+                                    style={{
+                                        color: "#000000",
+                                        cursor: 'pointer',
+                                    }}
+                                    onClick={() => setShowSlotModal(false)} />
+                            </Stack>
+                            <Stack direction='vertical'>
+                                <p>Lecturer: {selectedSlot.lecturerName}</p>
+                                <p>Slot: {selectedSlot.slotTimeId}</p>
+                                <p>Date : {selectedSlot.dateStart}</p>
+                                <p>Duration : {selectedSlot.duration}</p>
+                                <p>Time : {selectedSlot.timeStart}</p>
+                                <p>Room: {selectedSlot.roomId}</p>
 
-                            <label htmlFor='form'>Choose your subject:</label>
-                            <div className={Style.subjects}>
-                                {subjects.map((subject, index) => {
-                                    return (
-                                        <>
-                                            <input id={`radio-${index}`} type="radio" name="radio"
-                                                value={subject}
-                                                onClick={() => {
-                                                    setSubject(subject);
-                                                    selectedSlot.subjectId = subject
-                                                }}
+                                <label htmlFor='form'>Choose subject:</label>
+                                <div className={Style.subjects}>
+                                    {subjects.map((subject, index) => {
+                                        return (
+                                            <>
+                                                <input id={`radio-${index}`} type="radio" name="radio"
+                                                    value={subject}
+                                                    onClick={() => {
+                                                        setSubject(subject);
+                                                        selectedSlot.subjectId = subject
+                                                    }}
 
-                                            />
-                                            <label htmlFor={`radio-${index}`} key={index}>{subject}</label>
+                                                />
+                                                <label htmlFor={`radio-${index}`} key={index}>{subject}</label>
 
-                                        </>
-                                    )
-                                }
-                                )}
-                            </div>
-                            <form id='form' className={Style.object} onSubmit={(e) => handleSubmit(e)}>
-
-                                <Stack direction='vertical' gap='2'>
-                                    <label htmlFor='purpose'>Purpose:</label>
-                                    <textarea id='purpose' className={Style.purpose}
-                                        rows="4"
-                                        maxLength='200'
-                                        placeholder='Enter your purpose (200 words)'
-                                        onChange={(e) => {
-                                            setPurpose(e.target.value);
-                                            selectedSlot.description = e.target.value;
-                                        }}
-                                        value={selectedSlot.description}
-                                        required
-                                    >
-                                    </textarea>
-                                    {selectedSlot.status !== 'Booked' && (
-
-                                        <button className={Style.book_btn} type='submit' >Book</button>
+                                            </>
+                                        )
+                                    }
                                     )}
-                                </Stack>
-                            </form>
+                                </div>
+                                <form id='form' className={Style.object} onSubmit={(e) => handleSubmit(e)}>
+
+                                    <Stack direction='vertical' gap='2'>
+                                        <label htmlFor='purpose'>Purpose:</label>
+                                        <textarea id='purpose' className={Style.purpose}
+                                            rows="4"
+                                            maxLength='200'
+                                            placeholder='Enter your purpose (200 words)'
+                                            onChange={(e) => {
+                                                setPurpose(e.target.value);
+                                                selectedSlot.description = e.target.value;
+                                            }}
+                                            value={selectedSlot.description}
+                                            required
+                                        >
+                                        </textarea>
+                                        {selectedSlot.status !== 'Booked' && (
+
+                                            <button className={Style.book_btn} type='submit'  >Book</button>
+                                        )}
+                                    </Stack>
+                                </form>
+                            </Stack>
                         </Stack>
-                    </Stack>
-                </div>
+                    </div>
+                ) :
+                    <div className={Style.box_content}>
+                        <div
+                            style={{
+                                width: '30px',
+                                height: '15px',
+                                borderRadius: "10px",
+                                background: "#40BC4C",
+                                margin: '5px 10px 10px 10px',
+                            }}
+                        >
+                        </div>
+
+                        <Stack direction='vertical' gap='2'>
+                            <Stack className='pb-2 pe-2' direction='horizontal' gap='2'>
+                                <h4
+                                    style={{ margin: '0' }}
+                                >View slot</h4>
+                                <FontAwesomeIcon icon={faXmark}
+
+                                    className='ms-auto'
+                                    style={{
+                                        color: "#000000",
+                                        cursor: 'pointer',
+                                    }}
+                                    onClick={() => setShowSlotModal(false)} />
+                            </Stack>
+                            <Stack direction='vertical'>
+                                <p>Lecturer: {selectedSlot.teacher}</p>
+                                <p>Slot: {selectedSlot.slot}</p>
+                                <p>Date : {selectedSlot.date}</p>
+                                <p>Time : {selectedSlot.time}</p>
+                                <p>Room: {selectedSlot.room}</p>
+
+                                <label htmlFor='form'>Choose your subject:</label>
+                                <div className={Style.subjects}>
+                                    {subjects.map((subject, index) => {
+                                        return (
+                                            <>
+                                                <input id={`radio-${index}`} type="radio" name="radio"
+                                                    value={subject}
+                                                    onClick={() => {
+                                                        setSubject(subject);
+                                                        selectedSlot.subjectId = subject
+                                                    }}
+
+                                                />
+                                                <label htmlFor={`radio-${index}`} key={index}>{subject}</label>
+
+                                            </>
+                                        )
+                                    }
+                                    )}
+                                </div>
+                                <form id='form' className={Style.object} onSubmit={(e) => handleSubmit(e)}>
+
+                                    <Stack direction='vertical' gap='2'>
+                                        <label htmlFor='purpose'>Purpose:</label>
+                                        <textarea id='purpose' className={Style.purpose}
+                                            rows="4"
+                                            maxLength='200'
+                                            placeholder='Enter your purpose (200 words)'
+                                            onChange={(e) => {
+                                                setPurpose(e.target.value);
+                                                selectedSlot.description = e.target.value;
+                                            }}
+                                            value={selectedSlot.description}
+                                            required
+                                        >
+                                        </textarea>
+                                        {selectedSlot.status !== 'Booked' && (
+
+                                            <button className={Style.book_btn} type='submit' >Book</button>
+                                        )}
+                                    </Stack>
+                                </form>
+                            </Stack>
+                        </Stack>
+                    </div>
+                }
             </div>
         </>
     );

@@ -1,116 +1,111 @@
-import React, { useContext, useEffect, useState } from "react";
-import data from "../S_Data.json"; // Replace with the correct path to your data file
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Button, Form, Card, Row, Col, Tab, Tabs, Stack } from "react-bootstrap";
+import { Button, Card, Row, Col, Tab, Tabs, Stack, Spinner, Pagination } from "react-bootstrap";
 import dayjs from "dayjs";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faChevronLeft,
   faChevronRight,
 } from "@fortawesome/free-solid-svg-icons";
-import { useHistory } from "react-router-dom";
+import { useData } from "../context/DataContext";
 import axios from "../Services/customizeAxios";
-import GlobalContext from "../context/GlobalContext";
+import Style from '../assets/style/dashboard.module.scss'
+import RelatedCourse from "./RealatedCourse";
 
 function S_HomeStudent() {
-
-  const [currentPage, setCurrentPage] = useState(1);
-  const [recordsPerPage, setRecordsPerPage] = useState(5);
   const [currentDate, setCurrentDate] = useState(dayjs()); // Initialize currentDate using Day.js
-  const firstIndex = (currentPage - 1) * recordsPerPage;
-  const lastIndex = firstIndex + recordsPerPage;
-  const { accessToken } = useContext(GlobalContext)
+  const [loading, isLoading] = useState(true)
+  const [bookedSlot, setBookedSlot] = useState([])
+  const [filteredSlot, setFilteredSlot] = useState([])
+  const [page, setPage] = useState(0)
+  const [pageContent, setPageContent] = useState([])
+  const [totalPage, setTotalPage] = useState(1)
+  const { loginUser } = useData()
+
   useEffect(() => {
-    axios
-      .get(`/api/v1/user/userId`, {
-        headers: {
-          'Authorization': `Bearer ${accessToken}`,
+    axios.get(`/api/v1/students/bookedSlot/homePage/${loginUser.userId}`
+    )
+      .then(res => {
+        isLoading(false)
+        setBookedSlot(res)
+      })
+      .catch(error => {
+        isLoading(false)
+        console.log("error at getting booked slot: " + error)
+      })
+  }, [])
+
+  useEffect(async () => {
+    isLoading(true)
+    await axios.get(`/api/v1/requests/homepage/students/${loginUser.userId}`,
+      {
+        params: {
+          pageNo: page,
+          pageSize: 4,
         }
-      })
-      .then((res) => {
-        console.log(res)
-      })
-      .catch((error) => {
-        console.log("Error lecturer home", error);
-      });
-  }, []);
+      }
+    ).then(res => {
+      isLoading(false)
+      console.log(res.content)
+      setPageContent(res.content)
+      setTotalPage(res.totalPage)
+    }).catch(error => {
+      isLoading(false)
+      console.log("Error at getting request:", error)
+    })
+  }, [page])
 
+  useEffect(() => {
+    setFilteredSlot(getFilterBookedSlot)
+  }, [currentDate])
 
-  const filteredData = data.filter((record) => {
-    const recordDate = dayjs(record.date, "DD/MM/YYYY"); // Adjust the date format
-    return (
-      recordDate.date() === currentDate.date() &&
-      recordDate.month() === currentDate.month() &&
-      recordDate.year() === currentDate.year()
-    );
-  });
-
-  const records = filteredData.slice(firstIndex, lastIndex);
-
-  function handleRecordsPerPageChange(e) {
-    setRecordsPerPage(parseInt(e.target.value));
-    setCurrentPage(1);
+  const getFilterBookedSlot = () => {
+    const date = dayjs(currentDate).format("YYYY-MM-DD")
+    const matchingSlots = bookedSlot.reduce((accumulator, slot) => {
+      if (slot.dateStart === date) {
+        return [...accumulator, slot];
+      }
+      return accumulator;
+    }, []);
+    return matchingSlots;
   }
+
+  // const getFilterRequestedSlot = () => {
+  //   const date = dayjs(currentDate).format("YYYY-MM-DD")
+  //   const matchingSlots = bookedSlot.reduce((accumulator, slot) => {
+  //     if (slot.dateStart === date) {
+  //       return [...accumulator, slot];
+  //     }
+  //     return accumulator;
+  //   }, []);
+  //   return matchingSlots;
+  // }
+
+  console.log(filteredSlot)
 
   function nextDate() {
     const newDate = currentDate.add(1, "day");
     setCurrentDate(newDate);
-    setCurrentPage(1); // Reset to the first page when changing the date
   }
 
   function previousDate() {
     const newDate = currentDate.subtract(1, "day");
     setCurrentDate(newDate);
-    setCurrentPage(1); // Reset to the first page when changing the date
   }
-  const relatedCourses = [
-    {
-      id: 1,
-      name: "PRN211-Lập trình Cross-Platform với .Net",
-      instructor: "SWP391-Lai Duc Hung",
-    },
-    {
-      id: 2,
-      name: "PRN212-React Hooks và React-Bootstrap",
-      instructor: "John Doe",
-    },
-    {
-      id: 3,
-      name: "PRN212-React Hooks và React-Bootstrap",
-      instructor: "John Doe",
-    },
-    {
-      id: 4,
-      name: "PRN212-React Hooks và React-Bootstrap",
-      instructor: "John Doe",
-    },
-    {
-      id: 5,
-      name: "PRN212-React Hooks và React-Bootstrap",
-      instructor: "John Doe",
-    },
-    {
-      id: 6,
-      name: "PRN212-React Hooks và React-Bootstrap",
-      instructor: "John Doe",
-    },
 
-    // Thêm các khóa học khác tại đây
-  ];
-  const history = useHistory();
-  const handleClickProfile = () => {
-    history.push("/lecturer/viewprofile");
-  };
+  const handlePageChange = (value) => {
+    setPage(value)
+  }
   return (
     <div>
       <Tabs
         activeKey={'events'}
         className="mb-3"
       >
-        <Tab eventKey="events" title="Events">
+        <Tab eventKey="events" title="Events"
+        >
           <div
-            id="booked_slot"
-          >
+            id="booked_slot" >
             <div >
               <div
                 style={{
@@ -124,25 +119,12 @@ function S_HomeStudent() {
                 }}>Booked slot</h3>
             </div>
             <Card className="text-center"
+              style={{
+                minHeight: '40vh'
+              }}
             >
 
               <Card.Body>
-                <div className="d-flex align-items-center">
-                  Show{" "}
-                  <Form.Select
-                    className="w-25"
-                    aria-label="Default select example"
-                    as="select"
-                    size="sm"
-                    onChange={handleRecordsPerPageChange}
-                    value={recordsPerPage}
-                  >
-                    <option value="5">5</option>
-                    <option value="10">10</option>
-                    <option value="20">20</option>
-                  </Form.Select>{" "}
-                  entries
-                </div>
 
                 <div className="d-flex justify-content-between align-items-center">
                   <Button variant="secondary" onClick={previousDate}>
@@ -168,39 +150,49 @@ function S_HomeStudent() {
                       <th>Status</th>
                     </tr>
                   </thead>
-                  <tbody>
-                    {records.length > 0 && (
-                      records.map((record, i) => (
-                        <tr key={i}>
-                          <td>{i + 1}</td>
-                          <td>{record.lecture}</td>
-                          <td>{record.date}</td>
-                          <td>{record.timestart}</td>
-                          <td>{record.slot}</td>
-                          <td>{record.room}</td>
-                          <td>{record.subject}</td>
-                          <td>{record.duration}</td>
-                          <td>
-                            {" "}
-                            {record.status === "Accepted"}
-                            <div className="text-success">Accepted</div>
+                  {loading ? (
+                    <Spinner />
+                  ) : (
+                    <tbody>
+                      {filteredSlot.length > 0 ? (
+                        filteredSlot.map((record, i) => {
+                          console.log(record);
+                          return (
+                            <tr key={i}>
+                              <td>{i + 1}</td>
+                              <td>{record.lecturerName}</td>
+                              <td>{record.dateStart}</td>
+                              <td>{record.timeStart}</td>
+                              <td>{record.slotTimeId}</td>
+                              <td>{record.roomId}</td>
+                              <td>{record.subjectId}</td>
+                              <td>{record.duration}</td>
+                              <td>
+                                {record.status === "BOOKED" ? (
+                                  <div className="text-success">Booked</div>
+                                ) : (
+                                  "Some other status"
+                                )}
+                              </td>
+                            </tr>
+                          );
+                        })
+                      ) : (
+                        <tr>
+                          <td colSpan={9}>
+                            <div
+                              style={{
+                                margin: '100px',
+                                textAlign: 'center'
+                              }}
+                            >
+                              There are no events in this day yet.
+                            </div>
                           </td>
                         </tr>
-                      )))}
-                    {records.length == 0 && (
-                      <tr>
-                        <td colSpan={9}>
-                          <div
-                            style={{
-                              margin: '100px',
-                              textAlign: 'center'
-                            }}
-                          >There are no events in this day yet.
-                          </div>
-                        </td>
-                      </tr>
-                    )}
-                  </tbody>
+                      )}
+                    </tbody>
+                  )}
                 </table>
 
                 {/* ... (your pagination code) */}
@@ -209,7 +201,7 @@ function S_HomeStudent() {
           </div>
 
           <div
-            id="requested_slot"
+            id="requests"
             style={{
               marginTop: '40px',
               minHeight: '20vh'
@@ -228,91 +220,58 @@ function S_HomeStudent() {
                 }}
               >
                 <h3
-                >Requested slot</h3>
-                <div className="ms-auto">
-                  <Button variant="secondary">
-                    <FontAwesomeIcon icon={faChevronLeft} />
-                  </Button>{" "}
-                  <Button variant="secondary" >
-                    <FontAwesomeIcon icon={faChevronRight} />
-                  </Button>
-                </div>
+                >Requests</h3>
               </Stack>
             </div>
             {/* 4 items next for next page */}
             <Row>
-
-              <Col>
-                <Card>
-                  <Card.Body className="pt-5 border-top"
-                    style={{
-                      minWidth: '200px',
-                      maxWidth: '300px'
-                    }}
-                  >
-                    <Card.Title>Ngu</Card.Title>
-                    <Stack direction="horizontal" className="mb-3">
-                      <Card.Text className="mb-0">Instructor: </Card.Text>
-                      <Card.Text
-                        className="ms-auto"
-                      >Status: </Card.Text>
-                    </Stack>
-                    <Card.Subtitle>
-                      <p>Purpose: aosdbaosdbaosdaosidbaosidboasidbaosdibiasbdoasdb asojdbaisudhaisudh isuahd iasuhd iasuh isauh diaush iduash idaushid ahsi dhaiudh aius</p>
-                    </Card.Subtitle>
-                  </Card.Body>
-                </Card>
-              </Col>
-              <Col>
-                <Card>
-                  <Card.Body className="pt-5 border-top"
-                    style={{
-                      minWidth: '200px',
-                      maxWidth: '300px'
-                    }}
-                  >
-                    <Card.Title>Ngu</Card.Title>
-                    <Card.Text>Instructor:</Card.Text>
-                    <Card.Subtitle>
-                      <p>Purpose: aosdbaosdbaosdaosidbaosidboasidbaosdibiasbdoasdb asojdbaisudhaisudh isuahd iasuhd iasuh isauh diaush iduash idaushid ahsi dhaiudh aius</p>
-                    </Card.Subtitle>
-                  </Card.Body>
-                </Card>
-              </Col>
-              <Col>
-                <Card>
-                  <Card.Body className="pt-5 border-top"
-                    style={{
-                      minWidth: '200px',
-                      maxWidth: '300px'
-                    }}
-                  >
-                    <Card.Title>Ngu</Card.Title>
-                    <Card.Text>Instructor: </Card.Text>
-                    <Card.Subtitle>
-                      <p>Purpose: aosdbaosdbaosdaosidbaosidboasidbaosdibiasbdoasdb asojdbaisudhaisudh isuahd iasuhd iasuh isauh diaush iduash idaushid ahsi dhaiudh aius</p>
-                    </Card.Subtitle>
-                  </Card.Body>
-                </Card>
-              </Col>
-              <Col>
-                <Card>
-                  <Card.Body className="pt-5 border-top"
-                    style={{
-                      minWidth: '200px',
-                      maxWidth: '300px'
-                    }}
-                  >
-                    <Card.Title>Ngu</Card.Title>
-                    <Card.Text>Instructor:</Card.Text>
-                    <Card.Subtitle>
-                      <p>Purpose: aosdbaosdbaosdaosidbaosidboasidbaosdibiasbdoasdb asojdbaisudhaisudh isuahd iasuhd iasuh isauh diaush iduash idaushid ahsi dhaiudh aius</p>
-                    </Card.Subtitle>
-                  </Card.Body>
-                </Card>
-              </Col>
+              {loading ? (
+                <Spinner />
+              ) : (
+                pageContent.map((item, i) => (
+                  <Col key={i} md={3} className="mb-3">
+                    <Card>
+                      <Card.Body
+                        className="pt-5 border-top"
+                        style={{
+                          minWidth: '200px',
+                          maxWidth: '300px',
+                        }}
+                      >
+                        <Card.Title>{item.subjectId}</Card.Title>
+                        <Card.Text className="mb-0">
+                          <p>Instructor: {item.lecturerName}</p>
+                          <p> Status: {item.requestStatus}</p>
+                        </Card.Text>
+                        <Card.Subtitle>
+                          <p>Purpose: {item.requestContent}</p>
+                        </Card.Subtitle>
+                      </Card.Body>
+                    </Card>
+                  </Col>
+                ))
+              )}
             </Row>
+            <div
+              style={{
+                textAlign: "center"
+              }}
+            >
+              <Button variant="secondary" onClick={() => setPage(prev => prev - 1)}>
+                <FontAwesomeIcon icon={faChevronLeft} />
+              </Button>
 
+              <Pagination>
+                {Array.from({ length: totalPage }).map((_, index) => (
+                  <Pagination.Item key={index} onClick={() => handlePageChange(index)}>
+                    {index + 1}
+                  </Pagination.Item>
+                ))}
+              </Pagination>
+              <Button variant="secondary" onClick={() => setPage(prev => prev + 1)}>
+                <FontAwesomeIcon icon={faChevronRight} />
+              </Button>
+            </div>
           </div>
         </Tab>
       </Tabs>
@@ -322,25 +281,10 @@ function S_HomeStudent() {
         className="mb-3"
       >
         <Tab eventKey="related" title="Related Courses">
-          <Row>
-            {relatedCourses.map((course) => (
-              <Col key={course.id} md={4}>
-                <Card
-                  className="my-2"
-                  style={{ width: "100%", paddingTop: "100px" }}
-                  onClick={handleClickProfile}
-                >
-                  <Card.Body className="pt-5 border-top">
-                    <Card.Title>{course.name}</Card.Title>
-                    <Card.Text>Instructor: {course.instructor}</Card.Text>
-                  </Card.Body>
-                </Card>
-              </Col>
-            ))}
-          </Row>
+          <RelatedCourse />
         </Tab>
       </Tabs>
-    </div>
+    </div >
   );
 }
 

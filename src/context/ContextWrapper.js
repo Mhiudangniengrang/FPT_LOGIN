@@ -1,32 +1,19 @@
-import { useState, useEffect, useReducer } from "react";
+import { useState, useEffect, useReducer, useMemo } from "react";
 import GlobalContext from "./GlobalContext";
 import dayjs from "dayjs";
 import axios from "../Services/customizeAxios";
 
 export default function ContextWrapper(props) {
+    console.log("Context moi'")
     const [monthIndex, setMonthIndex] = useState(dayjs().month());
     const [showSlotModal, setShowSlotModal] = useState(false)
     const [daySelected, setDaySelected] = useState(new Date());
     const [selectedSlot, setSelectedSlot] = useState(null);
-    const [loading, setLoading] = useState(true);
+    const [lecturerId, setLecturerId] = useState(null)
+    const [selectedLecturer, setSelectedLecturer] = useState(null)
+    const [emptySlots, setEmptySlots] = useState(null)
 
     const accessToken = typeof window !== null ? localStorage.getItem('accessToken') : null
-    const [loginUser, setLoginUser] = useState(async () => {
-        await axios
-            .get("/api/v1/user/userId", {
-                headers: {
-                    'Authorization': `Bearer ${accessToken}`,
-                }
-            })
-            .then((response) => {
-                setLoginUser(response)
-                setLoading(false)
-            })
-            .catch(error => {
-                setLoading(false)
-                console.log("Error getting user data:", error);
-            });
-    });
 
     useEffect(() => {
         const expiresIn = 3600;
@@ -43,9 +30,29 @@ export default function ContextWrapper(props) {
         }
     }, [showSlotModal]);
 
-    if (loading) {
-        return <div>Loading...</div>; // Display a loading message or spinner
+    const getEmptySlots = async () => {
+        if (lecturerId != null) {
+            await axios
+                .get(`/api/v1/user/emptySlot/lecturer/${lecturerId}`)
+                .then((response) => {
+                    console.log(response)
+                    response.map((slot) => {
+                        setEmptySlots((prevSlot) => ([
+                            ...prevSlot,
+                            slot
+                        ]))
+                    })
+                })
+                .catch(error => {
+                    console.log("Error at Week.js " + error)
+                })
+        }
     }
+
+    useEffect(() => {
+        getEmptySlots
+    }, [lecturerId, setLecturerId])
+
     return (
         <GlobalContext.Provider
             value={{
@@ -57,9 +64,12 @@ export default function ContextWrapper(props) {
                 setDaySelected,
                 selectedSlot,
                 setSelectedSlot,
-                loginUser,
-                setLoginUser,
-                accessToken,
+                lecturerId,
+                setLecturerId,
+                selectedLecturer,
+                setSelectedLecturer,
+                emptySlots,
+                setEmptySlots
             }}
         >
             {props.children}

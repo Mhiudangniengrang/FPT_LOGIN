@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Container, Form, ListGroup, Button } from "react-bootstrap";
+import { Container, Form, ListGroup, Button, NavLink } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { faCalendarDays } from "@fortawesome/free-solid-svg-icons";
@@ -99,7 +99,7 @@ const FormSearch = () => {
               onChange={(e) => setSearchText(e.target.value)}
             />
             <Button variant="secondary" type="submit" onClick={handleSearch}>
-              Go
+              <NavLink>Go</NavLink>
             </Button>
           </form>
         </div>
