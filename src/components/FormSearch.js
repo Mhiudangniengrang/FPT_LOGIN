@@ -3,10 +3,9 @@ import { Button } from "react-bootstrap";
 
 import { Link, useParams } from "react-router-dom/cjs/react-router-dom.min";
 const FormSearch = () => {
-  const { filter, search } = useParams();
+  const { filter, search } = useParams()
   const [searchText, setSearchText] = useState(search);
   const [filterData, setFilterData] = useState("lecturer");
-  console.log(search);
   return (
     <div>
       <div
@@ -42,15 +41,15 @@ const FormSearch = () => {
             value={searchText}
             onChange={(e) => setSearchText(e.target.value)}
           />
+          <Button variant="secondary">
+            <Link
+              to={`/student/search/${filterData}/${searchText}`}
+              style={{ textDecoration: "none", color: "white" }}
+            >
+              Go
+            </Link>
+          </Button>
         </form>
-        <Button variant="secondary">
-          <Link
-            to={`/student/search/${filterData}/${searchText}`}
-            style={{ textDecoration: "none", color: "white" }}
-          >
-            Go
-          </Link>
-        </Button>
       </div>
     </div>
   );
