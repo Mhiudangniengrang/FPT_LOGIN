@@ -2,10 +2,11 @@ import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, Card, CardBody } from "react-bootstrap";
 import { faBriefcase } from "@fortawesome/free-solid-svg-icons";
+import { useParams } from "react-router-dom/cjs/react-router-dom.min";
 import axios from "axios";
 import { useData } from "../../context/DataContext";
 const S_ViewTeacherAboutme = () => {
-
+  const { lecturerId } = useParams()
   return (
     <div className="my-2 ">
       <Card>
@@ -51,7 +52,7 @@ const S_ViewTeacherAboutme = () => {
               </a>
             </h4>
             <h4>
-              <a href="http://localhost:3000/student/lecturer/viewschedule" className="schedule-link text-black">
+              <a href={`/student/lecturer/viewschedule/${lecturerId}`} className="schedule-link text-black">
                 Go to meeting schedule{" "}
               </a>
             </h4>

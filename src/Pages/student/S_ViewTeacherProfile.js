@@ -2,16 +2,28 @@ import React, { useContext, useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import { Container, Row, Col, Card, Button, Spinner } from "react-bootstrap";
-
+import { useParams } from "react-router-dom/cjs/react-router-dom.min";
 import S_Layout from "../../Layouts/S_Layout";
 import S_ViewTeacherAboutme from "../../components/ViewTeacherProfile/S_ViewTeacherAboutme";
 import GlobalContext from "../../context/GlobalContext";
 import axios from "../../Services/customizeAxios";
+import Breadcrumbs from "../../components/BreadcrumpCus";
+
+
 const S_ViewTeacherProfile = () => {
   const { setSelectedLecturer, selectedLecturer } = useContext(GlobalContext)
   const [isLoading, setIsLoading] = useState(true)
-  const lecturerId = typeof window != null ? sessionStorage.getItem("lecturerId") : null
-  console.log("view teacher profile:", lecturerId)
+  const { lecturerId } = useParams()
+  const path = [
+    {
+      route: '/student',
+      text: 'Home',
+    },
+    {
+      route: `/student/lecturer/profile/${lecturerId}`,
+      text: `Lecturer's profile`,
+    },
+  ]
 
   useEffect(async () => {
     if (lecturerId != null) {
@@ -30,15 +42,7 @@ const S_ViewTeacherProfile = () => {
   return (
     <S_Layout>
       <Container>
-        <Row>
-          <Col md={4}>
-            <Card className="my-2">
-              <Card.Header>
-                <FontAwesomeIcon icon={faUser} /> View Teacher Profile
-              </Card.Header>
-            </Card>
-          </Col>
-        </Row>
+        <Breadcrumbs items={path} />
         <Row>
           <Col md={12}>
             <Card className="my-4 ">

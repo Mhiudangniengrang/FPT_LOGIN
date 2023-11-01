@@ -1,6 +1,6 @@
 import React from "react";
-import Header from "./Header";
-import Footer from "./Footer";
+import Header from "./Headers & Footers/Header";
+import Footer from "./Headers & Footers/Footer";
 
 export default function Nopage() {
     return (

@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useContext } from "react";
 import dayjs from "dayjs";
 import { Button, Card, Stack } from "react-bootstrap";
-import WeeklyCalendar from "./Schedule/Week";
-import Month from "./Schedule/Month";
-import List from "./Schedule/List";
+import WeeklyCalendar from "./Week";
+import Month from "./Month";
+import List from "./List";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretRight, faCaretLeft } from "@fortawesome/free-solid-svg-icons";
 import {
@@ -12,11 +12,13 @@ import {
   getMonth,
   getStartOfWeekFormatted,
   subDaysByOne,
-} from "../Utils/dateUtils";
-import GlobalContext from "../context/GlobalContext";
+} from "../../Utils/dateUtils";
+import GlobalContext from "../../context/GlobalContext";
+import { useData } from "../../context/DataContext";
+import S_WeeklyCalendar from "./S_Week";
 
 const Calender_type = () => {
-
+  const { loginUser } = useData()
   const [activeButton, setActiveButton] = useState("week");
   const [currentMonth, setCurrentMonth] = useState(getMonth());
   const { setMonthIndex, monthIndex, daySelected, setDaySelected } =
@@ -176,16 +178,29 @@ const Calender_type = () => {
           </div>
         </Stack>
         {activeButton && (
+
           <div className="text-center">
-            <Card.Body>
-              {activeButton === "day" && <p>List content goes here.</p>}
-              {activeButton === "week" && <WeeklyCalendar isDisable={false} />}
-              {activeButton === "month" && <Month month={currentMonth} />}
-              {activeButton === "list" && <List />}
-            </Card.Body>
+            {loginUser.roleName === 'LECTURER' && (
+
+              <Card.Body>
+                {activeButton === 'day' && <p>Lecturer's Day content goes here.</p>}
+                {activeButton === 'week' && <WeeklyCalendar isDisable={false} />}
+                {activeButton === 'month' && <Month month={currentMonth} />}
+                {activeButton === 'list' && <List />}
+              </Card.Body>
+            )}
+
+            {loginUser.roleName === 'STUDENT' && (
+              <Card.Body>
+                {activeButton === 'day' && <p>Student's Day content goes here.</p>}
+                {activeButton === 'week' && <S_WeeklyCalendar />}
+                {activeButton === 'month' && <Month month={currentMonth} />}
+                {activeButton === 'list' && <List />}
+              </Card.Body>
+            )}
           </div>
         )}
-      </div>
+      </div >
     </>
   );
 };

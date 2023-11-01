@@ -11,8 +11,9 @@ const StudentRoutes = [
   { path: "/student", component: S_home },
   { path: "/student/viewinfo", component: S_UserInfo },
   { path: "/student/viewprofile", component: S_ViewProfile },
-  { path: "/student/search/profileteacher", component: S_ViewTeacherProfile },
-  { path: "/student/lecturer/viewschedule", component: S_ViewTeacherSchedule },
+  { path: "/student/search/profile", component: S_ViewTeacherProfile },
+  { path: "/student/lecturer/profile/:lecturerId", component: S_ViewTeacherProfile },
+  { path: "/student/lecturer/viewschedule/:lecturerId", component: S_ViewTeacherSchedule },
   { path: "/student/viewschedule", component: S_Schedule },
 
 ];

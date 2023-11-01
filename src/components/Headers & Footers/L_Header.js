@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 
-import Style from "../assets/style/header.module.scss";
+import Style from "../../assets/style/header.module.scss";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBell } from "@fortawesome/free-solid-svg-icons";
@@ -17,9 +17,9 @@ import { Stack } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import { NavLink } from "react-router-dom";
 
-import HorizontalStack from "./HorizontalStack";
-import CustomNavDropdown from "./DropDownStack";
-import GlobalContext from "../context/GlobalContext";
+import HorizontalStack from "../HorizontalStack";
+import CustomNavDropdown from "../DropDownStack";
+import GlobalContext from "../../context/GlobalContext";
 
 const dropdownItems = [
   {

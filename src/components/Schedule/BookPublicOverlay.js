@@ -10,6 +10,7 @@ import GlobalContext from '../../context/GlobalContext';
 import { useState } from 'react';
 import { useData } from '../../context/DataContext';
 import axios from '../../Services/customizeAxios'
+import dayjs from 'dayjs';
 const subjects = [
     'SWP391', 'MATH101', 'JPN301'
 ]
@@ -29,8 +30,6 @@ function BookPublicOverlay() {
     console.log(selectedSlot)
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(subject)
-        console.log(purpose)
         axios
             .put(`/api/v1/students/emptySlot/${selectedSlot.emptySlotId}/student/${loginUser.userId}/subject/${subject}`,
                 {
@@ -56,7 +55,7 @@ function BookPublicOverlay() {
                                 height: '15px',
                                 borderRadius: "10px",
                                 background: "#40BC4C",
-                                margin: '5px 10px 10px 10px',
+                                margin: '10px 10px 10px 10px',
                             }}
                         >
                         </div>
@@ -86,20 +85,20 @@ function BookPublicOverlay() {
                                 <label htmlFor='form'>Choose subject:</label>
                                 <div className={Style.subjects}>
                                     {subjects.map((subject, index) => {
-                                        return (
-                                            <>
-                                                <input id={`radio-${index}`} type="radio" name="radio"
-                                                    value={subject}
-                                                    onClick={() => {
-                                                        setSubject(subject);
-                                                        selectedSlot.subjectId = subject
-                                                    }}
 
-                                                />
-                                                <label htmlFor={`radio-${index}`} key={index}>{subject}</label>
+                                        <div>
+                                            <input id={`radio-${index}`} type="radio" name="radio"
+                                                value={subject}
+                                                onClick={() => {
+                                                    setSubject(subject);
+                                                    selectedSlot.subjectId = subject
+                                                }}
 
-                                            </>
-                                        )
+                                            />
+                                            <label htmlFor={`radio-${index}`} key={index}>{subject}</label>
+
+                                        </div>
+
                                     }
                                     )}
                                 </div>
@@ -119,10 +118,9 @@ function BookPublicOverlay() {
                                             required
                                         >
                                         </textarea>
-                                        {selectedSlot.status !== 'Booked' && (
 
-                                            <button className={Style.book_btn} type='submit'  >Book</button>
-                                        )}
+                                        <button className={Style.book_btn} type='submit'  >Book</button>
+
                                     </Stack>
                                 </form>
                             </Stack>
@@ -135,8 +133,8 @@ function BookPublicOverlay() {
                                 width: '30px',
                                 height: '15px',
                                 borderRadius: "10px",
-                                background: "#40BC4C",
-                                margin: '5px 10px 10px 10px',
+                                background: "red",
+                                margin: '10px 10px 10px 10px',
                             }}
                         >
                         </div>
@@ -145,7 +143,7 @@ function BookPublicOverlay() {
                             <Stack className='pb-2 pe-2' direction='horizontal' gap='2'>
                                 <h4
                                     style={{ margin: '0' }}
-                                >View slot</h4>
+                                >View slot</h4><span style={{ margin: '0' }}>    (You had booked this slot)</span>
                                 <FontAwesomeIcon icon={faXmark}
 
                                     className='ms-auto'
@@ -156,54 +154,24 @@ function BookPublicOverlay() {
                                     onClick={() => setShowSlotModal(false)} />
                             </Stack>
                             <Stack direction='vertical'>
-                                <p>Lecturer: {selectedSlot.teacher}</p>
-                                <p>Slot: {selectedSlot.slot}</p>
-                                <p>Date : {selectedSlot.date}</p>
-                                <p>Time : {selectedSlot.time}</p>
-                                <p>Room: {selectedSlot.room}</p>
-
-                                <label htmlFor='form'>Choose your subject:</label>
-                                <div className={Style.subjects}>
-                                    {subjects.map((subject, index) => {
-                                        return (
-                                            <>
-                                                <input id={`radio-${index}`} type="radio" name="radio"
-                                                    value={subject}
-                                                    onClick={() => {
-                                                        setSubject(subject);
-                                                        selectedSlot.subjectId = subject
-                                                    }}
-
-                                                />
-                                                <label htmlFor={`radio-${index}`} key={index}>{subject}</label>
-
-                                            </>
-                                        )
-                                    }
-                                    )}
-                                </div>
-                                <form id='form' className={Style.object} onSubmit={(e) => handleSubmit(e)}>
-
-                                    <Stack direction='vertical' gap='2'>
-                                        <label htmlFor='purpose'>Purpose:</label>
-                                        <textarea id='purpose' className={Style.purpose}
-                                            rows="4"
-                                            maxLength='200'
-                                            placeholder='Enter your purpose (200 words)'
-                                            onChange={(e) => {
-                                                setPurpose(e.target.value);
-                                                selectedSlot.description = e.target.value;
-                                            }}
-                                            value={selectedSlot.description}
-                                            required
-                                        >
-                                        </textarea>
-                                        {selectedSlot.status !== 'Booked' && (
-
-                                            <button className={Style.book_btn} type='submit' >Book</button>
-                                        )}
-                                    </Stack>
-                                </form>
+                                <p>Lecturer: {selectedSlot.lecturerName}</p>
+                                <p>Slot: {selectedSlot.slotTimeId}</p>
+                                <p>Duration: {selectedSlot.duration}</p>
+                                <p>Subject: {selectedSlot.subjectId}</p>
+                                <p>Date : {selectedSlot.dateStart}</p>
+                                <p>Time : {selectedSlot.timeStart}</p>
+                                <p>Room: {selectedSlot.roomId}</p>
+                                <p>Booked date: {dayjs(selectedSlot.bookedDate).format("YYYY-MM-DD")}</p>
+                                <Stack direction='vertical' gap='2'
+                                    style={{ marginBottom: '10px' }}
+                                >
+                                    <label htmlFor='purpose'>Purpose:</label>
+                                    <textarea id='purpose' className={Style.purpose}
+                                        value={selectedSlot.description}
+                                        disabled
+                                    >
+                                    </textarea>
+                                </Stack>
                             </Stack>
                         </Stack>
                     </div>

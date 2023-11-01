@@ -1,5 +1,5 @@
 import React from "react";
-import Style from "../assets/style/header.module.scss";
+import Style from "../../assets/style/header.module.scss";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBell } from "@fortawesome/free-solid-svg-icons";
@@ -14,9 +14,9 @@ import NavDropdown from "react-bootstrap/NavDropdown";
 import { Stack } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 
-import HorizontalStack from "./HorizontalStack";
-import CustomNavDropdown from "./DropDownStack";
-import S_ViewProfile from "../Pages/student/S_ViewProfile"; // Adjust the path as needed
+import HorizontalStack from "../HorizontalStack";
+import CustomNavDropdown from "../DropDownStack";
+import S_ViewProfile from "../../Pages/student/S_ViewProfile";
 const dropdownItems = [
   {
     link: "/student/viewschedule",

@@ -7,22 +7,26 @@ import Tabs from 'react-bootstrap/Tabs';
 import Breadcrumbs from "../../components/BreadcrumpCus";
 import GlobalContext from "../../context/GlobalContext";
 import BookPublicOverLay from "../../components/Schedule/BookPublicOverlay"
-const path = [
-    {
-        route: '/student',
-        text: 'Home',
-    },
-    {
-        route: `/student/search/profileteacher`,
-        text: `Hoadh's profile`,
-    },
-    {
-        route: '/student/lecturer/viewschedule',
-        text: 'View schedule',
-    },
-]
+import { useParams } from "react-router-dom/cjs/react-router-dom.min";
+import S_WeeklyCalendar from "../../components/Schedule/S_Week";
 
 const S_ViewTeacherSchedule = () => {
+    const { lecturerId } = useParams()
+    const path = [
+        {
+            route: '/student',
+            text: 'Home',
+        },
+        {
+            route: `/student/lecturer/profile/${lecturerId}`,
+            text: `Lecturer's profile`,
+        },
+        {
+            route: '/student/lecturer/viewschedule',
+            text: 'View schedule',
+        },
+    ]
+
     const [key, setKey] = useState('meeting');
     const { showSlotModal } = useContext(GlobalContext)
     return (
@@ -39,10 +43,10 @@ const S_ViewTeacherSchedule = () => {
                     }}
                 >
                     <Tab eventKey="meeting" title="Meeting Schedule">
-                        <WeeklyCalendar isDisable={false} />
+                        <S_WeeklyCalendar />
                     </Tab>
                     <Tab eventKey="teaching" title="Teaching Schedule">
-                        <WeeklyCalendar isDisable={true} />
+                        <S_WeeklyCalendar />
                     </Tab>
                 </Tabs>
             </S_Layout>

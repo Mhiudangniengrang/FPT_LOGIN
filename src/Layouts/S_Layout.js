@@ -1,6 +1,6 @@
 import React from "react";
-import S_Header from "../components/S_Header";
-import Footer from "../components/Footer";
+import S_Header from "../components/Headers & Footers/S_Header";
+import Footer from "../components/Headers & Footers/Footer";
 import Container from 'react-bootstrap/Container';
 import { useData } from "../context/DataContext";
 import Unauthorize from "../Pages/errors/Unauthorize";
