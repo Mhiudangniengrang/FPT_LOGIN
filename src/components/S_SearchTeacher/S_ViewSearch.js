@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { ListGroup } from "react-bootstrap";
-
 import axios from "../../Services/customizeAxios";
 import S_Layout from "../../Layouts/S_Layout";
 import { useParams } from "react-router-dom/cjs/react-router-dom.min";
