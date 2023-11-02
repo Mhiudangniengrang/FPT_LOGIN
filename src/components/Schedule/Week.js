@@ -60,27 +60,13 @@ const timeSlots = ["Slot 1", "Slot 2", "Slot 3", "Slot 4", "Slot 5", "Slot 6"];
 
 function WeeklyCalendar({ isDisable = false }) {
     const lecturerId = typeof window != null ? sessionStorage.getItem("lecturerId") : null
-    const role = typeof window != null ? sessionStorage.getItem("role") : null
     const [rooms, setRooms] = useState([]);
     const [emptySlot, setEmptySlot] = useState([])
-    const [bookedSlot, setBookedSlot] = useState([])
     const { loginUser } = useData()
 
     const { setShowSlotModal, setDaySelected, setSelectedSlot, selectedSlot } = useContext(GlobalContext);
     const [selectedDate, setSelectedDate] = useState(new Date());
     console.log(selectedSlot)
-    const getBookedSlot = () => {
-        axios.get(`/api/v1/students/bookedSlot/homePage/${loginUser.userId}`
-        )
-            .then(res => {
-                isLoading(false)
-                setBookedSlot(res)
-            })
-            .catch(error => {
-                isLoading(false)
-                console.log("error at getting booked slot: " + error)
-            })
-    }
 
     const getRoom = () => {
         axios
@@ -105,13 +91,6 @@ function WeeklyCalendar({ isDisable = false }) {
                 })
         }
     }, [lecturerId])
-
-
-    const handleStudentDayClick = (meeting) => {
-        console.log(meeting)
-        setShowSlotModal(true);
-        setSelectedSlot(meeting);
-    };
 
     const handleCreateClick = (day) => {
         let year = dayjs(selectedDate).year().toString()
@@ -189,11 +168,11 @@ function WeeklyCalendar({ isDisable = false }) {
                                 <th key={index}
                                     className={Style.createContain}
                                 >
-                                    {(role === "LECTURER" && checkDate(day)) && (
+                                    {checkDate(day) && (
                                         <span
                                             className={Style.create}
                                             onClick={() => {
-                                                if (role === "LECTURER") handleCreateClick(day)
+                                                handleCreateClick(day)
                                             }}
                                         ></span>
                                     )}
@@ -222,73 +201,35 @@ function WeeklyCalendar({ isDisable = false }) {
                                         emptySlot.map((meeting) => {
                                             {
                                                 if (meeting.dateStart === day && meeting.slotTimeId == slot.charAt(5)) {
-                                                    switch (role) {
-                                                        case "STUDENT":
-                                                            {
-                                                                return (
-                                                                    meeting.status === "OPEN" ? (
-                                                                        <div
-                                                                            key={meeting.slotId}
-                                                                            className={Style.slot}
-                                                                            onClick={() => handleStudentDayClick(meeting)}
-                                                                            style={{
-                                                                                border: "4px solid green"
-                                                                            }}
-                                                                        >
-                                                                            <span> </span>
-                                                                            <span>Room {meeting.roomId} -</span>
-                                                                            <span> {meeting.timeStart}</span><br></br>
-                                                                            <span> Duration {meeting.duration}</span>
-                                                                        </div>
-                                                                    ) : <div
-                                                                        key={meeting.slotId}
-                                                                        className={Style.slot}
-                                                                        style={{
-                                                                            border: "4px solid red"
-                                                                        }}
-                                                                    // onClick={() => handleDayClick()}
-                                                                    >
-                                                                        <span> SWP -</span>
-                                                                        <span>room 104 -</span>
-                                                                        <span> (7:30-8:00)</span>
-                                                                    </div>
-                                                                )
-                                                                break;
-                                                            }
-                                                        case "LECTURER":
-                                                            {
-                                                                return (
-                                                                    meeting.status === "OPEN" ? (
-                                                                        <div
-                                                                            key={meeting.slotId}
-                                                                            className={Style.slot}
-                                                                            style={{
-                                                                                border: "4px solid green"
-                                                                            }}
-                                                                            onClick={() => handleDayClick(meeting)}
-                                                                        >
-                                                                            <span> </span>
-                                                                            <span>Room {meeting.roomId} -</span>
-                                                                            <span> {meeting.timeStart}</span><br></br>
-                                                                            <span> Duration {meeting.duration}</span>
-                                                                        </div>
-                                                                    ) : <div
-                                                                        key={meeting.slotId}
-                                                                        className={Style.slot}
-                                                                        style={{
-                                                                            border: "4px solid red"
-                                                                        }}
-                                                                    // onClick={() => handleDayClick()}
-                                                                    >
-                                                                        <span>Subject {meeting.subjectId} -</span>
-                                                                        <span>Room {meeting.roomId} -</span>
-                                                                        <span> {meeting.timeStart}</span><br></br>
-                                                                        <span> Duration {meeting.duration}</span>
-                                                                    </div>
-                                                                )
-                                                                break;
-                                                            }
-                                                    }
+                                                    return (
+                                                        meeting.status === "OPEN" ? (
+                                                            <div
+                                                                key={meeting.slotId}
+                                                                className={Style.slot}
+                                                                style={{
+                                                                    border: "4px solid green"
+                                                                }}
+                                                                onClick={() => handleDayClick(meeting)}
+                                                            >
+                                                                <span> </span>
+                                                                <span>Room {meeting.roomId} -</span>
+                                                                <span> {meeting.timeStart}</span><br></br>
+                                                                <span> Duration {meeting.duration}</span>
+                                                            </div>
+                                                        ) : <div
+                                                            key={meeting.slotId}
+                                                            className={Style.slot}
+                                                            style={{
+                                                                border: "4px solid red"
+                                                            }}
+                                                            onClick={() => handleDayClick(meeting)}
+                                                        >
+                                                            <span>Subject {meeting.subjectId} -</span>
+                                                            <span>Room {meeting.roomId} -</span>
+                                                            <span> {meeting.timeStart}</span><br></br>
+                                                            <span> Duration {meeting.duration}</span>
+                                                        </div>
+                                                    )
                                                 } return null
                                             }
                                         })

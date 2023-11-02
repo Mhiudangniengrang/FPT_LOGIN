@@ -33,14 +33,19 @@ const RelatedCourse = () => {
             })
     }, [])
 
-    const handleRequest = async (subjectId, lecturerId) => {
+    const handleRequest = async (e, subjectId, lecturerId) => {
+        e.preventDefault();
+        isLoading(true)
         await axios.post(`/api/v1/requests/student/${loginUser.userId}`, {
             lecturerId: lecturerId,
             subjectId: subjectId,
             requestContent: purpose
         }).then(res => {
+            isLoading(false)
+            window.alert("Send request successfully!")
             console.log(res)
         }).catch(err => {
+            isLoading(false)
             console.log(err)
         })
     }
@@ -64,7 +69,7 @@ const RelatedCourse = () => {
                                     <Card.Body className="border-top">
                                         <Card.Title>{course.subjectId} - {course.subjectName}</Card.Title>
                                         <Card.Text>Instructor: {course.lecturerName}</Card.Text>
-                                        <form onSubmit={() => handleRequest(course.subjectId, course.lecturerId)}>
+                                        <form onSubmit={(e) => handleRequest(e, course.subjectId, course.lecturerId)}>
                                             <label htmlFor="purpose">Purpose</label><span style={{ color: "red" }}>*</span><span>:</span><br></br>
                                             <textarea id='purpose'
                                                 rows="4"
@@ -114,7 +119,6 @@ const RelatedCourse = () => {
                 )
 
             )}
-            {console.log(related)}
         </Row>
     )
 }

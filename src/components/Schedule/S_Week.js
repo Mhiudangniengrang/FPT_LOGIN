@@ -219,13 +219,13 @@ function S_WeeklyCalendar() {
                                                             key={index}
                                                             className={Style.slot}
                                                             onClick={() => handleDayClick(booked)}
-                                                            style={{ border: "4px solid green" }}
+                                                            style={{ border: "4px solid #333" }}
                                                         >
                                                             <span> </span>
                                                             <span>Room {booked.roomId} -</span>
                                                             <span> {booked.timeStart}</span>
                                                             <br />
-                                                            <span> Duration {booked.duration}</span>
+                                                            <span> Duration {(booked.duration).slice(3, 5)} minutes</span>
                                                         </div>
                                                     )
                                                 }

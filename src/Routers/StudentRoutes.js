@@ -4,8 +4,7 @@ import S_UserInfo from "../Pages/student/S_UserInfo";
 import S_ViewProfile from "../Pages/student/S_ViewProfile";
 import S_ViewTeacherProfile from "../Pages/student/S_ViewTeacherProfile";
 import S_ViewTeacherSchedule from "../Pages/student/S_ViewTeacherSchedule";
-import S_SearchSubject from "../components/S_SearchSubject";
-import S_SearchName from "../components/S_SearchTeacher/S_SearchName";
+import S_ViewSearch from "../components/S_SearchTeacher/S_ViewSearch";
 
 const StudentRoutes = [
   { path: "/student", component: S_home },
@@ -15,6 +14,10 @@ const StudentRoutes = [
   { path: "/student/lecturer/profile/:lecturerId", component: S_ViewTeacherProfile },
   { path: "/student/lecturer/viewschedule/:lecturerId", component: S_ViewTeacherSchedule },
   { path: "/student/viewschedule", component: S_Schedule },
+  { path: "/student/search/:filter/:search", component: S_ViewSearch },
+  { path: "/student/search", component: S_ViewSearch },
+  { path: "/student/search/lecturer/", component: S_ViewSearch },
+  { path: "/student/search/subject/", component: S_ViewSearch },
 
 ];
 

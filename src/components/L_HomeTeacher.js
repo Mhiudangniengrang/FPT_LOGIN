@@ -20,15 +20,13 @@ import GlobalContext from "../context/GlobalContext";
 import { useHistory } from "react-router-dom";
 
 function L_HomeTeacher() {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [recordsPerPage, setRecordsPerPage] = useState(5);
-  const [currentDate, setCurrentDate] = useState(dayjs()); // Initialize currentDate using Day.js
-  const firstIndex = (currentPage - 1) * recordsPerPage;
-  const lastIndex = firstIndex + recordsPerPage;
+  const [currentDate, setCurrentDate] = useState(dayjs());
   const [requestSlot, setRequestSlot] = useState([])
+  const [bookedSlot, setBookedSlot] = useState([])
+  const [filteredSlot, setFilteredSlot] = useState([])
+  const [filter, setFilter] = useState("PENDING")
   const { setSelectedSlot } = useContext(GlobalContext)
   const { loginUser } = useData()
-  console.log(loginUser)
   useEffect(() => {
     axios.get(`/api/v1/requests/lecturer/${loginUser.userId}`)
       .then(res => {
@@ -38,32 +36,37 @@ function L_HomeTeacher() {
         console.log("Error at lecturer home:", error)
       })
   }, [])
-  const filteredData = data.filter((record) => {
-    const recordDate = dayjs(record.date, "DD/MM/YYYY"); // Adjust the date format
-    return (
-      recordDate.date() === currentDate.date() &&
-      recordDate.month() === currentDate.month() &&
-      recordDate.year() === currentDate.year()
-    );
-  });
-
-  const records = filteredData.slice(firstIndex, lastIndex);
-
-  function handleRecordsPerPageChange(e) {
-    setRecordsPerPage(parseInt(e.target.value));
-    setCurrentPage(1);
+  useEffect(() => {
+    axios.get(`/api/v1/user/emptySlot/lecturer/${loginUser.userId}`)
+      .then(res => {
+        setBookedSlot(res)
+      }).catch(error => {
+        console.log("Error at lecturer home:", error)
+      })
+  }, [])
+  useEffect(() => {
+    setFilteredSlot(getFilterBookedSlot)
+  }, [currentDate, bookedSlot])
+  const getFilterBookedSlot = () => {
+    const date = dayjs(currentDate).format("YYYY-MM-DD")
+    const matchingSlots = bookedSlot.reduce((accumulator, slot) => {
+      if (slot.dateStart === date && slot.status === "BOOKED") {
+        return [...accumulator, slot];
+      }
+      return accumulator;
+    }, []);
+    return matchingSlots;
   }
+
 
   function nextDate() {
     const newDate = currentDate.add(1, "day");
     setCurrentDate(newDate);
-    setCurrentPage(1); // Reset to the first page when changing the date
   }
 
   function previousDate() {
     const newDate = currentDate.subtract(1, "day");
     setCurrentDate(newDate);
-    setCurrentPage(1);
   }
   const history = useHistory()
   const handleRequest = (record) => {
@@ -124,15 +127,16 @@ function L_HomeTeacher() {
                     </tr>
                   </thead>
                   <tbody>
-                    {records.map((record, i) => (
+                    {console.log(filteredSlot)}
+                    {filteredSlot.map((record, i) => (
                       <tr key={i}>
-                        <td>{record.no}</td>
-                        <td>{record.student}</td>
-                        <td>{record.date}</td>
-                        <td>{record.timestart}</td>
-                        <td>{record.slot}</td>
-                        <td>{record.room}</td>
-                        <td>{record.subject}</td>
+                        <td>{i + 1}</td>
+                        <td>{record.studentName}</td>
+                        <td>{record.dateStart}</td>
+                        <td>{record.timeStart}</td>
+                        <td>{record.slotTimeId}</td>
+                        <td>{record.roomId}</td>
+                        <td>{record.subjectId}</td>
                         <td>{record.duration}</td>
                       </tr>
                     ))}
@@ -163,8 +167,23 @@ function L_HomeTeacher() {
             <Card className="text-center">
               <Card.Body>
 
+                <div
+                  style={{
+                    textAlign: 'left'
+                  }}
+                >
+                  <span>Filter by: </span>
+                  <select
+                    onChange={e => setFilter(e.target.value)}
+                  >
+                    <option value={"PENDING"}>Pending requests</option>
+                    <option value={"APPROVED"}>Approved requests</option>
+                  </select>
+                </div>
+
                 <table className="table text-center">
                   <thead>
+
                     <tr>
                       <th>No</th>
                       <th>Student's ID</th>
@@ -177,28 +196,44 @@ function L_HomeTeacher() {
                   </thead>
                   <tbody>
                     {requestSlot.map((record, i) => (
-                      <tr
-                        className={Style.tableRowOnClick}
-                        key={i}
-                        onClick={() => handleRequest(record)}
-                      >
-                        <td>{i + 1}</td>
-                        <td>{record.studentId}</td>
-                        <td>{record.studentName}</td>
-                        <td>{record.subjectId}</td>
-                        <td>{record.requestContent}</td>
-                        <td>{dayjs(record.createAt).format('DD-MM-YYYY')}</td>
-                        <td>
-                          {record.requestStatus === "PENDING"}
-                          <div
-                            style={{
-                              background: 'rgba(255,255,0,0.7)',
-                              color: '#7781ff',
-                              fontWeight: '600',
-                            }}
-                          >Pending</div>
-                        </td>
-                      </tr>
+
+                      (record.requestStatus === filter) && (
+                        <tr
+                          className={Style.tableRowOnClick}
+                          key={i}
+                          onClick={() => handleRequest(record)}
+                        >
+                          <td>{i + 1}</td>
+                          <td>{record.studentId}</td>
+                          <td>{record.studentName}</td>
+                          <td>{record.subjectId}</td>
+                          <td>{record.requestContent}</td>
+                          <td>{dayjs(record.createAt).format('DD-MM-YYYY')}</td>
+                          {filter === "PENDING" ? (
+                            <td>
+                              <div
+                                style={{
+                                  background: 'rgba(255,255,0,0.5)',
+                                  color: '#7781ff',
+                                  fontWeight: '600',
+                                }}
+                              >Pending</div>
+
+                            </td>
+                          ) : (
+                            <td>
+                              <div
+                                style={{
+                                  background: 'rgb(0 255 52 / 50%)',
+                                  color: 'rgb(4 62 1)',
+                                  fontWeight: '600',
+                                }}
+                              >Approved</div>
+                            </td>
+
+                          )}
+                        </tr>
+                      )
                     ))}
                   </tbody>
                 </table>

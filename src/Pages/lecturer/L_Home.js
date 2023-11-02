@@ -5,9 +5,7 @@ import CreateSlot from "../../components/Schedule/CreateSlot";
 import L_HomeTeacher from "../../components/L_HomeTeacher";
 const L_home = () => {
 
-  const { showSlotModal, setLecturerId, emptySlots } = useContext(GlobalContext)
-  const lecturerId = typeof window != null ? sessionStorage.getItem('lecturerId') : null
-  setLecturerId(lecturerId)
+  const { showSlotModal } = useContext(GlobalContext)
   return (
     <>
       {showSlotModal && <CreateSlot />}

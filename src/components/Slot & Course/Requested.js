@@ -12,7 +12,6 @@ import axios from "../../Services/customizeAxios";
 import Style from '../../assets/style/dashboard.module.scss'
 
 function Requested() {
-    const [currentDate, setCurrentDate] = useState(dayjs());
     const [loading, isLoading] = useState(true)
     const [page, setPage] = useState(0)
     const [pageContent, setPageContent] = useState([])

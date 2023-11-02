@@ -48,18 +48,14 @@ const S_ViewTeacherAboutme = () => {
             <h4>
               {" "}
               <a href="#" className="schedule-link text-black ">
-                Go to teaching schedule
+                Go to teaching schedule &gt;&gt;&gt;
               </a>
             </h4>
             <h4>
               <a href={`/student/lecturer/viewschedule/${lecturerId}`} className="schedule-link text-black">
-                Go to meeting schedule{" "}
+                Go to meeting schedule &gt;&gt;&gt;
               </a>
             </h4>
-          </div>
-          <div>
-            {" "}
-            <Button variant="primary" onClick={() => handleSubmit()}>Send Request</Button>
           </div>
         </CardBody>
       </Card>

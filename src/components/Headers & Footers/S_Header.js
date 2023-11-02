@@ -23,11 +23,11 @@ const dropdownItems = [
     desc: "View Schedule",
   },
   {
-    link: "",
+    link: "/student/search",
     desc: "Book slot",
   },
   {
-    link: "",
+    link: `/student/search`,
     desc: "Send Request",
   },
 ];

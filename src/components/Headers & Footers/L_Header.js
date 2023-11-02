@@ -20,6 +20,7 @@ import { NavLink } from "react-router-dom";
 import HorizontalStack from "../HorizontalStack";
 import CustomNavDropdown from "../DropDownStack";
 import GlobalContext from "../../context/GlobalContext";
+import { useData } from "../../context/DataContext";
 
 const dropdownItems = [
   {
@@ -39,7 +40,7 @@ const dropdownItems = [
 const L_Header = () => {
   const { daySelected, setShowSlotModal, setDaySelected } =
     useContext(GlobalContext);
-
+  const { loginUser } = useData()
   const handleCreateClick = () => {
     setShowSlotModal(true);
     setDaySelected(new Date)
@@ -51,9 +52,12 @@ const L_Header = () => {
           <FontAwesomeIcon icon={faBell} color="#fff" size="xl" />
         </div>
         <NavDropdown
-          className={Style.nav}
-          title="Teacher [Hungld]"
+          className={`${Style.nav} ${Style.truncate_text}`}
+          title={`Lecturer [${loginUser.userName}]`}
           id="nav-dropdown"
+          style={{
+            maxWidth: '200px'
+          }}
         >
           <NavDropdown.Item
             href="/lecturer/viewprofile"
@@ -63,7 +67,7 @@ const L_Header = () => {
               style={{ color: "#000000", paddingRight: " 5px" }}
             />
 
-            View Profile
+            {loginUser.userName}
           </NavDropdown.Item>
           <NavDropdown.Item
             href="/lecturer/viewprofile"
