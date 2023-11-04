@@ -4,6 +4,12 @@ import axios from "../../Services/customizeAxios";
 import S_Layout from "../../Layouts/S_Layout";
 import { useParams } from "react-router-dom/cjs/react-router-dom.min";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import FormSearch from "../FormSearch";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faMagnifyingGlass,
+  faCalendarDays
+} from "@fortawesome/free-solid-svg-icons";
 const S_ViewSearch = () => {
   const { filter, search } = useParams();
   const [searchText, setSearchText] = useState(search);
@@ -19,7 +25,6 @@ const S_ViewSearch = () => {
   }, [filterData]);
 
   const handleSearchSubject = async () => {
-    setIsSearching(true);
     await axios
       .get(`/api/v1/student/searching/subject`, {
         params: {
@@ -57,67 +62,31 @@ const S_ViewSearch = () => {
         console.log("error at searchname:" + error);
       });
   };
-  const handleSearch = (e) => {
-    e.preventDefault();
-    if (!isSearching) {
-      setSearchLecture([]);
-      setSearchSubject([]);
-      if (filterData === "lecturer") {
+
+  console.log(search);
+  useEffect(() => {
+    console.log("useEffect");
+
+    if (search === undefined) {
+      history.push(`/student/search`);
+    } else {
+      if (filter === "lecturer") {
         handleSearchLecture();
       } else if (filterData === "subject") {
         handleSearchSubject();
       }
     }
-  };
-  const handleSearchTextChange = (e) => {
-    setSearchText(e.target.value);
-  };
-  const handleClickViewProfile = () => {
-    history.push("/student/view/profileteacher");
-  };
+  }, [filter, search]);
+
+  useEffect(() => {
+    setSearchSubject([])
+    setSearchLecture([])
+  }, [filter, search])
   return (
     <S_Layout>
       <div>
-        <div>
-          <div
-            style={{
-              maxWidth: "30vw",
-              display: "flex",
-              justifyContent: "flex-start",
-              alignItems: "center",
-            }}
-          >
-            <label className="pe-2" id="search_label" htmlFor="search">
-              Search for:{" "}
-            </label>
-            <form
-              id="search"
-              className="form pe-0"
-              style={{ display: "flex", flex: "1" }}
-            >
-              <select
-                className="form-select pe-0"
-                style={{ maxWidth: "150px", marginRight: "10px" }}
-                onChange={(e) => setFilterData(e.target.value)}
-                value={filterData}
-              >
-                <option value="lecturer">Lecturer</option>
-                <option value="subject">Subject</option>
-              </select>
-              <input
-                type="text"
-                placeholder="Search"
-                className="me-2 p-1"
-                value={searchText}
-                onChange={handleSearchTextChange}
-              />
-              <Button variant="secondary" type="submit" onClick={handleSearch}>
-                Go
-              </Button>
-            </form>
-          </div>
-        </div>
-        {filterData === "lecturer" && searchLecture.length > 0 && (
+        <FormSearch />
+        {filter === "lecturer" && searchLecture.length > 0 && (
           <div>
             <p>Search Results: {searchLecture.length} result(s) found</p>
           </div>
@@ -142,7 +111,7 @@ const S_ViewSearch = () => {
                         <div>Subject: {teacher.subjectId}</div>
                       </div>
                     </div>
-                    {/* <div className="d-flex">
+                    <div className="d-flex">
                       Subject:
                       <FontAwesomeIcon
                         className="mx-1 my-1"
@@ -156,9 +125,8 @@ const S_ViewSearch = () => {
                       <FontAwesomeIcon
                         className="mx-2 my-1"
                         icon={faMagnifyingGlass}
-                        onClick={handleSearch}
                       />
-                    </div> */}
+                    </div>
                   </div>
                 </ListGroup.Item>
               ))}
@@ -189,7 +157,7 @@ const S_ViewSearch = () => {
                         Teacher: {subject.lecturerName}
                       </div>
                     </div>
-                    {/* <div className="d-flex">
+                    <div className="d-flex">
                       Subject:
                       <FontAwesomeIcon
                         className="mx-1 my-1"
@@ -203,9 +171,8 @@ const S_ViewSearch = () => {
                       <FontAwesomeIcon
                         className="mx-2 my-1"
                         icon={faMagnifyingGlass}
-                        onClick={handleSearch}
                       />
-                    </div> */}
+                    </div>
                   </div>
                 </ListGroup.Item>
               ))}

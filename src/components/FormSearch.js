@@ -1,15 +1,11 @@
 import React, { useState } from "react";
 import { Button } from "react-bootstrap";
 
-import { Link } from "react-router-dom/cjs/react-router-dom.min";
-const FormSearch = (props) => {
-  const { filter, search, onSearch } = props;
-  const [searchText, setSearchText] = useState("");
+import { Link, useParams } from "react-router-dom/cjs/react-router-dom.min";
+const FormSearch = () => {
+  const { filter, search } = useParams()
+  const [searchText, setSearchText] = useState(search);
   const [filterData, setFilterData] = useState("lecturer");
-  const handleSearch = () => {
-    onSearch(filterData, searchText);
-  };
-
   return (
     <div>
       <div
@@ -47,7 +43,7 @@ const FormSearch = (props) => {
           />
           <Button variant="secondary">
             <Link
-              to={`/student/${filterData}/${searchText}`}
+              to={`/student/search/${filterData}/${searchText}`}
               style={{ textDecoration: "none", color: "white" }}
             >
               Go
