@@ -8,59 +8,75 @@ import {
   FormGroup,
   Button,
   Form,
-  FormControl,
+  ListGroup,
+  ListGroupItem,
 } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
 import S_Layout from "../../Layouts/S_Layout";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCircleCheck,
+  faCalendarDays,
+  faUser,
+} from "@fortawesome/free-solid-svg-icons";
+
 import axios from "../../Services/customizeAxios";
 function S_UserInfo() {
   const history = useHistory();
   const [major, setMajor] = useState("Select Major");
-  const [selectedSubjects, setSelectedSubjects] = useState("");
-
+  const [selectedSubjects, setSelectedSubjects] = useState([]);
   const [majors, setMajors] = useState([]);
+  const [majorId, setMajorId] = useState(null);
 
   useEffect(() => {
     axios
       .get("/api/v1/student/searching/majors")
       .then((response) => {
         setMajors(response);
-        // console.log(response);
+        if (response.length > 0) {
+          setMajorId(response[0].majorId);
+        }
       })
       .catch((error) => {
         console.error("Error fetching majors:", error);
       });
   }, []);
-  const handleSearchSubject = async () => {
-    const majorId = 2;
-    axios
-      .get(`/api/v1/student/searching/subjects/major/${majorId}`)
 
-      .then((res) => {
-        // res.map((subject) => {
-        //   setSelectedSubjects((prev) => [...prev, subject]);
-        // });
-        console.log(res);
-      })
-      .catch((error) => {
-        console.error("Error", error);
-      });
-  };
+  useEffect(() => {
+    if (majorId) {
+      axios
+        .get(`/api/v1/student/searching/subjects/major/${majorId}`)
+        .then((res) => {
+          setSelectedSubjects(res);
+          // console.log(res);
+        })
+        .catch((error) => {
+          console.error("Error", error);
+        });
+    }
+  }, [majorId]);
 
   const handleMajorChange = (event) => {
     setMajor(event.target.value);
+    const selectedMajor = majors.find(
+      (majorOption) => majorOption.majorName === event.target.value
+    );
+    if (selectedMajor) {
+      setMajorId(selectedMajor.majorId);
+    }
   };
 
   const handleClickSave = () => {
-    console.log("Selected Subjects:", selectedSubjects);
+    const selectedSubjectsToUpdate = selectedSubjects.filter(
+      (subject) => subject.selected
+    );
 
     history.push("/student/viewprofile", {
-      selectedSubjects: selectedSubjects,
+      selectedSubjects: selectedSubjectsToUpdate,
       name: formData.name,
     });
   };
+
   const [formData, setFormData] = useState({
     name: "",
   });
@@ -72,10 +88,16 @@ function S_UserInfo() {
       [name]: value,
     });
   };
-  const handleSearch = (e) => {
-    e.preventDefault();
-    handleSearchSubject();
+  const handleClickSubject = (subjectId) => {
+    const updatedSubjects = selectedSubjects.map((subject) => {
+      if (subject.subjectId === subjectId) {
+        return { ...subject, selected: !subject.selected };
+      }
+      return subject;
+    });
+    setSelectedSubjects(updatedSubjects);
   };
+
   return (
     <S_Layout>
       <Container className="py-2">
@@ -114,49 +136,46 @@ function S_UserInfo() {
                         Select Major
                       </option>
                       {majors.map((majorOption) => (
-                        <option
-                          key={majorOption.majorId}
-                          value={majorOption.majorName}
-                        >
+                        <option key={majorOption.majorId}>
                           {majorOption.majorName}
                         </option>
                       ))}
                     </select>
                   </FormGroup>
                   <p className="my-3">Your current subjects:</p>
-                  <div
-                    style={{
-                      maxWidth: "30vw",
-                      display: "flex",
-                      justifyContent: "flex-start",
-                      alignItems: "center",
-                      paddingBottom: "40px",
-                    }}
-                  >
-                    <label className="pe-2" id="search_label" htmlFor="search">
-                      Search for:{" "}
-                    </label>
-                    <form
-                      id="search"
-                      className="form pe-0"
-                      style={{ display: "flex", flex: "1" }}
-                    >
-                      <input
-                        type="text"
-                        placeholder="Search"
-                        className="me-2 p-1"
-                        value={selectedSubjects}
-                        onChange={(e) => setSelectedSubjects(e.target.value)}
-                      />
-                      <Button
-                        variant="secondary"
-                        type="submit"
-                        onClick={handleSearch}
-                      >
-                        Go
-                      </Button>
-                    </form>
-                  </div>
+                  {selectedSubjects.length > 0 && (
+                    <div className="my-3">
+                      <strong>
+                        {" "}
+                        <FontAwesomeIcon
+                          icon={faCalendarDays}
+                          className="mx-2"
+                        />
+                        {major}
+                      </strong>
+                      <div className="my-2">
+                        <ListGroup>
+                          {selectedSubjects.map((result) => (
+                            <ListGroupItem
+                              key={result.subjectId}
+                              onClick={() =>
+                                handleClickSubject(result.subjectId)
+                              }
+                              style={{
+                                background: result.selected
+                                  ? "#a9a9a9"
+                                  : "transparent",
+                              }}
+                            >
+                              {result.subjectId} - {result.lecturerName}
+                              <FontAwesomeIcon icon={faCircleCheck} />
+                            </ListGroupItem>
+                          ))}
+                        </ListGroup>
+                      </div>
+                    </div>
+                  )}
+
                   <Button onClick={handleClickSave}>Save</Button>
                   <Button className="mx-2" variant="secondary">
                     Cancel

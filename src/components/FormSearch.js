@@ -1,12 +1,15 @@
 import React, { useState } from "react";
 import { Button } from "react-bootstrap";
 
-import { Link, useParams } from "react-router-dom/cjs/react-router-dom.min";
-const FormSearch = () => {
-  const { filter, search } = useParams();
-  const [searchText, setSearchText] = useState(search);
+import { Link } from "react-router-dom/cjs/react-router-dom.min";
+const FormSearch = (props) => {
+  const { filter, search, onSearch } = props;
+  const [searchText, setSearchText] = useState("");
   const [filterData, setFilterData] = useState("lecturer");
-  console.log(search);
+  const handleSearch = () => {
+    onSearch(filterData, searchText);
+  };
+
   return (
     <div>
       <div
@@ -30,7 +33,7 @@ const FormSearch = () => {
             className="form-select pe-0"
             style={{ maxWidth: "150px", marginRight: "10px" }}
             onChange={(e) => setFilterData(e.target.value)}
-            value={filterData}
+            value={filter}
           >
             <option value="lecturer">Lecturer</option>
             <option value="subject">Subject</option>
@@ -39,18 +42,18 @@ const FormSearch = () => {
             type="text"
             placeholder="Search"
             className="me-2 p-1"
-            value={searchText}
+            value={search}
             onChange={(e) => setSearchText(e.target.value)}
           />
+          <Button variant="secondary">
+            <Link
+              to={`/student/${filterData}/${searchText}`}
+              style={{ textDecoration: "none", color: "white" }}
+            >
+              Go
+            </Link>
+          </Button>
         </form>
-        <Button variant="secondary">
-          <Link
-            to={`/student/search/${filterData}/${searchText}`}
-            style={{ textDecoration: "none", color: "white" }}
-          >
-            Go
-          </Link>
-        </Button>
       </div>
     </div>
   );

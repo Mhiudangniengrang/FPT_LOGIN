@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import axios from "../../Services/customizeAxios";
-import { Button } from "react-bootstrap";
 
 const List = (props) => {
   const { semesters, currentSemesterIndex } = props;
