@@ -29,7 +29,7 @@ const FormSearch = () => {
             className="form-select pe-0"
             style={{ maxWidth: "150px", marginRight: "10px" }}
             onChange={(e) => setFilterData(e.target.value)}
-            value={filter}
+            value={filterData}
           >
             <option value="lecturer">Lecturer</option>
             <option value="subject">Subject</option>
@@ -38,7 +38,7 @@ const FormSearch = () => {
             type="text"
             placeholder="Search"
             className="me-2 p-1"
-            value={search}
+            value={searchText}
             onChange={(e) => setSearchText(e.target.value)}
           />
           <Button variant="secondary">

@@ -16,15 +16,6 @@ const List = (props) => {
       .catch((error) => {
         console.log("Error at list: " + error);
       });
-
-    axios
-      .get("/api/v1/user/semester")
-      .then((response) => {
-        setSemesters(response);
-      })
-      .catch((error) => {
-        console.error("Error when calling API: ", error);
-      });
   }, []);
 
   if (!semesters?.length) {
