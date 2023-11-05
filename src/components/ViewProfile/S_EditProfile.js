@@ -1,98 +1,155 @@
-import React, { useState } from "react";
-import S_SubjectList from "../SubjectList_userinfo/S_SubjectList";
-
+import React, { useState, useEffect } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faCircleCheck,
+  faCalendarDays,
+} from "@fortawesome/free-solid-svg-icons";
+import axios from "../../Services/customizeAxios";
+import { FormGroup, ListGroup, ListGroupItem } from "react-bootstrap";
+import { toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 function S_EditProfile(props) {
-  const [selectedSubjects, setSelectedSubjects] = useState([]); // Initialize with an empty array for multi-selection
-  const [name, setName] = useState(props.currentName); // Initialize the name state with the prop value
-
-  const subjects = [
-    { id: 1, name: "SWP391 - Lại Đức Hùng" },
-    { id: 2, name: "PRN211 - Nguyễn Thế Hoàng" },
-    { id: 3, name: "PRF192 - Lê Thanh Tùng" },
-    { id: 4, name: "SWR302 - Đỗ Tấn Nhàn" },
-    { id: 5, name: "CSD201 - Thân Văn Sử" },
-    { id: 6, name: "CEA201 - Bùi Anh Tuấn" },
-    { id: 7, name: "JPD113 - Trần Anh Kiều" },
-    { id: 8, name: "JPD123 - Nguyễn Hoàng Hiếu" },
-    // Add more subjects here
-  ];
-  const [filteredSubjects, setFilteredSubjects] = useState(subjects);
- 
-
+  const [name, setName] = useState();
+  const [major, setMajor] = useState("Select Major");
+  const [majorId, setMajorId] = useState(null);
+  const [majors, setMajors] = useState([]);
+  const [selectedSubjects, setSelectedSubjects] = useState([]);
   const handleUpdateProfile = () => {
-    // Assuming you have an input field for the name
-    // Get the new name value from the 'name' state
     const newName = name;
-    props.onUpdateProfile(selectedSubjects);
-    // Call the parent component's function to update the name
-    props.onUpdateName(newName);
-  };
-  const handleNameChange = (event) => {
-    setName(event.target.value); // Update the 'name' state as the user types
-  };
-  const handleSearch = (searchTerm) => {
-    const filtered = subjects.filter((subject) =>
-      subject.name.toLowerCase().includes(searchTerm.toLowerCase())
+    const selectedSubjectsToUpdate = selectedSubjects.filter(
+      (subject) => subject.selected
     );
-    setFilteredSubjects(filtered);
+
+    props.onUpdateProfile({
+      name: newName,
+      selectedSubjects: selectedSubjectsToUpdate,
+    });
+
+    toast.success("Update Successfully", {
+      position: "top-right",
+      autoClose: 3000,
+    });
   };
-  const handleSubjectSelection = (subject) => {
-    // Kiểm tra xem môn học đã được chọn trước đó chưa
-    if (
-      !selectedSubjects.some(
-        (selectedSubject) => selectedSubject.id === subject.id
-      )
-    ) {
-      setSelectedSubjects([...selectedSubjects, subject]);
+
+  const handleNameChange = (event) => {
+    setName(event.target.value);
+  };
+
+  useEffect(() => {
+    axios
+      .get("/api/v1/student/searching/majors")
+      .then((response) => {
+        setMajors(response);
+        if (response.length > 0) {
+          setMajorId(response[0].majorId);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching majors:", error);
+      });
+  }, []);
+
+  const handleMajorChange = (event) => {
+    setMajor(event.target.value);
+    const selectedMajor = majors.find(
+      (majorOption) => majorOption.majorName === event.target.value
+    );
+    if (selectedMajor) {
+      setMajorId(selectedMajor.majorId);
     }
-    // Nếu môn học đã được chọn, bạn có thể xử lý theo ý muốn, ví dụ: thông báo lỗi hoặc không thêm vào danh sách.
-    else {
-      // Xử lý trường hợp môn học đã được chọn
-      // Ví dụ: alert("Môn học đã được chọn trước đó");
+  };
+
+  useEffect(() => {
+    if (majorId) {
+      axios
+        .get(`/api/v1/student/searching/subjects/major/${majorId}`)
+        .then((res) => {
+          setSelectedSubjects(res);
+          // console.log(res);
+        })
+        .catch((error) => {
+          console.error("Error", error);
+        });
     }
+  }, [majorId]);
+  const handleClickSubject = (subjectId) => {
+    const updatedSubjects = selectedSubjects.map((subject) => {
+      if (subject.subjectId === subjectId) {
+        return { ...subject, selected: !subject.selected };
+      }
+      return subject;
+    });
+    setSelectedSubjects(updatedSubjects);
   };
 
   return (
     <div>
       <h3>Edit Profile</h3>
-
-      <form>
-        <div className="form-group">
-          <label>Name:</label>
-          <input
-            type="text"
-            className="form-control"
-            
-            onChange={handleNameChange}
-          />
-        </div>
-        <div className="form-group">
-          <label>Course:</label>
-
-          {selectedSubjects.map((subject) => (
-            <li key={subject.id}>{subject.name}</li>
+      <div className="form-group">
+        <label>Name:</label>
+        <input
+          type="text"
+          className="form-control"
+          onChange={handleNameChange}
+        />
+      </div>
+      <FormGroup>
+        <label htmlFor="major">Major:</label>
+        <select
+          className="mx-2 my-3"
+          value={major}
+          onChange={handleMajorChange}
+        >
+          <option value="Select Major" disabled hidden>
+            Select Major
+          </option>
+          {majors.map((majorOption) => (
+            <option key={majorOption.majorId}>{majorOption.majorName}</option>
           ))}
-
-          <S_SubjectList
-            subjects={filteredSubjects}
-            onSearch={handleSearch}
-            onSubjectSelect={handleSubjectSelection}
-          />
-        </div>
-        <div>
-          <button
-            type="button"
-            className="btn btn-primary  "
-            onClick={handleUpdateProfile}
-          >
-            Update Profile
-          </button>
-          <button type="button" className="btn btn-secondary mx-2">
-            Cancel
-          </button>
-        </div>
-      </form>
-      
+        </select>
+      </FormGroup>
+      <div className="form-group ">
+        <p className="my-3">Course:</p>
+        {selectedSubjects.length > 0 && (
+          <div className="my-3">
+            <strong>
+              {" "}
+              <FontAwesomeIcon icon={faCalendarDays} className="mx-2" />
+              {major}
+            </strong>
+            <div className="my-2">
+              <ListGroup>
+                {selectedSubjects.map((result) => (
+                  <ListGroupItem
+                    key={result.subjectId}
+                    onClick={() => handleClickSubject(result.subjectId)}
+                    style={{
+                      background: result.selected ? "#a9a9a9" : "transparent",
+                    }}
+                  >
+                    {result.subjectId} - {result.lecturerName}{" "}
+                    <FontAwesomeIcon icon={faCircleCheck} />
+                  </ListGroupItem>
+                ))}
+              </ListGroup>
+            </div>
+          </div>
+        )}
+      </div>
+      <div>
+        <button
+          type="button"
+          className="btn btn-primary  "
+          onClick={handleUpdateProfile}
+        >
+          Update Profile
+        </button>
+        <button type="button" className="btn btn-secondary mx-2">
+          Cancel
+        </button>
+      </div>
+      <ToastContainer />
     </div>
   );
 }

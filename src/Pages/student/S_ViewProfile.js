@@ -14,41 +14,39 @@ import S_EditProfile from "../../components/ViewProfile/S_EditProfile";
 import S_Layout from "../../Layouts/S_Layout";
 import { useLocation } from "react-router-dom";
 import S_Course from "../../components/ViewProfile/S_Course";
+import { useHistory } from "react-router-dom";
 
 function S_ViewProfile() {
   const [activeTab, setActiveTab] = useState("course");
   const [course, setCourse] = useState([]);
-  const [name, setName] = useState(""); // Tên người dùng
-
+  const [name, setName] = useState("");
+  const history = useHistory();
   const location = useLocation();
-  const state = location.state; // Initialize the state variable
+  const state = location.state;
 
   useEffect(() => {
     if (state && state.name) {
-      // Kiểm tra xem có tên (name) trong location.state hay không
       setName(state.name);
     }
 
-    // Cập nhật các thông tin khác
     if (state && state.selectedSubjects) {
       setCourse(state.selectedSubjects);
     }
   }, [state]);
-  const handleUpdateProfile = (selectedSubjects) => {
-    const course = selectedSubjects.map((subject) => ({
-      id: subject.id,
-      name: subject.name,
-    }));
 
-    setCourse(course);
+  const handleUpdateProfile = (updatedData) => {
+    history.replace({
+      ...location,
+      state: updatedData,
+    });
   };
   const breadScrumData = [
     {
-      route: "/student_home",
+      route: "/student",
       text: "Home",
     },
     {
-      route: "/s_view_profile",
+      route: "/student/viewprofile",
       text: "View Profile",
     },
   ];
@@ -98,8 +96,6 @@ function S_ViewProfile() {
                         {activeTab === "course" && <S_Course course={course} />}
                         {activeTab === "editprofile" && (
                           <S_EditProfile
-                            onUpdateName={(newName) => setName(newName)}
-                            currentName={name}
                             onUpdateProfile={handleUpdateProfile}
                           />
                         )}
