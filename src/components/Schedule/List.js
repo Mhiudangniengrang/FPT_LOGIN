@@ -11,36 +11,12 @@ const List = (props) => {
     axios
       .get(`/api/v1/subject/admin/bookedSlot/homePage/${studentId}`)
       .then((response) => {
-<<<<<<< HEAD
-        setList(response.content); 
-=======
         setList(response);
->>>>>>> get-lecturer
       })
       .catch((error) => {
         console.log("Error at list: " + error);
       });
   }, []);
-<<<<<<< HEAD
-  useEffect(() => {
-    axios
-      .get("/api/v1/semesters")
-      .then((response) => {
-        console.log(response);
-        // setSemesters(response);
-      })
-      .catch((error) => {
-        console.error("Lỗi khi gọi API: ", error);
-      });
-  }, []);
-  useEffect(() => {
-    if (semesters.length > 0) {
-      // Find the "Fall 2023" semester
-      const fallSemester = semesters.find(
-        (semester) => semester.semesterName === "Fall 2023"
-      );
-=======
->>>>>>> get-lecturer
 
   if (!semesters?.length) {
     return (
