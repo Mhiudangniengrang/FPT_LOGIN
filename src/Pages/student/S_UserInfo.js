@@ -10,6 +10,7 @@ import {
   Form,
   ListGroup,
   ListGroupItem,
+  Spinner,
 } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
 import S_Layout from "../../Layouts/S_Layout";
@@ -21,21 +22,22 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 import axios from "../../Services/customizeAxios";
+import { useData } from "../../context/DataContext";
 function S_UserInfo() {
   const history = useHistory();
-  const [major, setMajor] = useState("Select Major");
   const [selectedSubjects, setSelectedSubjects] = useState([]);
+  const [subjects, setSubjects] = useState([]);
   const [majors, setMajors] = useState([]);
-  const [majorId, setMajorId] = useState(null);
+  const [selectedMajor, setSelectedMajor] = useState(null);
+  const [loading, isLoading] = useState(true);
+  const { loginUser } = useData();
 
+  console.log(loginUser);
   useEffect(() => {
     axios
       .get("/api/v1/student/searching/majors")
       .then((response) => {
         setMajors(response);
-        if (response.length > 0) {
-          setMajorId(response[0].majorId);
-        }
       })
       .catch((error) => {
         console.error("Error fetching majors:", error);
@@ -43,38 +45,40 @@ function S_UserInfo() {
   }, []);
 
   useEffect(() => {
-    if (majorId) {
+    if (selectedMajor) {
+      const item = majors.find((major) => major.majorName === selectedMajor);
+
+      console.log(item);
+
       axios
-        .get(`/api/v1/student/searching/subjects/major/${majorId}`)
+        .get(`/api/v1/student/searching/subjects/major/${item.majorId}`)
         .then((res) => {
-          setSelectedSubjects(res);
+          setSubjects(res);
           // console.log(res);
         })
         .catch((error) => {
           console.error("Error", error);
+        })
+        .finally(() => {
+          isLoading(false);
         });
     }
-  }, [majorId]);
+  }, [selectedMajor]);
 
-  const handleMajorChange = (event) => {
-    setMajor(event.target.value);
-    const selectedMajor = majors.find(
-      (majorOption) => majorOption.majorName === event.target.value
-    );
-    if (selectedMajor) {
-      setMajorId(selectedMajor.majorId);
+  const saveSelectedSubjects = () => {
+    try {
+      const selectedSubjectsStr = selectedSubjects
+        .map((subject) => `${subject.subjectId} - ${subject.lecturerName}`)
+      history.push({
+        pathname: `/student/viewprofile`,
+        state: {
+          selectedSubjects: selectedSubjectsStr,
+        },
+      });
+      // console.log(selectedSubjectsStr);
+    } catch (err) {
+      console.error("Error creating URL:", err);
     }
-  };
-
-  const handleClickSave = () => {
-    const selectedSubjectsToUpdate = selectedSubjects.filter(
-      (subject) => subject.selected
-    );
-
-    history.push("/student/viewprofile", {
-      selectedSubjects: selectedSubjectsToUpdate,
-      name: formData.name,
-    });
   };
 
   const [formData, setFormData] = useState({
@@ -88,14 +92,21 @@ function S_UserInfo() {
       [name]: value,
     });
   };
-  const handleClickSubject = (subjectId) => {
-    const updatedSubjects = selectedSubjects.map((subject) => {
-      if (subject.subjectId === subjectId) {
-        return { ...subject, selected: !subject.selected };
+  const handleClickSubject = (item) => {
+    setSelectedSubjects((prevSubjects) => {
+      if (prevSubjects.includes(item)) {
+        return prevSubjects.filter((subject) => subject !== item);
+      } else {
+        return [...prevSubjects, item];
       }
-      return subject;
     });
-    setSelectedSubjects(updatedSubjects);
+  };
+
+  const isActive = (item) => {
+    if (selectedSubjects.some((subject) => subject === item)) {
+      return "active";
+    }
+    return "";
   };
 
   return (
@@ -129,8 +140,10 @@ function S_UserInfo() {
                       className="mx-2"
                       id="major"
                       name="major"
-                      value={major}
-                      onChange={handleMajorChange}
+                      value={selectedMajor}
+                      onChange={(e) => {
+                        setSelectedMajor(e.target.value);
+                      }}
                     >
                       <option value="Select Major" disabled hidden>
                         Select Major
@@ -143,7 +156,7 @@ function S_UserInfo() {
                     </select>
                   </FormGroup>
                   <p className="my-3">Your current subjects:</p>
-                  {selectedSubjects.length > 0 && (
+                  {subjects.length > 0 && (
                     <div className="my-3">
                       <strong>
                         {" "}
@@ -151,24 +164,20 @@ function S_UserInfo() {
                           icon={faCalendarDays}
                           className="mx-2"
                         />
-                        {major}
+                        {selectedMajor.majorName}
                       </strong>
                       <div className="my-2">
                         <ListGroup>
-                          {selectedSubjects.map((result) => (
+                          {subjects.map((result) => (
                             <ListGroupItem
-                              key={result.subjectId}
-                              onClick={() =>
-                                handleClickSubject(result.subjectId)
-                              }
-                              style={{
-                                background: result.selected
-                                  ? "#a9a9a9"
-                                  : "transparent",
-                              }}
+                              onClick={() => handleClickSubject(result)}
+                              className={`${isActive(result)}`}
                             >
                               {result.subjectId} - {result.lecturerName}
-                              <FontAwesomeIcon icon={faCircleCheck} />
+                              <FontAwesomeIcon
+                                className="mx-2"
+                                icon={faCircleCheck}
+                              />
                             </ListGroupItem>
                           ))}
                         </ListGroup>
@@ -176,7 +185,7 @@ function S_UserInfo() {
                     </div>
                   )}
 
-                  <Button onClick={handleClickSave}>Save</Button>
+                  <Button onClick={saveSelectedSubjects}>Save</Button>
                   <Button className="mx-2" variant="secondary">
                     Cancel
                   </Button>

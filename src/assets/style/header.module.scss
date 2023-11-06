@@ -25,6 +25,13 @@
             font-weight: 600;
         }
 
+        .truncate_text {
+            a {
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+        }
+
         .notify_icon {
             padding-right: 20px;
             position: relative;

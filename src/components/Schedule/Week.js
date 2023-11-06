@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useMemo } from 'react';
 import Style from '../../assets/style/schedule.module.scss'
 import { Stack, Table } from 'react-bootstrap';
 import GlobalContext from '../../context/GlobalContext';
@@ -10,97 +10,87 @@ import 'react-datepicker/dist/react-datepicker-cssmodules.css';
 import { getDaysInWeek, getFullDaysInWeek } from '../../Utils/dateUtils';
 import { useEffect } from 'react';
 import dayjs from 'dayjs';
+import { useData } from '../../context/DataContext';
 
 
 const slotTime = [
-  {
-    slot: "1",
-    start: "7:00",
-    end: "9:15",
-  },
-  {
-    slot: "2",
-    start: "9:30",
-    end: "11:45",
-  },
-  {
-    slot: "3",
-    start: "12:30",
-    end: "14:45",
-  },
-  {
-    slot: "4",
-    start: "15:00",
-    end: "17:15",
-  },
-  {
-    slot: "5",
-    start: "17:30",
-    end: "19:45",
-  },
-  {
-    slot: "6",
-    start: "20:00",
-    end: "22:15",
-  },
+    {
+        slot: "1",
+        start: "7:00",
+        end: "9:15",
+    },
+    {
+        slot: "2",
+        start: "9:30",
+        end: "11:45",
+    },
+    {
+        slot: "3",
+        start: "12:30",
+        end: "14:45",
+    },
+    {
+        slot: "4",
+        start: "15:00",
+        end: "17:15",
+    },
+    {
+        slot: "5",
+        start: "17:30",
+        end: "19:45",
+    },
+    {
+        slot: "6",
+        start: "20:00",
+        end: "22:15",
+    },
 ];
 
 const daysOfWeek = [
-  "Sunday",
-  "Monday",
-  "Tuesday",
-  "Wednesday",
-  "Thursday",
-  "Friday",
-  "Saturday",
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
 ];
 
 const timeSlots = ["Slot 1", "Slot 2", "Slot 3", "Slot 4", "Slot 5", "Slot 6"];
 
-const lecturerId = 2
 function WeeklyCalendar({ isDisable = false }) {
-
+    const lecturerId = typeof window != null ? sessionStorage.getItem("lecturerId") : null
+    const [rooms, setRooms] = useState([]);
     const [emptySlot, setEmptySlot] = useState([])
+    const { loginUser } = useData()
 
+    const { setShowSlotModal, setDaySelected, setSelectedSlot, selectedSlot } = useContext(GlobalContext);
+    const [selectedDate, setSelectedDate] = useState(new Date());
+    console.log(selectedSlot)
+
+    const getRoom = () => {
+        axios
+            .get(`/api/v1/slots/lecturer/room`)
+            .then((response) => {
+                setRooms(response)
+            }).catch(error => {
+                console.log('Error at Data Context:', error)
+            })
+    }
     useEffect(() => {
         if (!isDisable) {
             axios
                 .get(`/api/v1/user/emptySlot/lecturer/${lecturerId}`)
                 .then((response) => {
-                    response.map((slot) => {
-                        setEmptySlot((prevSlot) => ([
-                            ...prevSlot,
-                            slot
-                        ]))
-                    })
+                    setEmptySlot(response)
+                    getRoom()
+                    console.log(response)
                 })
                 .catch(error => {
                     console.log("Error at Week.js " + error)
                 })
         }
-    }, [])
-
-
-    const { role, selectedSlot, setSelectedSlot, setShowSlotModal, setDaySelected } = useContext(GlobalContext);
-    const [selectedDate, setSelectedDate] = useState(new Date());
-
-  const handleDayClick = (day, timeSlot, subjectSlot, purposeSlot) => {
-    let j = timeSlots.indexOf(timeSlot);
-
-        setShowSlotModal(true);
-        const value = slotTime.find(item => item.slot == j + 1)
-        let time = `${value.start} - ${value.end}`
-        setSelectedSlot(() => (
-            {
-                slotTimeId: j + 1,
-                dateStart: day,
-                timeStart: `${time}`,
-                subjectId: subjectSlot,
-                purpose: purposeSlot,
-            }
-        ));
-
-    };
+    }, [lecturerId])
 
     const handleCreateClick = (day) => {
         let year = dayjs(selectedDate).year().toString()
@@ -121,6 +111,11 @@ function WeeklyCalendar({ isDisable = false }) {
         return false;
     }
 
+    const handleDayClick = (meeting) => {
+        setSelectedSlot(meeting)
+        setShowSlotModal(true)
+    }
+
     return (
         <div>
             <Table responsive striped bordered>
@@ -133,7 +128,7 @@ function WeeklyCalendar({ isDisable = false }) {
                         >
                             <Stack direction='horizontal' gap='3'
                                 style={{
-                                    padding: '10px',
+                                    padding: '10px 0',
                                 }}
                             >
                                 <div>
@@ -173,11 +168,11 @@ function WeeklyCalendar({ isDisable = false }) {
                                 <th key={index}
                                     className={Style.createContain}
                                 >
-                                    {(role === "lecturer" && checkDate(day)) && (
+                                    {checkDate(day) && (
                                         <span
                                             className={Style.create}
                                             onClick={() => {
-                                                if (role === "lecturer") handleCreateClick(day)
+                                                handleCreateClick(day)
                                             }}
                                         ></span>
                                     )}
@@ -206,28 +201,35 @@ function WeeklyCalendar({ isDisable = false }) {
                                         emptySlot.map((meeting) => {
                                             {
                                                 if (meeting.dateStart === day && meeting.slotTimeId == slot.charAt(5)) {
-                                                    switch (role) {
-                                                        case "student":
-                                                            {
-                                                                return (
-                                                                    <div>student meeting schedule</div>
-                                                                )
-                                                                break;
-                                                            }
-                                                        case "lecturer":
-                                                            {
-                                                                return (
-                                                                    <div
-                                                                        className={Style.slot}
-                                                                    // onClick={() => handleDayClick()}
-                                                                    >
-                                                                        <span> SWP </span>
-                                                                        <span>- room 104 -</span>
-                                                                        <span> (7:30-8:00)</span>
-                                                                    </div>)
-                                                                break;
-                                                            }
-                                                    }
+                                                    return (
+                                                        meeting.status === "OPEN" ? (
+                                                            <div
+                                                                key={meeting.slotId}
+                                                                className={Style.slot}
+                                                                style={{
+                                                                    border: "4px solid green"
+                                                                }}
+                                                                onClick={() => handleDayClick(meeting)}
+                                                            >
+                                                                <span> </span>
+                                                                <span>Room {meeting.roomId} -</span>
+                                                                <span> {meeting.timeStart}</span><br></br>
+                                                                <span> Duration {meeting.duration}</span>
+                                                            </div>
+                                                        ) : <div
+                                                            key={meeting.slotId}
+                                                            className={Style.slot}
+                                                            style={{
+                                                                border: "4px solid red"
+                                                            }}
+                                                            onClick={() => handleDayClick(meeting)}
+                                                        >
+                                                            <span>Subject {meeting.subjectId} -</span>
+                                                            <span>Room {meeting.roomId} -</span>
+                                                            <span> {meeting.timeStart}</span><br></br>
+                                                            <span> Duration {meeting.duration}</span>
+                                                        </div>
+                                                    )
                                                 } return null
                                             }
                                         })

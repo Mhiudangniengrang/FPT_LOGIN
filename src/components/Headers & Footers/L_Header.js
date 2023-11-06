@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 
-import Style from "../assets/style/header.module.scss";
+import Style from "../../assets/style/header.module.scss";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBell } from "@fortawesome/free-solid-svg-icons";
@@ -17,10 +17,10 @@ import { Stack } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import { NavLink } from "react-router-dom";
 
-import HorizontalStack from "./HorizontalStack";
-import CustomNavDropdown from "./DropDownStack";
-import GlobalContext from "../context/GlobalContext";
-import { getDateFormat } from "../Utils/dateUtils";
+import HorizontalStack from "../HorizontalStack";
+import CustomNavDropdown from "../DropDownStack";
+import GlobalContext from "../../context/GlobalContext";
+import { useData } from "../../context/DataContext";
 
 const dropdownItems = [
   {
@@ -38,18 +38,12 @@ const dropdownItems = [
 ];
 
 const L_Header = () => {
-  const { daySelected, setShowSlotModal, setSelectedSlot } =
+  const { daySelected, setShowSlotModal, setDaySelected } =
     useContext(GlobalContext);
-
+  const { loginUser } = useData()
   const handleCreateClick = () => {
     setShowSlotModal(true);
-    let date = getDateFormat(new Date());
-    console.log("date" + date);
-    setSelectedSlot(() => ({
-      slot: {
-        date: date,
-      },
-    }));
+    setDaySelected(new Date)
   };
   return (
     <Stack className={Style.container}>
@@ -58,9 +52,12 @@ const L_Header = () => {
           <FontAwesomeIcon icon={faBell} color="#fff" size="xl" />
         </div>
         <NavDropdown
-          className={Style.nav}
-          title="Teacher [Hungld]"
+          className={`${Style.nav} ${Style.truncate_text}`}
+          title={`Lecturer [${loginUser.userName}]`}
           id="nav-dropdown"
+          style={{
+            maxWidth: '200px'
+          }}
         >
           <NavDropdown.Item
             href="/lecturer/viewprofile"
@@ -70,7 +67,7 @@ const L_Header = () => {
               style={{ color: "#000000", paddingRight: " 5px" }}
             />
 
-            View Profile
+            {loginUser.userName}
           </NavDropdown.Item>
           <NavDropdown.Item
             href="/lecturer/viewprofile"
@@ -90,7 +87,9 @@ const L_Header = () => {
             />
             View Meeting
           </NavDropdown.Item>
-          <NavDropdown.Item>
+          <NavDropdown.Item
+            href="/"
+          >
             <FontAwesomeIcon
               icon={faRightFromBracket}
               style={{ color: "#050505", paddingRight: " 5px" }}
@@ -108,20 +107,14 @@ const L_Header = () => {
           className="ms-auto"
           variant="light"
           style={{ borderRadius: "10px" }}
+          onClick={() => handleCreateClick()}
         >
           <FontAwesomeIcon
             icon={faCirclePlus}
             style={{ color: "#fa8334", paddingRight: "10px" }}
+
           />
-          <a href="#create_slot"
-            style={{
-              textDecorationLine: "none",
-              color: "#000",
-            }}
-            onClick={() => handleCreateClick()}
-          >
-            Create Slot
-          </a>
+          Create Slot
         </Button>
       </Stack>
       <Stack direction="horizontal" gap={5} className={Style.div3}>

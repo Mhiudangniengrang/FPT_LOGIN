@@ -15,24 +15,16 @@ import S_Layout from "../../Layouts/S_Layout";
 import { useLocation } from "react-router-dom";
 import S_Course from "../../components/ViewProfile/S_Course";
 import { useHistory } from "react-router-dom";
+import { useData, useDataCourse } from "../../context/DataContext";
 
 function S_ViewProfile() {
   const [activeTab, setActiveTab] = useState("course");
-  const [course, setCourse] = useState([]);
   const [name, setName] = useState("");
   const history = useHistory();
   const location = useLocation();
-  const state = location.state;
+  const selectedSubjectsStr = location.state?.selectedSubjects;
 
-  useEffect(() => {
-    if (state && state.name) {
-      setName(state.name);
-    }
-
-    if (state && state.selectedSubjects) {
-      setCourse(state.selectedSubjects);
-    }
-  }, [state]);
+  const { loginUser } = useData();
 
   const handleUpdateProfile = (updatedData) => {
     history.replace({
@@ -93,7 +85,9 @@ function S_ViewProfile() {
                     </Button>
                     <Card className="my-3">
                       <CardBody>
-                        {activeTab === "course" && <S_Course course={course} />}
+                        {activeTab === "course" && (
+                          <S_Course selectedSubjects={selectedSubjectsStr} />
+                        )}
                         {activeTab === "editprofile" && (
                           <S_EditProfile
                             onUpdateProfile={handleUpdateProfile}

@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useContext } from "react";
 import dayjs from "dayjs";
 import { Button, Card, Stack } from "react-bootstrap";
-import WeeklyCalendar from "./Schedule/Week";
-import Month from "./Schedule/Month";
-import List from "./Schedule/List";
+import WeeklyCalendar from "./Week";
+import Month from "./Month";
+import List from "./List";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretRight, faCaretLeft } from "@fortawesome/free-solid-svg-icons";
 import {
@@ -12,14 +12,17 @@ import {
   getMonth,
   getStartOfWeekFormatted,
   subDaysByOne,
-} from "../Utils/dateUtils";
-import GlobalContext from "../context/GlobalContext";
-import axios from "../Services/customizeAxios";
+} from "../../Utils/dateUtils";
+import GlobalContext from "../../context/GlobalContext";
+import { useData } from "../../context/DataContext";
+import S_WeeklyCalendar from "./S_Week";
+import axios from "../../Services/customizeAxios";
 
 const Calender_type = () => {
+  const { loginUser } = useData();
   const [activeButton, setActiveButton] = useState("week");
   const [currentMonth, setCurrentMonth] = useState(getMonth());
-  const { role, setMonthIndex, monthIndex, daySelected, setDaySelected } =
+  const { setMonthIndex, monthIndex, daySelected, setDaySelected } =
     useContext(GlobalContext);
 
   useEffect(() => {
@@ -57,7 +60,6 @@ const Calender_type = () => {
   const [currentSemesterIndex, setCurrentSemesterIndex] = useState(0);
 
   useEffect(() => {
-    // Gọi API bằng Axios và lấy dữ liệu
     axios
       .get("/api/v1/user/semester")
       .then((response) => {
@@ -93,6 +95,7 @@ const Calender_type = () => {
       <div>
         <h2
           style={{
+            padding: "0",
             marginLeft: "1rem",
             fontSize: "1.25rem",
             lineHeight: "1.75rem",
@@ -107,7 +110,6 @@ const Calender_type = () => {
               " - " +
               getEndOfWeekFormatted(daySelected)}
           {activeButton === "list" && (
-            // <div>PASSED</div>
             <div className="d-flex justify-content-between">
               <Button variant="secondary" onClick={handleClickPrev}>
                 Previous
@@ -218,17 +220,39 @@ const Calender_type = () => {
         </Stack>
         {activeButton && (
           <div className="text-center">
-            <Card.Body>
-              {activeButton === "day" && <p>List content goes here.</p>}
-              {activeButton === "week" && <WeeklyCalendar isDisable={false} />}
-              {activeButton === "month" && <Month month={currentMonth} />}
-              {activeButton === "list" && (
-                <List
-                  semesters={semesters}
-                  currentSemesterIndex={currentSemesterIndex}
-                />
-              )}
-            </Card.Body>
+            {loginUser.roleName === "LECTURER" && (
+              <Card.Body>
+                {activeButton === "day" && (
+                  <p>Lecturer's Day content goes here.</p>
+                )}
+                {activeButton === "week" && (
+                  <WeeklyCalendar isDisable={false} />
+                )}
+                {activeButton === "month" && <Month month={currentMonth} />}
+                {activeButton === "list" && (
+                  <List
+                    semesters={semesters}
+                    currentSemesterIndex={currentSemesterIndex}
+                  />
+                )}{" "}
+              </Card.Body>
+            )}
+
+            {loginUser.roleName === "STUDENT" && (
+              <Card.Body>
+                {activeButton === "day" && (
+                  <p>Student's Day content goes here.</p>
+                )}
+                {activeButton === "week" && <S_WeeklyCalendar />}
+                {activeButton === "month" && <Month month={currentMonth} />}
+                {activeButton === "list" && (
+                  <List
+                    semesters={semesters}
+                    currentSemesterIndex={currentSemesterIndex}
+                  />
+                )}
+              </Card.Body>
+            )}
           </div>
         )}
       </div>

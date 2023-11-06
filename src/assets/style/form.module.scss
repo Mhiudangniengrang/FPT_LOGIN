@@ -77,3 +77,47 @@
         }
     }
 }
+
+.tableRowOnClick {
+    cursor: pointer;
+
+    &:hover td {
+        background-color: #d5d8d5;
+
+    }
+}
+
+.searchContainer {
+    a {
+        color: #333;
+        text-decoration: none;
+    }
+
+    .teacher {
+        &:hover {
+            color: #FB9553
+        }
+
+        &:active {
+            background-color: rgba($color: #FB9553, $alpha: 0.2);
+            border-bottom: 2px solid black;
+        }
+    }
+
+    .subject {
+        &:hover {
+            color: #FB9553
+        }
+
+        &:active {
+            background-color: rgba($color: #FB9553, $alpha: 0.2);
+            border-bottom: 1px solid black;
+        }
+    }
+
+    .icon {
+        &:hover {
+            color: #FB9553
+        }
+    }
+}

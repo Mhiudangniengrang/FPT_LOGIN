@@ -3,15 +3,13 @@ import WeeklyCalendar from "../../components/Schedule/Week";
 import L_Layout from "../../Layouts/L_Layout";
 import Breadcrumbs from "../../components/BreadcrumpCus";
 
-
-
 const path = [
     {
-        route: '/lecturer_home',
+        route: '/lecturer',
         text: 'Home',
     },
     {
-        route: '/l_view_teaching_schedule',
+        route: '/lecturer/teachingschedule',
         text: 'View Teaching Schedule',
     },
 ]

@@ -10,10 +10,10 @@ import {
     faMagnifyingGlass,
     faCalendarDays
 } from "@fortawesome/free-solid-svg-icons";
-// import RelatedCourse from "../Slot & Course/RealatedCourse";
+import RelatedCourse from "../Slot & Course/RealatedCourse";
 import Breadcrumbs from "../BreadcrumpCus"
 import Style from "../../assets/style/form.module.scss"
-// import { useData } from "../../context/DataContext";
+import { useData } from "../../context/DataContext";
 
 const path = [
     {
@@ -32,7 +32,7 @@ const S_ViewSearch = () => {
     const [searchLecture, setSearchLecture] = useState([]);
     const history = useHistory();
 
-    // const { loginUser } = useData();
+    const { loginUser } = useData();
 
     const handleClickSendRequest = (subject) => {
         //axios post
@@ -221,7 +221,7 @@ const S_ViewSearch = () => {
                 className="mb-3"
             >
                 <Tab eventKey="related" title="Related Courses">
-                    {/* <RelatedCourse /> */}
+                    <RelatedCourse />
                 </Tab>
             </Tabs>
         </S_Layout >

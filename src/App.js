@@ -6,6 +6,9 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import BaseRoutes from "./Routers/BaseRoutes";
 import StudentRoutes from "./Routers/StudentRoutes";
 import LecturerRoutes from "./Routers/LecturerRoutes";
+import { DataProvider } from "./context/DataContext";
+import PageLoading from "./components/PageLoad";
+import S_Course from "./components/ViewProfile/S_Course";
 
 function App() {
   return (
@@ -15,22 +18,20 @@ function App() {
           {StudentRoutes.map((route, idx) => {
             const Page = route.component;
             return (
-              <Route
-                key={idx}
-                exact path={route.path}
-              >
-                <Page />
+              <Route key={idx} exact path={route.path}>
+                <DataProvider role={"STUDENT"}>
+                  <Page />
+                </DataProvider>
               </Route>
             );
           })}
           {LecturerRoutes.map((route, idx) => {
             const Page = route.component;
             return (
-              <Route
-                key={idx}
-                exact path={route.path}
-              >
-                <Page />
+              <Route key={idx} exact path={route.path}>
+                <DataProvider role={"LECTURER"}>
+                  <Page />
+                </DataProvider>
               </Route>
             );
           })}

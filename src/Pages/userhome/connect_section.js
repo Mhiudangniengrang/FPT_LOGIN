@@ -1,7 +1,31 @@
 import React from "react";
 import Style from '../../assets/style/connect_section.module.scss';
-import ButtonLink from "../../components/ButtonLink";
+
+import { GoogleOAuthProvider } from "@react-oauth/google";
+import { GoogleLogin } from "@react-oauth/google";
+import axios from "../../Services/customizeAxios";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import { useContext } from "react";
+import GlobalContext from "../../context/GlobalContext";
 export default function Connect_section() {
+    const history = useHistory();
+    const { setAccessToken } = useContext(GlobalContext);
+    const handleLoginSuccess = (credentialResponse) => {
+        const accessToken = credentialResponse.credential;
+        setAccessToken(accessToken)
+        axios
+            .get("/api/v1/user/userId", {
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`,
+                }
+            })
+            .then((response) => {
+                history.push(`/${response.roleName}`)
+            })
+            .catch(error => {
+                console.log("Error getting user data:", error);
+            });
+    };
 
     return (
 
@@ -22,7 +46,14 @@ export default function Connect_section() {
                         </div>
                     </div>
                     <div>
-                        <ButtonLink text="Login" link="/login" style={{ padding: "10px 40px", backgroundColor: 'rgb(255, 87, 34)', border: 'none' }} />
+                        <GoogleOAuthProvider clientId="557005058309-0088dfrc1trmtp5sn1im019as1rt3ofq.apps.googleusercontent.com">
+                            <GoogleLogin
+                                onSuccess={handleLoginSuccess}
+                                onError={() => {
+                                    console.log("Login Failed");
+                                }}
+                            />
+                        </GoogleOAuthProvider>
                     </div>
                 </div>
             </div>

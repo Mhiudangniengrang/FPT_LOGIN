@@ -3,15 +3,10 @@ import dayjs from "dayjs";
 import GlobalContext from "../../context/GlobalContext";
 import Style from '../../assets/style/month.module.scss'
 
-
-export default function Day({ day, rowIdx }) {
-
+export default function Day({ day, rowIdx, slots }) {
     const {
-        role,
-        selectedSlot,
         setShowSlotModal,
         setDaySelected,
-        setSelectedSlot,
     } = useContext(GlobalContext);
 
     function getCurrentDayClass() {
@@ -43,7 +38,17 @@ export default function Day({ day, rowIdx }) {
                     setShowSlotModal(true)
                 }}
             >
-                ngu
+                {slots &&
+                    slots.map(slot => (
+                        <>
+                            <div
+                                className={Style.dayEvent}
+                            >
+                                {slot.dateStart} - {slot.slotTimeId}
+                            </div>
+                        </>
+                    ))
+                }
             </div>
         </div>
     );

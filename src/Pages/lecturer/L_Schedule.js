@@ -7,7 +7,7 @@ import BookPublicOverlay from "../../components/Schedule/BookPublicOverlay";
 import OffCanvasSidebar from "../../components/OffCanvasSidebar";
 
 import GlobalContext from "../../context/GlobalContext";
-import Calender_type from "../../components/Calender_type";
+import Calender_type from "../../components/Schedule/Calender_type";
 import Breadcrumbs from "../../components/BreadcrumpCus";
 
 const path = [
