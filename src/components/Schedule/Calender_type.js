@@ -18,8 +18,8 @@ import { useData } from "../../context/DataContext";
 import S_WeeklyCalendar from "./S_Week";
 import axios from "../../Services/customizeAxios";
 
-const Calender_type = () => {
-  const { loginUser } = useData();
+const Calender_type = (type) => {
+  const { loginUser } = useData()
   const [activeButton, setActiveButton] = useState("week");
   const [currentMonth, setCurrentMonth] = useState(getMonth());
   const { setMonthIndex, monthIndex, daySelected, setDaySelected } =
@@ -222,19 +222,10 @@ const Calender_type = () => {
           <div className="text-center">
             {loginUser.roleName === "LECTURER" && (
               <Card.Body>
-                {activeButton === "day" && (
-                  <p>Lecturer's Day content goes here.</p>
-                )}
-                {activeButton === "week" && (
-                  <WeeklyCalendar isDisable={false} />
-                )}
-                {activeButton === "month" && <Month month={currentMonth} />}
-                {activeButton === "list" && (
-                  <List
-                    semesters={semesters}
-                    currentSemesterIndex={currentSemesterIndex}
-                  />
-                )}{" "}
+                {(activeButton === 'day' || type === 'day') && <p>Lecturer's Day content goes here.</p>}
+                {(activeButton === 'week' || type === 'week') && <WeeklyCalendar isDisable={false} />}
+                {(activeButton === 'month' || type === 'month') && <Month month={currentMonth} />}
+                {(activeButton === 'list' || type === 'list') && <List />}
               </Card.Body>
             )}
 

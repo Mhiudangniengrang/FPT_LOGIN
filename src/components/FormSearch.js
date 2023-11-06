@@ -27,7 +27,7 @@ const FormSearch = () => {
         >
           <select
             className="form-select pe-0"
-            style={{ maxWidth: "150px", marginRight: "10px" }}
+            style={{ minWidth: "100px", maxWidth: "150px", marginRight: "10px" }}
             onChange={(e) => setFilterData(e.target.value)}
             value={filterData}
           >

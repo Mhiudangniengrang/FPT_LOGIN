@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsisVertical } from '@fortawesome/free-solid-svg-icons'
 import { faXmark } from '@fortawesome/free-solid-svg-icons'
 import Style from '../../assets/style/form.module.scss'
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useMemo } from 'react';
 import GlobalContext from '../../context/GlobalContext';
 import { useState } from 'react';
 import { useData } from '../../context/DataContext';
@@ -17,7 +17,6 @@ const subjects = [
 
 function BookPublicOverlay() {
     const { loginUser } = useData()
-    console.log(loginUser)
     const { setShowSlotModal, selectedSlot } = useContext(GlobalContext)
     const [purpose, setPurpose] = useState(
         selectedSlot ? selectedSlot.description : ""
@@ -25,6 +24,8 @@ function BookPublicOverlay() {
     const [subject, setSubject] = useState(
         selectedSlot ? selectedSlot.subjectId : ""
     );
+    const [subjectList, setSubjectList] = useState([])
+    const [loading, isLoading] = useState(true)
 
     console.log("BookPublicOverLay")
     console.log(selectedSlot)
@@ -43,6 +44,19 @@ function BookPublicOverlay() {
             })
         setShowSlotModal(false);
     };
+
+    useEffect(() => {
+        axios.get(`/api/v1/students/${loginUser.userId}/subjects/lecturers`)
+            .then(res => {
+                setSubjectList(res);
+                isLoading(false)
+            })
+            .catch(error => {
+                console.log("Error at getting subject list", error);
+                isLoading(false)
+
+            });
+    }, []);
 
     return (
         <>
@@ -83,28 +97,24 @@ function BookPublicOverlay() {
                                 <p>Room: {selectedSlot.roomId}</p>
 
                                 <label htmlFor='form'>Choose subject:</label>
-                                <div className={Style.subjects}>
-                                    {subjects.map((subject, index) => {
 
-                                        <div>
-                                            <input id={`radio-${index}`} type="radio" name="radio"
-                                                value={subject}
-                                                onClick={() => {
-                                                    setSubject(subject);
-                                                    selectedSlot.subjectId = subject
-                                                }}
-
-                                            />
-                                            <label htmlFor={`radio-${index}`} key={index}>{subject}</label>
-
-                                        </div>
-
-                                    }
-                                    )}
-                                </div>
                                 <form id='form' className={Style.object} onSubmit={(e) => handleSubmit(e)}>
 
                                     <Stack direction='vertical' gap='2'>
+                                        <div className={Style.subjects}>
+                                            {loading ? (
+                                                <p>Loading...</p>
+                                            ) : (
+                                                subjectList.map((item, index) => (
+                                                    <div
+                                                        className={`${Style.subject}  ${subject === item.subjectId ? Style.active : ""}`}
+                                                        key={index}
+                                                        onClick={() => setSubject(item.subjectId)}
+                                                    >{item.subjectId}
+                                                    </div>
+                                                ))
+                                            )}
+                                        </div>
                                         <label htmlFor='purpose'>Purpose:</label>
                                         <textarea id='purpose' className={Style.purpose}
                                             rows="4"
@@ -119,7 +129,7 @@ function BookPublicOverlay() {
                                         >
                                         </textarea>
 
-                                        <button className={Style.book_btn} type='submit'  >Book</button>
+                                        <button className={Style.book_btn} type='submit'>Book</button>
 
                                     </Stack>
                                 </form>

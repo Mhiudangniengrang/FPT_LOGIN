@@ -67,8 +67,6 @@ function S_WeeklyCalendar() {
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [loading, isLoading] = useState(true)
     const { lecturerId } = useParams()
-    console.log(lecturerId)
-    console.log(selectedSlot)
     useEffect(() => {
         if (lecturerId !== undefined) {
             axios
@@ -90,15 +88,15 @@ function S_WeeklyCalendar() {
             axios.get(`/api/v1/students/bookedSlot/homePage/${loginUser.userId}`
             )
                 .then(res => {
-                    console.log("bookedSlot", res)
-
                     setBookedSlot(res)
 
-                    isLoading(false)
                 })
                 .catch(error => {
                     isLoading(false)
                     console.log("error at getting booked slot: " + error)
+                })
+                .finally(() => {
+                    isLoading(false)
                 })
         }
     }, [])
@@ -182,7 +180,6 @@ function S_WeeklyCalendar() {
                                     <td className={Style.days} key={`${day}-${slot}`}>
                                         {lecturerId !== undefined ? (
                                             emptySlot.map((meeting) => {
-                                                console.log(meeting)
                                                 if (meeting.dateStart === day && meeting.slotTimeId == slot.charAt(5) && meeting.status === "OPEN") {
                                                     return (
                                                         <div
@@ -192,7 +189,7 @@ function S_WeeklyCalendar() {
                                                             onClick={() => handleDayClick(meeting)}
                                                         >
                                                             <span>{(meeting.duration).slice(3, 5)} minutes at room {meeting.roomId} </span>
-                                                            <p> ({meeting.timeStart}-{meeting.timeStart})</p>
+                                                            <p> ({meeting.timeStart}-)</p>
                                                         </div>
                                                     );
                                                 } else if (meeting.dateStart === day && meeting.slotTimeId == slot.charAt(5) && meeting.status === "BOOKED" && meeting.studentId === loginUser.userId) {

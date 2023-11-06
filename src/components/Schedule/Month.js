@@ -2,23 +2,24 @@ import React, { useState, useEffect } from "react";
 import Day from "./Day";
 import Style from '../../assets/style/month.module.scss';
 import axios from "../../Services/customizeAxios";
+import { useData } from "../../context/DataContext";
 export default function Month({ month }) {
-    console.log("render me")
     const [emptySlot, setEmptySlot] = useState([])
-    console.log(emptySlot)
+    const [bookedSlot, setBookedSlot] = useState([])
+    const [loading, isLoading] = useState(true)
+    const { loginUser } = useData()
     useEffect(() => {
         axios
-            .get(`/api/v1/user/emptySlot/lecturer/2`)
+            .get(`/api/v1/user/emptySlot/lecturer/${loginUser.userId}`)
             .then((response) => {
-                response.map((slot) => {
-                    setEmptySlot((prevSlot) => ([
-                        ...prevSlot,
-                        slot
-                    ]))
-                })
+                setEmptySlot(response)
             })
             .catch(error => {
-                console.log("Error at Week.js " + error)
+                console.log("Error at Month.js " + error)
+
+            })
+            .finally(() => {
+                isLoading(false)
             })
 
     }, [])
@@ -34,6 +35,7 @@ export default function Month({ month }) {
         }, []);
         return matchingSlots;
     }
+
     return (
         <>
             <div className={Style.month}>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Style from "../../assets/style/header.module.scss";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -16,9 +16,10 @@ import { NavLink } from "react-router-dom";
 
 import HorizontalStack from "../HorizontalStack";
 import CustomNavDropdown from "../DropDownStack";
+import { useData } from "../../context/DataContext";
 const dropdownItems = [
   {
-    link: "/student/viewschedule",
+    link: "/student/viewschedule/week",
     desc: "View Schedule",
   },
   {
@@ -32,9 +33,8 @@ const dropdownItems = [
 ];
 
 const S_Header = () => {
-  const handleTestClick = () => {
-    console.log("test");
-  };
+  const { loginUser } = useData()
+
   return (
     <Stack className={Style.container}>
       <div className={Style.div1}>
@@ -42,18 +42,25 @@ const S_Header = () => {
           <FontAwesomeIcon icon={faBell} color="#fff" size="xl" />
         </div>
         <NavDropdown
-          className={Style.nav}
-          title="Student [hieudmse161153]"
+          className={`${Style.nav} ${Style.truncate_text}`}
+          title={`Student ${loginUser.userName}`}
           id="nav-dropdown"
+          style={{
+            maxWidth: '200px'
+          }}
         >
-          <NavDropdown.Item href="/student/viewprofile">
+          <NavDropdown.Item
+            href="/student/viewprofile"
+          >
             <FontAwesomeIcon
               icon={faUser}
               style={{ color: "#000000", paddingRight: " 5px" }}
             />
-            View Profile
+            {loginUser.userName}
           </NavDropdown.Item>
-          <NavDropdown.Item href="/student/viewprofile">
+          <NavDropdown.Item
+            href="/student/viewprofile"
+          >
             <FontAwesomeIcon
               icon={faUserPen}
               style={{ color: "#000000", paddingRight: " 5px" }}
@@ -63,13 +70,6 @@ const S_Header = () => {
           <NavDropdown.Item>
             <NavLink
               to="/student/viewschedule"
-              style={({ isActive, isPending }) => {
-                return {
-                  fontWeight: isActive ? "bold" : "",
-                  color: isPending ? "red" : "black",
-                  textDecoration: "none",
-                };
-              }}
             >
               <FontAwesomeIcon
                 icon={faCalendarDays}
@@ -78,7 +78,9 @@ const S_Header = () => {
               View Schedule
             </NavLink>
           </NavDropdown.Item>
-          <NavDropdown.Item>
+          <NavDropdown.Item
+            href="/"
+          >
             <FontAwesomeIcon
               icon={faRightFromBracket}
               style={{ color: "#050505", paddingRight: " 5px" }}
@@ -105,11 +107,12 @@ const S_Header = () => {
           modify="ms-auto"
           icon={faCircleQuestion}
           text="Help Center"
-          link="/student/helpcenter"
+          link="/"
         />
       </Stack>
     </Stack>
   );
-};
+
+}
 
 export default S_Header;

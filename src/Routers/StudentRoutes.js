@@ -22,6 +22,7 @@ const StudentRoutes = [
   },
 
   { path: "/student/viewschedule", component: S_Schedule },
+  { path: "/student/viewschedule/:type", component: S_Schedule },
   { path: "/student/search/:filter/:search", component: S_ViewSearch },
   { path: "/student/search", component: S_ViewSearch },
   { path: "/student/search/lecturer/", component: S_ViewSearch },
