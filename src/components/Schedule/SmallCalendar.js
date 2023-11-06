@@ -47,7 +47,7 @@ export default function SmallCalendar({ emptySlot, selectedSlot }) {
         const date = day.format("YYYY-MM-DD");
         let flag = false;
         emptySlot.map((slot) => {
-            if (slot.dateStart === date) {
+            if (slot.dateStart === date && slot.status === "OPEN") {
                 flag = true
             }
         })
@@ -58,7 +58,7 @@ export default function SmallCalendar({ emptySlot, selectedSlot }) {
         console.log("usememo ne")
         const date = dayjs(daySelected).format("YYYY-MM-DD");
         const matchingSlots = emptySlot.reduce((accumulator, slot) => {
-            if (slot.dateStart === date) {
+            if (slot.dateStart === date && slot.status === "OPEN") {
                 return [...accumulator, slot];
             }
             return accumulator;

@@ -4,7 +4,6 @@ import dayjs from "dayjs";
 import axios from "../Services/customizeAxios";
 
 export default function ContextWrapper(props) {
-    console.log("Context moi'")
     const [monthIndex, setMonthIndex] = useState(dayjs().month());
     const [showSlotModal, setShowSlotModal] = useState(false)
     const [daySelected, setDaySelected] = useState(new Date());
@@ -20,6 +19,7 @@ export default function ContextWrapper(props) {
         const tokenExpirationTimestamp = Date.now() + expiresIn * 1000;
         if (Date.now() >= tokenExpirationTimestamp) {
             console.log('Access token has expired');
+            window.alert("Access token has expired")
             localStorage.clear
         }
     }, [accessToken]);

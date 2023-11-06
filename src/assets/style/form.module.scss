@@ -9,6 +9,7 @@
     bottom: 0;
     align-items: center;
     text-align: left;
+    transition: all .3s linear;
 
     .box_content {
         display: flex;
@@ -55,25 +56,20 @@
             gap: 5px;
             justify-content: flex-start;
 
-            .contain {
-                position: relative;
-                width: 80px;
-                height: 40px;
-                border-radius: 20px;
-                background-color: #d0dbd1;
-                margin: 5px 10px 10px 10px;
+            .subject {
+                cursor: pointer;
+                width: 90px;
+                padding: 5px;
                 text-align: center;
-
-                .span {
-                    font-size: 14px;
-                    font-weight: bold;
-                    position: absolute;
-                    top: 50%;
-                    transform: translate(-50%, -50%);
-                }
+                border-radius: 20px;
+                font-weight: 500;
+                background-color: #d7dcd8;
 
             }
 
+            .active {
+                background-color: #07d730;
+            }
         }
     }
 }

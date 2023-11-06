@@ -36,6 +36,7 @@ export const DataProvider = ({ children, role }) => {
     }, [loginUser])
 
     useEffect(() => {
+        console.log("room ne")
         axios
             .get(`/api/v1/slots/lecturer/room`)
             .then((response) => {
