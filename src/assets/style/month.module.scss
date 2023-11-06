@@ -2,8 +2,7 @@
     display: flex;
     flex-direction: column;
     max-height: 60vh;
-    border-width: 1px;
-    border-color: #E5E7EB;
+    border: 1px solid #eceef3;
 
     .header {
         display: flex;
@@ -23,18 +22,30 @@
             font-size: 0.875rem;
             line-height: 1.25rem;
             text-align: center;
+            cursor: pointer;
+
+            &:hover {
+                color: #20B2AA;
+                border: #20B2AA 1px solid;
+                padding: 0.2rem;
+                border-radius: 100%;
+            }
+
         }
 
         .dayCurr {
-            border-radius: 9999px;
+            border-radius: 100%;
             color: #ffffff;
             background-color: #2563EB;
+            width: 30px;
+            height: 30px;
         }
     }
 
     .daySelect {
         cursor: pointer;
         flex: 1;
+        min-height: 100px;
 
         .dayEvent {
             background-color: rgba($color: #20B2AA, $alpha: 0.4);
@@ -48,6 +59,11 @@
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
+            transition: all 0.4s linear;
+
+            &:hover {
+                background-color: rgba($color: #20B2AA, $alpha: 0.8);
+            }
         }
     }
 
@@ -58,4 +74,129 @@
     flex: 1 1 0%;
     grid-template-columns: repeat(7, minmax(0, 1fr));
     grid-template-rows: repeat(5, minmax(0, 1fr));
+}
+
+.content {
+    display: flex;
+    justify-content: space-between;
+
+    .calendar {
+        width: 50%;
+        font-size: 13px;
+        border: 1px solid #c2c2c2;
+        max-height: 290px;
+
+        .smallHeader {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            padding: 10px;
+
+            .smallDays {
+                color: #4B5563;
+                font-weight: bold;
+            }
+
+            &>button {
+                border: none;
+            }
+
+            &>p {
+                margin: 0;
+            }
+
+            .next,
+            .prev {
+                font-weight: 600;
+            }
+        }
+
+        .smallDayRow {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            grid-template-rows: repeat(6, 1fr);
+
+            .smallDaySpan {
+                padding: 5px;
+                text-align: center;
+                position: relative;
+
+                .smallDot {
+                    position: absolute;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    width: 7px;
+                    height: 7px;
+                    border-radius: 100%;
+                    background-color: rgb(27, 126, 0);
+                }
+            }
+
+            .smallDayBtn {
+                padding: 5px;
+                width: 100%;
+                border: none;
+                background-color: #ffffff;
+            }
+
+            .smallDayCurr {
+                border-radius: 10px;
+                background-color: #4f86fc;
+                width: 100%;
+                font-weight: 500;
+            }
+
+            .smallDaySlc {
+                width: 100%;
+                border-radius: 10px;
+                font-weight: 500;
+                background-color: #a2bbf0;
+            }
+        }
+    }
+}
+
+.smallContent {
+    width: 50%;
+    padding-left: 10px;
+
+    &>p {}
+
+    .smallSlot {
+        border: 2px solid green;
+        text-align: left;
+        padding: 5px 10px;
+        margin-bottom: 10px;
+        border-radius: 10px;
+
+        &>p {
+            margin: 0;
+        }
+
+        .assignDiv {
+            display: flex;
+            justify-content: flex-end;
+
+            .assignBtn {
+                border: none;
+                border-radius: 10px;
+                background-color: #00870b;
+                color: #fff;
+                font-weight: 600;
+                padding: 5px 10px;
+                margin-top: 5px;
+            }
+        }
+    }
+
+    .createBtn {
+        border: none;
+        border-radius: 10px;
+        background-color: #F46000;
+        color: #fff;
+        font-weight: 600;
+        padding: 5px 10px;
+        margin-top: 5px;
+    }
 }

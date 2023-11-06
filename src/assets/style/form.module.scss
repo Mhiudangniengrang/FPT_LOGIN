@@ -80,11 +80,10 @@
 
 .tableRowOnClick {
     cursor: pointer;
+}
 
-    &:hover td {
-        background-color: #d5d8d5;
-
-    }
+.active>td {
+    background-color: #FB9553;
 }
 
 .searchContainer {

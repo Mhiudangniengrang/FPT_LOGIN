@@ -9,7 +9,6 @@ export const DataProvider = ({ children, role }) => {
     const [emptySlots, setEmptySlots] = useState([]);
     const [authorize, setAuthorize] = useState(false);
     const [loading, setLoading] = useState(true);
-    const [lecturerId, setLecturerId] = useState(null)
     const accessToken = typeof window !== null ? localStorage.getItem('accessToken') : null
     const [loginUser, setLoginUser] = useState({})
 
@@ -32,7 +31,6 @@ export const DataProvider = ({ children, role }) => {
 
     useEffect(() => {
         if (loginUser.roleName === role) {
-            console.log("setAuthorize")
             setAuthorize(true)
         } else setAuthorize(false)
     }, [loginUser])
@@ -45,7 +43,7 @@ export const DataProvider = ({ children, role }) => {
             }).catch(error => {
                 console.log('Error at Data Context:', error)
             })
-    }, [lecturerId])
+    }, [])
 
     if (loading) {
         return <PageLoading />;
@@ -58,8 +56,6 @@ export const DataProvider = ({ children, role }) => {
             authorize,
             loginUser,
             accessToken,
-            lecturerId,
-            setLecturerId
         }}>
             {children}
         </DataContext.Provider >

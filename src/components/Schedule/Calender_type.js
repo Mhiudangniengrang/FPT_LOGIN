@@ -17,7 +17,7 @@ import GlobalContext from "../../context/GlobalContext";
 import { useData } from "../../context/DataContext";
 import S_WeeklyCalendar from "./S_Week";
 
-const Calender_type = () => {
+const Calender_type = (type) => {
   const { loginUser } = useData()
   const [activeButton, setActiveButton] = useState("week");
   const [currentMonth, setCurrentMonth] = useState(getMonth());
@@ -183,19 +183,19 @@ const Calender_type = () => {
             {loginUser.roleName === 'LECTURER' && (
 
               <Card.Body>
-                {activeButton === 'day' && <p>Lecturer's Day content goes here.</p>}
-                {activeButton === 'week' && <WeeklyCalendar isDisable={false} />}
-                {activeButton === 'month' && <Month month={currentMonth} />}
-                {activeButton === 'list' && <List />}
+                {(activeButton === 'day' || type === 'day') && <p>Lecturer's Day content goes here.</p>}
+                {(activeButton === 'week' || type === 'week') && <WeeklyCalendar isDisable={false} />}
+                {(activeButton === 'month' || type === 'month') && <Month month={currentMonth} />}
+                {(activeButton === 'list' || type === 'list') && <List />}
               </Card.Body>
             )}
 
             {loginUser.roleName === 'STUDENT' && (
               <Card.Body>
-                {activeButton === 'day' && <p>Student's Day content goes here.</p>}
-                {activeButton === 'week' && <S_WeeklyCalendar />}
-                {activeButton === 'month' && <Month month={currentMonth} />}
-                {activeButton === 'list' && <List />}
+                {(activeButton === 'day' || type === 'day') && <p>Student's Day content goes here.</p>}
+                {(activeButton === 'week' || type === 'week') && <S_WeeklyCalendar />}
+                {(activeButton === 'month' || type === 'month') && <Month month={currentMonth} />}
+                {(activeButton === 'list' || type === 'list') && <List />}
               </Card.Body>
             )}
           </div>

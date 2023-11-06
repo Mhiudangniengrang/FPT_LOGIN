@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Style from "../../assets/style/header.module.scss";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -16,10 +16,10 @@ import { NavLink } from "react-router-dom";
 
 import HorizontalStack from "../HorizontalStack";
 import CustomNavDropdown from "../DropDownStack";
-import S_ViewProfile from "../../Pages/student/S_ViewProfile";
+import { useData } from "../../context/DataContext";
 const dropdownItems = [
   {
-    link: "/student/viewschedule",
+    link: "/student/viewschedule/week",
     desc: "View Schedule",
   },
   {
@@ -32,101 +32,87 @@ const dropdownItems = [
   },
 ];
 
-class S_Header extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      activePage: null,
-    };
-  }
+const S_Header = () => {
+  const { loginUser } = useData()
 
-  handleViewProfileClick = () => {
-    this.setState({ activePage: "ViewProfile" });
-  };
-
-  render() {
-    return (
-      <Stack className={Style.container}>
-        <div className={Style.div1}>
-          <div className={Style.notify_icon}>
-            <FontAwesomeIcon icon={faBell} color="#fff" size="xl" />
-          </div>
-          <NavDropdown
-            className={Style.nav}
-            title="Student [hieudmse161153]"
-            id="nav-dropdown"
-          >
-            <NavDropdown.Item
-              href="/student/viewprofile"
-            >
-              <FontAwesomeIcon
-                icon={faUser}
-                style={{ color: "#000000", paddingRight: " 5px" }}
-              />
-              View Profile
-            </NavDropdown.Item>
-            <NavDropdown.Item
-              href="/student/viewprofile"
-            >
-              <FontAwesomeIcon
-                icon={faUserPen}
-                style={{ color: "#000000", paddingRight: " 5px" }}
-              />
-              Edit Profile
-            </NavDropdown.Item>
-            <NavDropdown.Item>
-              <NavLink
-                to="/student/viewschedule"
-                style={({ isActive, isPending }) => {
-                  return {
-                    fontWeight: isActive ? "bold" : "",
-                    color: isPending ? "red" : "black",
-                    textDecoration: "none",
-                  };
-                }}
-              >
-                <FontAwesomeIcon
-                  icon={faCalendarDays}
-                  style={{ color: "#000000", paddingRight: " 5px" }}
-                />
-                View Schedule
-              </NavLink>
-            </NavDropdown.Item>
-            <NavDropdown.Item
-              href="/"
-            >
-              <FontAwesomeIcon
-                icon={faRightFromBracket}
-                style={{ color: "#050505", paddingRight: " 5px" }}
-              />
-              Log out
-            </NavDropdown.Item>
-          </NavDropdown>
+  return (
+    <Stack className={Style.container}>
+      <div className={Style.div1}>
+        <div className={Style.notify_icon}>
+          <FontAwesomeIcon icon={faBell} color="#fff" size="xl" />
         </div>
-        <Stack direction="horizontal" gap={3} className={Style.div2}>
-          <h1 style={{ color: "#fff", fontWeight: "700", margin: "0" }}>
-            MML - MEET MY LECTURER
-          </h1>
-        </Stack>
-        <Stack direction="horizontal" gap={5} className={Style.div3}>
-          <HorizontalStack icon={faHouse} text="Home" link="/student" />
-
-          <CustomNavDropdown
-            title="Schedule"
-            icon={faCalendarDays}
-            items={dropdownItems}
-          />
-
-          <HorizontalStack
-            modify="ms-auto"
-            icon={faCircleQuestion}
-            text="Help Center"
-            link="/"
-          />
-        </Stack>
+        <NavDropdown
+          className={`${Style.nav} ${Style.truncate_text}`}
+          title={`Student ${loginUser.userName}`}
+          id="nav-dropdown"
+          style={{
+            maxWidth: '200px'
+          }}
+        >
+          <NavDropdown.Item
+            href="/student/viewprofile"
+          >
+            <FontAwesomeIcon
+              icon={faUser}
+              style={{ color: "#000000", paddingRight: " 5px" }}
+            />
+            {loginUser.userName}
+          </NavDropdown.Item>
+          <NavDropdown.Item
+            href="/student/viewprofile"
+          >
+            <FontAwesomeIcon
+              icon={faUserPen}
+              style={{ color: "#000000", paddingRight: " 5px" }}
+            />
+            Edit Profile
+          </NavDropdown.Item>
+          <NavDropdown.Item>
+            <NavLink
+              to="/student/viewschedule"
+            >
+              <FontAwesomeIcon
+                icon={faCalendarDays}
+                style={{ color: "#000000", paddingRight: " 5px" }}
+              />
+              View Schedule
+            </NavLink>
+          </NavDropdown.Item>
+          <NavDropdown.Item
+            href="/"
+          >
+            <FontAwesomeIcon
+              icon={faRightFromBracket}
+              style={{ color: "#050505", paddingRight: " 5px" }}
+            />
+            Log out
+          </NavDropdown.Item>
+        </NavDropdown>
+      </div>
+      <Stack direction="horizontal" gap={3} className={Style.div2}>
+        <h1 style={{ color: "#fff", fontWeight: "700", margin: "0" }}>
+          MML - MEET MY LECTURER
+        </h1>
       </Stack>
-    );
-  }
+      <Stack direction="horizontal" gap={5} className={Style.div3}>
+        <HorizontalStack icon={faHouse} text="Home" link="/student" />
+
+        <CustomNavDropdown
+          title="Schedule"
+          icon={faCalendarDays}
+          items={dropdownItems}
+        />
+
+        <HorizontalStack
+          modify="ms-auto"
+          icon={faCircleQuestion}
+          text="Help Center"
+          link="/"
+        />
+      </Stack>
+    </Stack>
+  );
+
 }
 
 export default S_Header;

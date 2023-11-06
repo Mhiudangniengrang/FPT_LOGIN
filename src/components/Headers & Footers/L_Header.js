@@ -31,10 +31,6 @@ const dropdownItems = [
     link: "/lecturer/teachingschedule",
     desc: "View Teaching Schedule",
   },
-  {
-    link: "/lecturer/viewrequest",
-    desc: "View Students' Request",
-  },
 ];
 
 const L_Header = () => {

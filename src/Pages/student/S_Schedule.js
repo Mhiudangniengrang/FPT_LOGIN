@@ -9,6 +9,7 @@ import OffCanvasSidebar from "../../components/OffCanvasSidebar";
 import GlobalContext from "../../context/GlobalContext";
 import Calender_type from "../../components/Schedule/Calender_type";
 import Breadcrumbs from "../../components/BreadcrumpCus";
+import { useParams } from "react-router-dom/cjs/react-router-dom.min";
 
 const path = [
     {
@@ -23,12 +24,11 @@ const path = [
 
 const S_Schedule = () => {
     const { showSlotModal } = useContext(GlobalContext);
-
+    const { type } = useParams()
     return (
         <>
             {showSlotModal && <BookPublicOverlay />}
             <S_Layout>
-                <OffCanvasSidebar />
                 <Breadcrumbs items={path} />
                 <FormSearch />
                 <Calender_type />
