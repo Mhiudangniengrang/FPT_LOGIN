@@ -72,6 +72,7 @@ function SolveRequests({ emptySlot }) {
                                         <th>Purpose</th>
                                         <th>Request at</th>
                                         <th>Status</th>
+                                        <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -87,28 +88,22 @@ function SolveRequests({ emptySlot }) {
                                                 <td>{record.subjectId}</td>
                                                 <td>{record.requestContent}</td>
                                                 <td>{dayjs(record.createAt).format('DD-MM-YYYY')}</td>
-                                                {filter === "PENDING" ? (
-                                                    <td>
-                                                        <div
-                                                            style={{
-                                                                background: 'rgba(255,255,0,0.5)',
-                                                                color: '#7781ff',
-                                                                fontWeight: '600',
-                                                            }}
-                                                        >Pending</div>
-
-                                                    </td>
-                                                ) : (
-                                                    <td>
-                                                        <div
-                                                            style={{
-                                                                background: 'rgb(0 255 52 / 50%)',
-                                                                color: 'rgb(4 62 1)',
-                                                                fontWeight: '600',
-                                                            }}
-                                                        >Approved</div>
-                                                    </td>
-                                                )}
+                                                <td>
+                                                    <div
+                                                        style={{
+                                                            background: filter === "PENDING" ? 'rgba(255, 255, 0, 0.5)' : 'rgb(0, 255, 52, 0.5)',
+                                                            color: filter === "PENDING" ? '#7781ff' : 'rgb(4, 62, 1)',
+                                                            fontWeight: '600',
+                                                        }}
+                                                    >
+                                                        {filter === "PENDING" ? "Pending" : "Approved"}
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    {filter === "PENDING" ? (
+                                                        <button className={Style.approveBtn}>Approve</button>
+                                                    ) : null}
+                                                </td>
                                             </tr>
                                         )
                                     ))}
@@ -118,13 +113,13 @@ function SolveRequests({ emptySlot }) {
                     </Card>
                 </Col>
                 <Col >
-                    <Card className="text-center">
-                        <Card.Body>
-                            {filter === "PENDING" && (
+                    {filter === "APPROVED" && (
+                        <Card className="text-center">
+                            <Card.Body>
                                 <SmallCalendar emptySlot={emptySlot} selectedSlot={selectedSlot} />
-                            )}
-                        </Card.Body>
-                    </Card>
+                            </Card.Body>
+                        </Card>
+                    )}
                 </Col>
             </Row>
         </div>

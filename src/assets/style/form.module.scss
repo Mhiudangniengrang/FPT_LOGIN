@@ -76,6 +76,11 @@
 
 .tableRowOnClick {
     cursor: pointer;
+
+    .approveBtn {
+        border: none;
+
+    }
 }
 
 .active>td {

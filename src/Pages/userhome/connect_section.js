@@ -4,11 +4,11 @@ import Style from '../../assets/style/connect_section.module.scss';
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { GoogleLogin } from "@react-oauth/google";
 import axios from "../../Services/customizeAxios";
-import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import GlobalContext from "../../context/GlobalContext";
 export default function Connect_section() {
-    const history = useHistory();
+    const navigate = useNavigate();
     const { setAccessToken } = useContext(GlobalContext);
     const handleLoginSuccess = (credentialResponse) => {
         const accessToken = credentialResponse.credential;
@@ -20,7 +20,7 @@ export default function Connect_section() {
                 }
             })
             .then((response) => {
-                history.push(`/${response.roleName}`)
+                navigate(`/${response.roleName}`)
             })
             .catch(error => {
                 console.log("Error getting user data:", error);

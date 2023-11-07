@@ -121,7 +121,7 @@ function BookedSlot() {
                                                 <td>{record.duration}</td>
                                                 <td>
                                                     {record.status === "BOOKED" && (
-                                                        <div className="text-success">Booked</div>
+                                                        <span className="text-success">Booked</span>
                                                     )}
                                                 </td>
                                             </tr>
@@ -130,14 +130,14 @@ function BookedSlot() {
                                 ) : (
                                     <tr>
                                         <td colSpan={9}>
-                                            <div
+                                            <p
                                                 style={{
                                                     margin: '100px',
                                                     textAlign: 'center'
                                                 }}
                                             >
                                                 There are no events in this day yet.
-                                            </div>
+                                            </p>
                                         </td>
                                     </tr>
                                 )}

@@ -10,14 +10,14 @@ import {
   Form,
   FormControl,
 } from "react-bootstrap";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import S_Layout from "../../Layouts/S_Layout";
 import S_SubjectList from "../../components/SubjectList_userinfo/S_SubjectList";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import axios from "../../Services/customizeAxios";
 function S_UserInfo() {
-  const history = useHistory();
+  const navigate = useNavigate();
   const subjects = [
     { id: 1, name: "SWP391 - Lại Đức Hùng" },
     { id: 2, name: "PRN211 - Nguyễn Thế Hoàng" },
@@ -81,7 +81,7 @@ function S_UserInfo() {
     console.log("Selected Subjects:", selectedSubjects);
 
     // Truyền tên (name) từ formData sang trang S_ViewProfile
-    history.push("/student/viewprofile", {
+    navigate("/student/viewprofile", {
       selectedSubjects: selectedSubjects,
       name: formData.name,
     });

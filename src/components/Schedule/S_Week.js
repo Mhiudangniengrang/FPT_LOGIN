@@ -4,7 +4,7 @@ import { Stack, Table, Spinner } from 'react-bootstrap';
 import GlobalContext from '../../context/GlobalContext';
 import axios from '../../Services/customizeAxios';
 
-import { useParams } from "react-router-dom/cjs/react-router-dom.min";
+import { useParams } from 'react-router-dom';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import 'react-datepicker/dist/react-datepicker-cssmodules.css';

@@ -2,7 +2,7 @@ import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, Card, CardBody } from "react-bootstrap";
 import { faBriefcase } from "@fortawesome/free-solid-svg-icons";
-import { useParams } from "react-router-dom/cjs/react-router-dom.min";
+import { useParams } from "react-router-dom";
 import axios from "axios";
 import { useData } from "../../context/DataContext";
 const S_ViewTeacherAboutme = () => {

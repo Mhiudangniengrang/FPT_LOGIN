@@ -9,7 +9,7 @@ import OffCanvasSidebar from "../../components/OffCanvasSidebar";
 import GlobalContext from "../../context/GlobalContext";
 import Calender_type from "../../components/Schedule/Calender_type";
 import Breadcrumbs from "../../components/BreadcrumpCus";
-import { useParams } from "react-router-dom/cjs/react-router-dom.min";
+import { useParams } from "react-router-dom";
 
 const path = [
     {

@@ -7,7 +7,7 @@ import Tabs from 'react-bootstrap/Tabs';
 import Breadcrumbs from "../../components/BreadcrumpCus";
 import GlobalContext from "../../context/GlobalContext";
 import BookPublicOverLay from "../../components/Schedule/BookPublicOverlay"
-import { useParams } from "react-router-dom/cjs/react-router-dom.min";
+import { useParams } from "react-router-dom";
 import S_WeeklyCalendar from "../../components/Schedule/S_Week";
 
 const S_ViewTeacherSchedule = () => {

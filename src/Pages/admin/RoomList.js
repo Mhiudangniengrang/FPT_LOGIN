@@ -1,14 +1,14 @@
 
 import React from "react";
 import { List, Datagrid, TextField } from 'react-admin';
-const MajorList = (props) => (
+const RoomList = (props) => (
     <List {...props}>
         <Datagrid>
-            <TextField source="majorId" />
-            <TextField source="majorName" />
+            <TextField source="roomId" />
+            <TextField source="address" />
             <TextField source="status" />
         </Datagrid>
     </List>
 );
 
-export default MajorList
+export default RoomList
