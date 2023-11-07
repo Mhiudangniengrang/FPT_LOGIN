@@ -8,74 +8,65 @@ import {
   FormGroup,
   Button,
   Form,
-  FormControl,
+  ListGroup,
+  ListGroupItem,
+  Spinner,
 } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import S_Layout from "../../Layouts/S_Layout";
-import S_SubjectList from "../../components/SubjectList_userinfo/S_SubjectList";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCircleCheck,
+  faCalendarDays,
+  faUser,
+} from "@fortawesome/free-solid-svg-icons";
+
 import axios from "../../Services/customizeAxios";
+import { useData } from "../../context/DataContext";
 function S_UserInfo() {
   const navigate = useNavigate();
-  const subjects = [
-    { id: 1, name: "SWP391 - Lại Đức Hùng" },
-    { id: 2, name: "PRN211 - Nguyễn Thế Hoàng" },
-    { id: 3, name: "PRF192 - Lê Thanh Tùng" },
-    { id: 4, name: "SWR302 - Đỗ Tấn Nhàn" },
-    { id: 5, name: "CSD201 - Thân Văn Sử" },
-    { id: 6, name: "CEA201 - Bùi Anh Tuấn" },
-    { id: 7, name: "JPD113 - Trần Anh Kiều" },
-    { id: 8, name: "JPD123 - Nguyễn Hoàng Hiếu" },
-    // Add more subjects here
-  ];
+
   const [filteredSubjects, setFilteredSubjects] = useState(subjects);
   const [major, setMajor] = useState("Select Major");
   const [selectedSubjects, setSelectedSubjects] = useState([]);
-  const [enteredID, setEnteredID] = useState("");
-
+  const [subjects, setSubjects] = useState([]);
   const [majors, setMajors] = useState([]);
+  const [selectedMajor, setSelectedMajor] = useState(null);
+  const [loading, isLoading] = useState(true);
+  const { loginUser } = useData();
 
+  console.log(loginUser);
   useEffect(() => {
     axios
       .get("/api/v1/student/searching/majors")
       .then((response) => {
         setMajors(response);
-        // console.log(response);
       })
       .catch((error) => {
         console.error("Error fetching majors:", error);
       });
   }, []);
-  const handleEnteredIDChange = (event) => {
-    setEnteredID(event.target.value);
-  };
-  const handleSearch = (searchTerm) => {
-    const filtered = subjects.filter((subject) =>
-      subject.name.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-    setFilteredSubjects(filtered);
-  };
 
-  const handleMajorChange = (event) => {
-    setMajor(event.target.value);
-  };
+  useEffect(() => {
+    if (selectedMajor) {
+      const item = majors.find((major) => major.majorName === selectedMajor);
 
-  const handleSubjectSelection = (subject) => {
-    // Kiểm tra xem môn học đã được chọn trước đó chưa
-    if (
-      !selectedSubjects.some(
-        (selectedSubject) => selectedSubject.id === subject.id
-      )
-    ) {
-      setSelectedSubjects([...selectedSubjects, subject]);
+      console.log(item);
+
+      axios
+        .get(`/api/v1/student/searching/subjects/major/${item.majorId}`)
+        .then((res) => {
+          setSubjects(res);
+          // console.log(res);
+        })
+        .catch((error) => {
+          console.error("Error", error);
+        })
+        .finally(() => {
+          isLoading(false);
+        });
     }
-    // Nếu môn học đã được chọn, bạn có thể xử lý theo ý muốn, ví dụ: thông báo lỗi hoặc không thêm vào danh sách.
-    else {
-      // Xử lý trường hợp môn học đã được chọn
-      // Ví dụ: alert("Môn học đã được chọn trước đó");
-    }
-  };
+  }, [])
   const handleClickSave = () => {
     // Handle saving the selected subjects (e.g., send to server or another component)
     console.log("Selected Subjects:", selectedSubjects);
@@ -86,6 +77,7 @@ function S_UserInfo() {
       name: formData.name,
     });
   };
+
   const [formData, setFormData] = useState({
     name: "",
   });
@@ -96,6 +88,22 @@ function S_UserInfo() {
       ...formData,
       [name]: value,
     });
+  };
+  const handleClickSubject = (item) => {
+    setSelectedSubjects((prevSubjects) => {
+      if (prevSubjects.includes(item)) {
+        return prevSubjects.filter((subject) => subject !== item);
+      } else {
+        return [...prevSubjects, item];
+      }
+    });
+  };
+
+  const isActive = (item) => {
+    if (selectedSubjects.some((subject) => subject === item)) {
+      return "active";
+    }
+    return "";
   };
 
   return (
@@ -129,32 +137,52 @@ function S_UserInfo() {
                       className="mx-2"
                       id="major"
                       name="major"
-                      value={major}
-                      onChange={handleMajorChange}
+                      value={selectedMajor}
+                      onChange={(e) => {
+                        setSelectedMajor(e.target.value);
+                      }}
                     >
                       <option value="Select Major" disabled hidden>
                         Select Major
                       </option>
                       {majors.map((majorOption) => (
-                        <option
-                          key={majorOption.majorId}
-                          value={majorOption.majorName}
-                        >
+                        <option key={majorOption.majorId}>
                           {majorOption.majorName}
                         </option>
                       ))}
                     </select>
                   </FormGroup>
                   <p className="my-3">Your current subjects:</p>
-                  {selectedSubjects.map((subject) => (
-                    <li key={subject.id}>{subject.name}</li>
-                  ))}
-                  <S_SubjectList
-                    subjects={filteredSubjects}
-                    onSearch={handleSearch}
-                    onSubjectSelect={handleSubjectSelection}
-                  />
-                  <Button onClick={handleClickSave}>Save</Button>
+                  {subjects.length > 0 && (
+                    <div className="my-3">
+                      <strong>
+                        {" "}
+                        <FontAwesomeIcon
+                          icon={faCalendarDays}
+                          className="mx-2"
+                        />
+                        {selectedMajor.majorName}
+                      </strong>
+                      <div className="my-2">
+                        <ListGroup>
+                          {subjects.map((result) => (
+                            <ListGroupItem
+                              onClick={() => handleClickSubject(result)}
+                              className={`${isActive(result)}`}
+                            >
+                              {result.subjectId} - {result.lecturerName}
+                              <FontAwesomeIcon
+                                className="mx-2"
+                                icon={faCircleCheck}
+                              />
+                            </ListGroupItem>
+                          ))}
+                        </ListGroup>
+                      </div>
+                    </div>
+                  )}
+
+                  <Button onClick={saveSelectedSubjects}>Save</Button>
                   <Button className="mx-2" variant="secondary">
                     Cancel
                   </Button>

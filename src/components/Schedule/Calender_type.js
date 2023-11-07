@@ -16,6 +16,7 @@ import {
 import GlobalContext from "../../context/GlobalContext";
 import { useData } from "../../context/DataContext";
 import S_WeeklyCalendar from "./S_Week";
+import axios from "../../Services/customizeAxios";
 
 const Calender_type = (type) => {
   const { loginUser } = useData()
@@ -55,14 +56,46 @@ const Calender_type = (type) => {
         : dayjs().month()
     );
   }
+  const [semesters, setSemesters] = useState([]);
+  const [currentSemesterIndex, setCurrentSemesterIndex] = useState(0);
 
+  useEffect(() => {
+    axios
+      .get("/api/v1/user/semester")
+      .then((response) => {
+        // console.log(response);
+        setSemesters(response);
+      })
+      .catch((error) => {
+        console.error("Lỗi khi gọi API: ", error);
+      });
+  }, []);
+  const handleClickPrev = () => {
+    if (semesters.length > 0) {
+      if (currentSemesterIndex === 0) {
+        setCurrentSemesterIndex(semesters.length - 1);
+      } else {
+        setCurrentSemesterIndex(currentSemesterIndex - 1);
+      }
+    }
+  };
+
+  const handleClickNext = () => {
+    if (semesters.length > 0) {
+      if (currentSemesterIndex === semesters.length - 1) {
+        setCurrentSemesterIndex(0);
+      } else {
+        setCurrentSemesterIndex(currentSemesterIndex + 1);
+      }
+    }
+  };
 
   return (
     <>
       <div>
         <h2
           style={{
-            padding: '0',
+            padding: "0",
             marginLeft: "1rem",
             fontSize: "1.25rem",
             lineHeight: "1.75rem",
@@ -74,10 +107,18 @@ const Calender_type = (type) => {
             dayjs(new Date(dayjs().year(), monthIndex)).format("MMMM YYYY")}
           {activeButton === "week" &&
             getStartOfWeekFormatted(daySelected) +
-            " - " +
-            getEndOfWeekFormatted(daySelected)}
+              " - " +
+              getEndOfWeekFormatted(daySelected)}
           {activeButton === "list" && (
-            <div>hi</div>
+            <div className="d-flex justify-content-between">
+              <Button variant="secondary" onClick={handleClickPrev}>
+                Previous
+              </Button>
+              <div>{semesters[currentSemesterIndex]?.semesterName}</div>
+              <Button variant="secondary" onClick={handleClickNext}>
+                Next
+              </Button>
+            </div>
           )}
         </h2>
         <Stack direction="horizontal">
@@ -178,10 +219,8 @@ const Calender_type = (type) => {
           </div>
         </Stack>
         {activeButton && (
-
           <div className="text-center">
-            {loginUser.roleName === 'LECTURER' && (
-
+            {loginUser.roleName === "LECTURER" && (
               <Card.Body>
                 {(activeButton === 'day' || type === 'day') && <p>Lecturer's Day content goes here.</p>}
                 {(activeButton === 'week' || type === 'week') && <WeeklyCalendar isDisable={false} />}
@@ -190,17 +229,24 @@ const Calender_type = (type) => {
               </Card.Body>
             )}
 
-            {loginUser.roleName === 'STUDENT' && (
+            {loginUser.roleName === "STUDENT" && (
               <Card.Body>
-                {(activeButton === 'day' || type === 'day') && <p>Student's Day content goes here.</p>}
-                {(activeButton === 'week' || type === 'week') && <S_WeeklyCalendar />}
-                {(activeButton === 'month' || type === 'month') && <Month month={currentMonth} />}
-                {(activeButton === 'list' || type === 'list') && <List />}
+                {activeButton === "day" && (
+                  <p>Student's Day content goes here.</p>
+                )}
+                {activeButton === "week" && <S_WeeklyCalendar />}
+                {activeButton === "month" && <Month month={currentMonth} />}
+                {activeButton === "list" && (
+                  <List
+                    semesters={semesters}
+                    currentSemesterIndex={currentSemesterIndex}
+                  />
+                )}
               </Card.Body>
             )}
           </div>
         )}
-      </div >
+      </div>
     </>
   );
 };

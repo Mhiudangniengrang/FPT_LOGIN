@@ -1,40 +1,35 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Button, Card, CardBody } from "react-bootstrap";
+import { Card, CardBody } from "react-bootstrap";
 import { faBriefcase } from "@fortawesome/free-solid-svg-icons";
-import { useParams } from "react-router-dom";
-import axios from "axios";
-import { useData } from "../../context/DataContext";
+import { useParams } from "react-router-dom/cjs/react-router-dom.min";
+
 const S_ViewTeacherAboutme = () => {
-  const { lecturerId } = useParams()
+  const { lecturerId } = useParams();
   return (
     <div className="my-2 ">
       <Card>
         <CardBody>
-          <h5>About me</h5>
+          <h4>About me</h4>
           <strong>Description:</strong>
           <p> Write a brief introduction about yourself here.</p>
 
           <div>
-            <h3 className="font-weight-bold">Course</h3>
-
-            <strong style={{ padding: "5px" }}>Course Profile:</strong>
-
-            <div>
-              <div style={{ float: "left", width: "50%", padding: "15px" }}>
-                <FontAwesomeIcon icon={faBriefcase} /> CSI104 - Introduction
-                to Computing
+            <strong>Course</strong>
+            <div>Course Profile:</div>
+            <div className="my-2">
+              <div style={{ float: "left", width: "50%" }}>
+                <FontAwesomeIcon icon={faBriefcase} /> CSI104 - Introduction to
+                Computing
                 <br />
-                <FontAwesomeIcon icon={faBriefcase} /> SWT301 - Software
-                Testing
+                <FontAwesomeIcon icon={faBriefcase} /> SWT301 - Software Testing
                 <br />
-                <FontAwesomeIcon icon={faBriefcase} /> SWE102 - Introduction
-                to Software Engineering
+                <FontAwesomeIcon icon={faBriefcase} /> SWE102 - Introduction to
+                Software Engineering
               </div>
-              <div style={{ float: "left", width: "50%", padding: "15px" }}>
+              <div style={{ float: "left", width: "50%" }}>
                 <FontAwesomeIcon icon={faBriefcase} /> SWR301 - Software
                 Requirement
-
                 <br />
                 <FontAwesomeIcon icon={faBriefcase} /> SWP391 - Application
                 Development Project
@@ -45,23 +40,25 @@ const S_ViewTeacherAboutme = () => {
             </div>
           </div>
           <div>
-            <h4>
+            <h5>
               {" "}
               <a href="#" className="schedule-link text-black ">
                 Go to teaching schedule &gt;&gt;&gt;
               </a>
-            </h4>
-            <h4>
-              <a href={`/student/lecturer/viewschedule/${lecturerId}`} className="schedule-link text-black">
+            </h5>
+            <h5>
+              <a
+                href={`/student/lecturer/viewschedule/${lecturerId}`}
+                className="schedule-link text-black"
+              >
                 Go to meeting schedule &gt;&gt;&gt;
               </a>
-            </h4>
+            </h5>
           </div>
         </CardBody>
       </Card>
     </div>
   );
-}
-
+};
 
 export default S_ViewTeacherAboutme;

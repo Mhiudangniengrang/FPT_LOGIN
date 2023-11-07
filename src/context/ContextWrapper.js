@@ -24,11 +24,11 @@ export default function ContextWrapper(props) {
         }
     }, [accessToken]);
 
-    useEffect(() => {
-        if (!showSlotModal) {
-            setSelectedSlot(null);
-        }
-    }, [showSlotModal]);
+  useEffect(() => {
+    if (!showSlotModal) {
+      setSelectedSlot(null);
+    }
+  }, [showSlotModal]);
 
     const getEmptySlots = async () => {
         if (lecturerId != null) {

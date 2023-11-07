@@ -9,36 +9,35 @@ import GlobalContext from "../../context/GlobalContext";
 import axios from "../../Services/customizeAxios";
 import Breadcrumbs from "../../components/BreadcrumpCus";
 
-
 const S_ViewTeacherProfile = () => {
-  const { setSelectedLecturer, selectedLecturer } = useContext(GlobalContext)
-  const [isLoading, setIsLoading] = useState(true)
-  const { lecturerId } = useParams()
+  const { setSelectedLecturer, selectedLecturer } = useContext(GlobalContext);
+  const [isLoading, setIsLoading] = useState(true);
+  const { lecturerId } = useParams();
   const path = [
     {
-      route: '/student',
-      text: 'Home',
+      route: "/student",
+      text: "Home",
     },
     {
       route: `/student/lecturer/profile/${lecturerId}`,
       text: `Lecturer's profile`,
     },
-  ]
+  ];
 
   useEffect(async () => {
     if (lecturerId != null) {
       await axios
         .get(`/api/v1/user/profile/${lecturerId}`)
         .then((response) => {
-          setSelectedLecturer(response)
-          setIsLoading(false)
+          setSelectedLecturer(response);
+          setIsLoading(false);
         })
-        .catch(error => {
-          setIsLoading(false)
-          console.log("Error at Week.js " + error)
-        })
+        .catch((error) => {
+          setIsLoading(false);
+          console.log("Error at Week.js " + error);
+        });
     }
-  }, [])
+  }, []);
   return (
     <S_Layout>
       <Container>
@@ -76,7 +75,6 @@ const S_ViewTeacherProfile = () => {
       </Container>
     </S_Layout>
   );
-
-}
+};
 
 export default S_ViewTeacherProfile;
