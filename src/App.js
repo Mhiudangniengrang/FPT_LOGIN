@@ -7,6 +7,7 @@ import LecturerRoutes from "./Routers/LecturerRoutes";
 import { DataProvider } from "./context/DataContext";
 import PageLoading from "./components/PageLoad";
 import AdminPage from "./Pages/admin/AdminPage";
+import { ToastContainer } from "react-toastify";
 
 function App() {
   return (
@@ -43,6 +44,7 @@ function App() {
           })}
         </Switch>
       </Router>
+      <ToastContainer autoClose={2000} />
     </div>
   );
 }

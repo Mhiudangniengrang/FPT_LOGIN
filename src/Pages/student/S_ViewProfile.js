@@ -1,37 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
-import {
-  Container,
-  Row,
-  Col,
-  Card,
-  Button,
-  Image,
-  CardBody,
-} from "react-bootstrap";
+import { Container, Row, Col, Card, Button, CardBody } from "react-bootstrap";
 import S_EditProfile from "../../components/ViewProfile/S_EditProfile";
 import S_Layout from "../../Layouts/S_Layout";
-import { useLocation } from "react-router-dom";
 import S_Course from "../../components/ViewProfile/S_Course";
-import { useHistory } from "react-router-dom";
-import { useData, useDataCourse } from "../../context/DataContext";
+import { useData } from "../../context/DataContext";
 
 function S_ViewProfile() {
   const [activeTab, setActiveTab] = useState("course");
-  const [name, setName] = useState("");
-  const history = useHistory();
-  const location = useLocation();
-  const selectedSubjectsStr = location.state?.selectedSubjects;
-
   const { loginUser } = useData();
+  console.log(loginUser);
 
-  const handleUpdateProfile = (updatedData) => {
-    history.replace({
-      ...location,
-      state: updatedData,
-    });
-  };
   const breadScrumData = [
     {
       route: "/student",
@@ -62,9 +42,9 @@ function S_ViewProfile() {
                 <Row>
                   <Col md={6} className="py-2">
                     <h5>Name:</h5>
-                    <p>{name || "Write a name here."}</p>
+                    <p>{loginUser.userName}</p>
                     <h5>Email Address:</h5>
-                    <p>hieudmse161153@fpt.edu.vn</p>
+                    <p>{loginUser.email}</p>
                   </Col>
                   <Col md={6}>
                     <Button
@@ -86,12 +66,10 @@ function S_ViewProfile() {
                     <Card className="my-3">
                       <CardBody>
                         {activeTab === "course" && (
-                          <S_Course selectedSubjects={selectedSubjectsStr} />
+                          <S_Course loginUser={loginUser} />
                         )}
                         {activeTab === "editprofile" && (
-                          <S_EditProfile
-                            onUpdateProfile={handleUpdateProfile}
-                          />
+                          <S_EditProfile loginUser={loginUser} />
                         )}
                       </CardBody>
                     </Card>

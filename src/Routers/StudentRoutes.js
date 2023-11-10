@@ -6,6 +6,7 @@ import S_ViewTeacherProfile from "../Pages/student/S_ViewTeacherProfile";
 import HelpCenter from "../components/HelpCenter";
 import S_ViewSearch from "../components/S_SearchTeacher/S_ViewSearch";
 import S_ViewTeacherSchedule from "../Pages/student/S_ViewTeacherSchedule";
+import S_EditProfile from "../components/ViewProfile/S_EditProfile";
 
 const StudentRoutes = [
   { path: "/student", component: S_home },
@@ -20,7 +21,7 @@ const StudentRoutes = [
     path: "/student/lecturer/viewschedule/:lecturerId",
     component: S_ViewTeacherSchedule,
   },
-
+  { path: "/student/viewprofile/:lecturerId/:studentId", component: S_EditProfile },
   { path: "/student/viewschedule", component: S_Schedule },
   { path: "/student/viewschedule/:type", component: S_Schedule },
   { path: "/student/search/:filter/:search", component: S_ViewSearch },

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Container,
   Row,
@@ -8,80 +8,93 @@ import {
   FormGroup,
   Button,
   Form,
+  ListGroup,
+  ListGroupItem,
 } from "react-bootstrap";
-import { useHistory } from "react-router-dom";
 import L_Layout from "../../Layouts/L_Layout";
-import L_SubjectList from "../../components/SubjectList_userinfo/L_SubjectList";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser } from "@fortawesome/free-solid-svg-icons";
-
+import {
+  faCircleCheck,
+  faCalendarDays,
+  faUser,
+} from "@fortawesome/free-solid-svg-icons";
+import { useHistory } from "react-router-dom";
+import axios from "../../Services/customizeAxios";
+import { useData } from "../../context/DataContext";
+import { toast } from "react-toastify";
 function L_UserInfo() {
-  const history = useHistory();
-  const subjects = [
-    { id: 1, name: "SWP391 - Lại Đức Hùng" },
-    { id: 2, name: "PRN211 - Nguyễn Thế Hoàng" },
-    { id: 3, name: "PRF192 - Lê Thanh Tùng" },
-    { id: 4, name: "SWR302 - Đỗ Tấn Nhàn" },
-    { id: 5, name: "CSD201 - Thân Văn Sử" },
-    { id: 6, name: "CEA201 - Bùi Anh Tuấn" },
-    { id: 7, name: "JPD113 - Trần Anh Kiều" },
-    { id: 8, name: "JPD123 - Nguyễn Hoàng Hiếu" },
-    // Add more subjects here
-  ];
-  const [filteredSubjects, setFilteredSubjects] = useState(subjects);
-  const [major, setMajor] = useState("Select Major");
   const [selectedSubjects, setSelectedSubjects] = useState([]);
-  const [enteredID, setEnteredID] = useState("");
+  const [subjects, setSubjects] = useState([]);
+  const [majors, setMajors] = useState([]);
+  const [selectedMajor, setSelectedMajor] = useState(null);
+  const [loading, isLoading] = useState(true);
+  const { loginUser } = useData();
+  const history = useHistory();
 
-  const handleEnteredIDChange = (event) => {
-    setEnteredID(event.target.value);
-  };
-  const handleSearch = (searchTerm) => {
-    const filtered = subjects.filter((subject) =>
-      subject.name.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-    setFilteredSubjects(filtered);
-  };
+  console.log(loginUser);
+  useEffect(() => {
+    axios
+      .get("/api/v1/student/searching/majors")
+      .then((response) => {
+        setMajors(response);
+      })
+      .catch((error) => {
+        console.error("Error fetching majors:", error);
+      });
+  }, []);
 
-  const handleMajorChange = (event) => {
-    setMajor(event.target.value);
-  };
+  useEffect(() => {
+    if (selectedMajor) {
+      const item = majors.find((major) => major.majorName === selectedMajor);
 
-  const handleSubjectSelection = (subject) => {
-    // Kiểm tra xem môn học đã được chọn trước đó chưa
-    if (
-      !selectedSubjects.some(
-        (selectedSubject) => selectedSubject.id === subject.id
-      )
-    ) {
-      setSelectedSubjects([...selectedSubjects, subject]);
+      console.log(item);
+
+      axios
+        .get(`/api/v1/student/searching/subjects/major/${item.majorId}`)
+        .then((res) => {
+          setSubjects(res);
+          // console.log(res);
+        })
+        .catch((error) => {
+          console.error("Error", error);
+        })
+        .finally(() => {
+          isLoading(false);
+        });
     }
-    // Nếu môn học đã được chọn, bạn có thể xử lý theo ý muốn, ví dụ: thông báo lỗi hoặc không thêm vào danh sách.
-    else {
-      // Xử lý trường hợp môn học đã được chọn
-      // Ví dụ: alert("Môn học đã được chọn trước đó");
+  }, [selectedMajor]);
+
+  const saveSubjects = async () => {
+    try {
+      const selectedSubjectsData = selectedSubjects.map((subject) => ({
+        lecturerId: subject.lecturerId,
+        subjectId: subject.subjectId,
+      }));
+      await axios.post("/api/v1/lecturer/subject", selectedSubjectsData);
+      console.log(selectedSubjectsData);
+      toast.success("Save information success");
+      // history.push("/lecturer/viewprofile", selectedSubjectsData);
+    } catch (err) {
+      console.error("Error creating URL:", err);
+      toast.error(err.response.data.message);
     }
   };
-  const handleClickSave = () => {
-    // Handle saving the selected subjects (e.g., send to server or another component)
-    console.log("Selected Subjects:", selectedSubjects);
 
-    // Truyền tên (name) từ formData sang trang S_ViewProfile
-    history.push("/l_view_profile", {
-      selectedSubjects: selectedSubjects,
-      name: formData.name,
+  const handleClickSubject = (item) => {
+    setSelectedSubjects((prevSubjects) => {
+      if (prevSubjects.includes(item)) {
+        return prevSubjects.filter((subject) => subject !== item);
+      } else {
+        return [...prevSubjects, item];
+      }
     });
   };
-  const [formData, setFormData] = useState({
-    name: "",
-  });
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+  const isActive = (item) => {
+    if (selectedSubjects.some((subject) => subject === item)) {
+      return "active";
+    }
+    return "";
   };
 
   return (
@@ -98,16 +111,7 @@ function L_UserInfo() {
             <Card className="px-2">
               <CardBody>
                 <div>
-                  <Form.Group className="d-flex align-items-center">
-                    <Form.Label>Your Name</Form.Label>
-                    <Form.Control
-                      className="w-50 mb-2 mx-2"
-                      type="text"
-                      name="name"
-                      value={formData.name}
-                      onChange={handleChange}
-                    />
-                  </Form.Group>
+                  <Form.Label>Your Name: {loginUser.userName}</Form.Label>
 
                   <FormGroup>
                     <label htmlFor="major">Major:</label>
@@ -115,39 +119,52 @@ function L_UserInfo() {
                       className="mx-2"
                       id="major"
                       name="major"
-                      value={major}
-                      onChange={handleMajorChange}
+                      value={selectedMajor}
+                      onChange={(e) => {
+                        setSelectedMajor(e.target.value);
+                      }}
                     >
-                      <option value="" disabled hidden>
+                      <option value="" disabled selected>
                         Select Major
-                      </option>{" "}
-                      <option value="Software Engineering (Kĩ thuật phần mềm)">
-                        Software Engineering (Kĩ thuật phần mềm)
                       </option>
-                      <option value="Artificial Intelligence (AI) (Trí tuệ nhân tạo (AI))">
-                        Artificial Intelligence (AI) (Trí tuệ nhân tạo (AI))
-                      </option>
-                      <option value="Information Assurance (An toàn thông tin)">
-                        Information Assurance (An toàn thông tin)
-                      </option>
-                      <option value="Information System - IS (Hệ thống thông tin)">
-                        Information System - IS (Hệ thống thông tin)
-                      </option>
-                      <option value="Digital Art & Design (Thiết kế Mỹ thuật số)">
-                        Digital Art & Design (Thiết kế Mỹ thuật số)
-                      </option>
+                      {majors.map((majorOption) => (
+                        <option key={majorOption.majorId}>
+                          {majorOption.majorName}
+                        </option>
+                      ))}
                     </select>
                   </FormGroup>
                   <p className="my-3">Your current subjects:</p>
-                  {selectedSubjects.map((subject) => (
-                    <li key={subject.id}>{subject.name}</li>
-                  ))}
-                  <L_SubjectList
-                    subjects={filteredSubjects}
-                    onSearch={handleSearch}
-                    onSubjectSelect={handleSubjectSelection}
-                  />
-                  <Button onClick={handleClickSave}>Save</Button>
+                  {subjects.length > 0 && (
+                    <div className="my-3">
+                      <strong>
+                        {" "}
+                        <FontAwesomeIcon
+                          icon={faCalendarDays}
+                          className="mx-2"
+                        />
+                        {selectedMajor}
+                      </strong>
+                      <div className="my-2">
+                        <ListGroup>
+                          {subjects.map((result) => (
+                            <ListGroupItem
+                              onClick={() => handleClickSubject(result)}
+                              className={`${isActive(result)}`}
+                            >
+                              {result.subjectId}
+                              <FontAwesomeIcon
+                                className="mx-2"
+                                icon={faCircleCheck}
+                              />
+                            </ListGroupItem>
+                          ))}
+                        </ListGroup>
+                      </div>
+                    </div>
+                  )}
+
+                  <Button onClick={saveSubjects}>Save</Button>
                   <Button className="mx-2" variant="secondary">
                     Cancel
                   </Button>

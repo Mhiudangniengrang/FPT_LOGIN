@@ -10,9 +10,7 @@ import {
   Form,
   ListGroup,
   ListGroupItem,
-  Spinner,
 } from "react-bootstrap";
-import { useHistory } from "react-router-dom";
 import S_Layout from "../../Layouts/S_Layout";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -20,17 +18,18 @@ import {
   faCalendarDays,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
-
+import { useHistory } from "react-router-dom";
 import axios from "../../Services/customizeAxios";
 import { useData } from "../../context/DataContext";
+import { toast } from "react-toastify";
 function S_UserInfo() {
-  const history = useHistory();
   const [selectedSubjects, setSelectedSubjects] = useState([]);
   const [subjects, setSubjects] = useState([]);
   const [majors, setMajors] = useState([]);
   const [selectedMajor, setSelectedMajor] = useState(null);
   const [loading, isLoading] = useState(true);
   const { loginUser } = useData();
+  const history = useHistory();
 
   console.log(loginUser);
   useEffect(() => {
@@ -65,33 +64,26 @@ function S_UserInfo() {
     }
   }, [selectedMajor]);
 
-  const saveSelectedSubjects = () => {
+  const saveSubjects = async () => {
     try {
-      const selectedSubjectsStr = selectedSubjects
-        .map((subject) => `${subject.subjectId} - ${subject.lecturerName}`)
-      history.push({
-        pathname: `/student/viewprofile`,
-        state: {
-          selectedSubjects: selectedSubjectsStr,
-        },
-      });
-      // console.log(selectedSubjectsStr);
+      const selectedSubjectsData = selectedSubjects.map((subject) => ({
+        lecturerId: subject.lecturerId,
+        studentId: loginUser.userId,
+        subjectId: subject.subjectId,
+      }));
+      await axios.post(
+        "/api/v1/students/profile/subject",
+        selectedSubjectsData
+      );
+      // console.log(selectedSubjectsData);
+      toast.success("Save information success");
+      history.push("/student/viewprofile", selectedSubjectsData);
     } catch (err) {
       console.error("Error creating URL:", err);
+      toast.error( err.response.data.message);
     }
   };
 
-  const [formData, setFormData] = useState({
-    name: "",
-  });
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
   const handleClickSubject = (item) => {
     setSelectedSubjects((prevSubjects) => {
       if (prevSubjects.includes(item)) {
@@ -123,16 +115,7 @@ function S_UserInfo() {
             <Card className="px-2">
               <CardBody>
                 <div>
-                  <Form.Group className="d-flex align-items-center">
-                    <Form.Label>Your Name</Form.Label>
-                    <Form.Control
-                      className="w-50 mb-2 mx-2"
-                      type="text"
-                      name="name"
-                      value={formData.name}
-                      onChange={handleChange}
-                    />
-                  </Form.Group>
+                  <Form.Label>Your Name: {loginUser.userName}</Form.Label>
 
                   <FormGroup>
                     <label htmlFor="major">Major:</label>
@@ -145,7 +128,7 @@ function S_UserInfo() {
                         setSelectedMajor(e.target.value);
                       }}
                     >
-                      <option value="Select Major" disabled hidden>
+                      <option value="" disabled selected>
                         Select Major
                       </option>
                       {majors.map((majorOption) => (
@@ -164,7 +147,7 @@ function S_UserInfo() {
                           icon={faCalendarDays}
                           className="mx-2"
                         />
-                        {selectedMajor.majorName}
+                        {selectedMajor}
                       </strong>
                       <div className="my-2">
                         <ListGroup>
@@ -185,7 +168,7 @@ function S_UserInfo() {
                     </div>
                   )}
 
-                  <Button onClick={saveSelectedSubjects}>Save</Button>
+                  <Button onClick={saveSubjects}>Save</Button>
                   <Button className="mx-2" variant="secondary">
                     Cancel
                   </Button>

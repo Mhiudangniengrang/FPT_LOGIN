@@ -1,54 +1,24 @@
 import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
-import {
-  Container,
-  Row,
-  Col,
-  Card,
-  Button,
-  Image,
-  CardBody,
-} from "react-bootstrap";
+import { Container, Row, Col, Card, Button, CardBody } from "react-bootstrap";
 import L_EditProfile from "../../components/ViewProfile/L_EditProfile";
 import L_Layout from "../../Layouts/L_Layout";
-import { useLocation } from "react-router-dom";
 import L_Course from "../../components/ViewProfile/L_Course";
+import { useData } from "../../context/DataContext";
 
 function L_ViewProfile() {
   const [activeTab, setActiveTab] = useState("course");
-  const [course, setCourse] = useState([]);
-  const [name, setName] = useState(""); // Tên người dùng
+  const { loginUser } = useData();
+  console.log(loginUser);
 
-  const location = useLocation();
-  const state = location.state; // Initialize the state variable
-
-  useEffect(() => {
-    if (state && state.name) {
-      // Kiểm tra xem có tên (name) trong location.state hay không
-      setName(state.name);
-    }
-
-    // Cập nhật các thông tin khác
-    if (state && state.selectedSubjects) {
-      setCourse(state.selectedSubjects);
-    }
-  }, [state]);
-  const handleUpdateProfile = (selectedSubjects) => {
-    const course = selectedSubjects.map((subject) => ({
-      id: subject.id,
-      name: subject.name,
-    }));
-
-    setCourse(course);
-  };
   const breadScrumData = [
     {
-      route: "/lecturer_home",
+      route: "/lecturer",
       text: "Home",
     },
     {
-      route: "/l_view_profile",
+      route: "/lecturer/viewprofile",
       text: "View Profile",
     },
   ];
@@ -72,9 +42,9 @@ function L_ViewProfile() {
                 <Row>
                   <Col md={6} className="py-2">
                     <h5>Name:</h5>
-                    <p>{name || "Write a name here."}</p>
+                    <p>{loginUser.userName}</p>
                     <h5>Email Address:</h5>
-                    <p>HungLD@fpt.edu.vn</p>{" "}
+                    <p>{loginUser.email}</p>
                   </Col>
                   <Col md={6}>
                     <Button
@@ -95,13 +65,11 @@ function L_ViewProfile() {
                     </Button>
                     <Card className="my-3">
                       <CardBody>
-                        {activeTab === "course" && <L_Course course={course} />}
+                        {activeTab === "course" && (
+                          <L_Course loginUser={loginUser} />
+                        )}
                         {activeTab === "editprofile" && (
-                          <L_EditProfile
-                            onUpdateName={(newName) => setName(newName)}
-                            currentName={name}
-                            onUpdateProfile={handleUpdateProfile}
-                          />
+                          <L_EditProfile loginUser={loginUser} />
                         )}
                       </CardBody>
                     </Card>
