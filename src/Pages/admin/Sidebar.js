@@ -1,7 +1,7 @@
 import React from 'react'
 import Style from '../../assets/style/admin.module.scss'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBook, faBookOpen, faPersonShelter } from "@fortawesome/free-solid-svg-icons";
+import { faBook, faBookOpen, faGraduationCap, faPersonShelter, faUser } from "@fortawesome/free-solid-svg-icons";
 import { faGauge } from "@fortawesome/free-solid-svg-icons";
 import { faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
 import { useParams } from 'react-router-dom';
@@ -11,6 +11,8 @@ export function Sidebar({ Toggle }) {
         { icon: faBook, text: 'Major', href: '/admin/major' },
         { icon: faPersonShelter, text: 'Room', href: '/admin/room' },
         { icon: faBookOpen, text: 'Subject', href: '/admin/subject' },
+        { icon: faUser, text: 'User', href: '/admin/user' },
+        { icon: faGraduationCap, text: 'Semester', href: '/admin/semester' },
     ];
     const { type } = useParams()
     return (

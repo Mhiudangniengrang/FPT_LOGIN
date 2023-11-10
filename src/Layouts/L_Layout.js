@@ -2,37 +2,27 @@ import React from "react";
 import L_Header from "../components/Headers & Footers/L_Header";
 import Footer from "../components/Headers & Footers/Footer";
 import Container from "react-bootstrap/Container";
-import { useData } from "../context/DataContext";
-import Unauthorize from "../Pages/errors/Unauthorize";
 
 const L_Layout = ({ children }) => {
 
-  const { authorize } = useData()
-
   return (
     <>
-      {authorize !== null && (
-        authorize ? (
+      <Container
+        fluid
+        style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}
+      >
+        <>
+          <L_Header />
           <Container
-            fluid
-            style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}
+            style={{
+              flex: "1",
+            }}
           >
-            <>
-              <L_Header />
-              <Container
-                style={{
-                  flex: "1",
-                }}
-              >
-                {children}
-              </Container>
-              <Footer />
-            </>
+            {children}
           </Container>
-        ) : (
-          <Unauthorize />
-        )
-      )}
+          <Footer />
+        </>
+      </Container>
     </>
   );
 };

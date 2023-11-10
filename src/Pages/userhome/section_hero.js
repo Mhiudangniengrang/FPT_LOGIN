@@ -43,10 +43,20 @@ function Hero() {
         }
       })
       .then((response) => {
+        console.log(response)
         sessionStorage.setItem('role', response.roleName)
-        if (response.roleName === "LECTURER") {
-          sessionStorage.setItem('lecturerId', response.userId)
+        const encodeInfo = {
+          userId: response.userId,
+          email: response.email,
+          status: response.status,
+          roleName: response.roleName,
+          majorId: response.majorId,
+        };
+        const saveToSession = {
+          userName: response.userName,
+          info: btoa(JSON.stringify(encodeInfo))
         }
+        sessionStorage.setItem("user", JSON.stringify(saveToSession));
         navigate(`/${response.roleName}`)
       })
       .catch(error => {

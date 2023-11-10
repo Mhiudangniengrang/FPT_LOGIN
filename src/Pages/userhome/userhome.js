@@ -10,6 +10,7 @@ import { useEffect } from "react";
 function Userhome() {
     useEffect(() => {
         localStorage.removeItem("accessToken")
+        sessionStorage.clear()
     }, [])
     return (
         <>

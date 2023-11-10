@@ -49,7 +49,12 @@ function App() {
           })}
           {AdminRoutes.map((route, idx) => {
             const Page = route.component;
-            return <Route key={idx} path={route.path} element={<Page />} />;
+            return (
+              <Route key={idx} path={route.path}
+                element={<DataProvider role={"ADMIN"}><Page /></DataProvider>}
+              />
+            );
+
           })}
         </Routes>
       </Router>
