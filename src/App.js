@@ -6,14 +6,7 @@ import StudentRoutes from "./Routers/StudentRoutes";
 import LecturerRoutes from "./Routers/LecturerRoutes";
 import { DataProvider } from "./context/DataContext";
 import AdminRoutes from "./Routers/AdminRoutes";
-import { Admin, Resource } from "react-admin";
-import restProvider from 'ra-data-simple-rest'
-import MajorList from "./Pages/admin/MajorList";
-import RoomList from "./Pages/admin/RoomList";
-import customDataProvider from "./Services/customDataProvider";
 function App() {
-  const apiUrl = 'http://localhost:8080';
-  const dataProvider = customDataProvider(apiUrl); // Create an instance of your custom data provider
   return (
     <div className="App">
       <Router>
@@ -52,9 +45,6 @@ function App() {
           })}
         </Routes>
       </Router>
-      {/* <Admin dataProvider={dataProvider}>
-        <Resource name="/api/v1/admin/majors" list={MajorList} />
-      </Admin> */}
     </div>
   );
 }

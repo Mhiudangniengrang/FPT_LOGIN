@@ -1,6 +1,5 @@
 {
   "name": "fpt_login",
-  "proxy":"http://localhost:8080/api/v1",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -18,11 +17,9 @@
     "font-awesome": "^4.7.0",
     "ra-data-simple-rest": "^4.15.2",
     "react": "^17.0.2",
-    "react-admin": "^4.15.3",
     "react-bootstrap": "^2.9.0",
     "react-datepicker": "^4.20.0",
     "react-dom": "^17.0.2",
-    "react-query": "^3.39.3",
     "react-router-dom": "^6.18.0",
     "react-scripts": "5.0.1",
     "react-time-picker": "^6.5.2",

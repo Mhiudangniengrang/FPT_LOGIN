@@ -12,22 +12,21 @@ import {
 } from "react-bootstrap";
 import S_EditProfile from "../../components/ViewProfile/S_EditProfile";
 import S_Layout from "../../Layouts/S_Layout";
-import { useLocation } from "react-router-dom";
 import S_Course from "../../components/ViewProfile/S_Course";
-import { useHistory } from "react-router-dom";
-import { useData, useDataCourse } from "../../context/DataContext";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useData } from "../../context/DataContext";
 
 function S_ViewProfile() {
   const [activeTab, setActiveTab] = useState("course");
   const [name, setName] = useState("");
-  const history = useHistory();
+  const navigate = useNavigate();
   const location = useLocation();
   const selectedSubjectsStr = location.state?.selectedSubjects;
 
   const { loginUser } = useData();
 
   const handleUpdateProfile = (updatedData) => {
-    history.replace({
+    navigate.replace({
       ...location,
       state: updatedData,
     });
