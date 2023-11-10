@@ -4,7 +4,7 @@ import Carousel from "react-bootstrap/Carousel";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { GoogleLogin } from "@react-oauth/google";
 import axios from "../../Services/customizeAxios";
-import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import GlobalContext from "../../context/GlobalContext";
 var heroData = [
@@ -32,7 +32,7 @@ var heroData = [
 ];
 
 function Hero() {
-  const history = useHistory();
+  const navigate = useNavigate();
   const handleLoginSuccess = (credentialResponse) => {
     const accessToken = credentialResponse.credential;
     localStorage.setItem('accessToken', accessToken)
@@ -47,7 +47,7 @@ function Hero() {
         if (response.roleName === "LECTURER") {
           sessionStorage.setItem('lecturerId', response.userId)
         }
-        history.push(`/${response.roleName}`)
+        navigate(`/${response.roleName}`)
       })
       .catch(error => {
         console.log("Error getting user data:", error);

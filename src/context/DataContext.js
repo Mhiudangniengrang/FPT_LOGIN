@@ -37,16 +37,14 @@ export const DataProvider = ({ children, role }) => {
   }, [loginUser]);
 
   useEffect(() => {
-    console.log("room ne");
     axios
       .get(`/api/v1/slots/lecturer/room`)
       .then((response) => {
-        setRooms(response);
+        setRooms(response)
+      }).catch(error => {
+        console.log('Error at Data Context:', error)
       })
-      .catch((error) => {
-        console.log("Error at Data Context:", error);
-      });
-  }, []);
+  }, [])
 
   if (loading) {
     return <PageLoading />;

@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import { ListGroup, Tab, Tabs } from "react-bootstrap";
 import axios from "../../Services/customizeAxios";
 import S_Layout from "../../Layouts/S_Layout";
-import { useParams } from "react-router-dom/cjs/react-router-dom.min";
-import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import { useParams, useNavigate } from "react-router-dom";
 import FormSearch from "../FormSearch";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -30,7 +29,7 @@ const S_ViewSearch = () => {
     const { filter, search } = useParams();
     const [searchSubject, setSearchSubject] = useState([]);
     const [searchLecture, setSearchLecture] = useState([]);
-    const history = useHistory();
+    const navigate = useNavigate();
 
     const { loginUser } = useData();
 
@@ -79,7 +78,7 @@ const S_ViewSearch = () => {
         console.log("useEffect");
 
         if (search === undefined) {
-            history.push(`/student/search`);
+            navigate(`/student/search`);
         } else {
             if (filter === "lecturer") {
                 handleSearchLecture();

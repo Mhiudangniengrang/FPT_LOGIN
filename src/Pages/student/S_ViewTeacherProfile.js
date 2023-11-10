@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Container, Row, Col, Card, Button, Spinner } from "react-bootstrap";
-import { useParams } from "react-router-dom/cjs/react-router-dom.min";
+import { useParams } from "react-router-dom";
 import S_Layout from "../../Layouts/S_Layout";
 import S_ViewTeacherAboutme from "../../components/ViewTeacherProfile/S_ViewTeacherAboutme";
 import GlobalContext from "../../context/GlobalContext";

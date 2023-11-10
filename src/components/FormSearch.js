@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Button } from "react-bootstrap";
 
-import { Link, useParams } from "react-router-dom/cjs/react-router-dom.min";
+import { Link, useParams } from "react-router-dom";
 const FormSearch = () => {
   const { filter, search } = useParams()
   const [searchText, setSearchText] = useState(search);

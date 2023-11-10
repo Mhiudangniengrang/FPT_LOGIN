@@ -18,7 +18,7 @@ import {
   faCalendarDays,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
-import { useHistory } from "react-router-dom";
+// import { useHistory } from "react-router-dom";
 import axios from "../../Services/customizeAxios";
 import { useData } from "../../context/DataContext";
 import { toast } from "react-toastify";
@@ -29,7 +29,7 @@ function L_UserInfo() {
   const [selectedMajor, setSelectedMajor] = useState(null);
   const [loading, isLoading] = useState(true);
   const { loginUser } = useData();
-  const history = useHistory();
+  // const history = useHistory();
 
   console.log(loginUser);
   useEffect(() => {

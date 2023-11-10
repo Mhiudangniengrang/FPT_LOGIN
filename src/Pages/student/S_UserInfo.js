@@ -18,7 +18,7 @@ import {
   faCalendarDays,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "../../Services/customizeAxios";
 import { useData } from "../../context/DataContext";
 import { toast } from "react-toastify";
@@ -29,7 +29,7 @@ function S_UserInfo() {
   const [selectedMajor, setSelectedMajor] = useState(null);
   const [loading, isLoading] = useState(true);
   const { loginUser } = useData();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   console.log(loginUser);
   useEffect(() => {
@@ -53,7 +53,7 @@ function S_UserInfo() {
         .get(`/api/v1/student/searching/subjects/major/${item.majorId}`)
         .then((res) => {
           setSubjects(res);
-          // console.log(res);
+          console.log(res);
         })
         .catch((error) => {
           console.error("Error", error);
@@ -62,7 +62,7 @@ function S_UserInfo() {
           isLoading(false);
         });
     }
-  }, [selectedMajor]);
+  }, []);
 
   const saveSubjects = async () => {
     try {
@@ -75,12 +75,12 @@ function S_UserInfo() {
         "/api/v1/students/profile/subject",
         selectedSubjectsData
       );
-      // console.log(selectedSubjectsData);
+      console.log(selectedSubjectsData);
       toast.success("Save information success");
-      history.push("/student/viewprofile", selectedSubjectsData);
+      navigate("/student/viewprofile", selectedSubjectsData);
     } catch (err) {
       console.error("Error creating URL:", err);
-      toast.error( err.response.data.message);
+      toast.error(err.response.data.message);
     }
   };
 

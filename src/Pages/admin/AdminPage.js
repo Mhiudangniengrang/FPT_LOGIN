@@ -1,21 +1,24 @@
 import axios from "../../Services/customizeAxios";
 import React, { useEffect, useState } from "react";
-import Sidebar from "./Sidebar";
 import Home from "./Home";
+
+import Style from '../../assets/style/admin.module.scss'
+import { Sidebar } from "./Sidebar";
 const AdminPage = () => {
     const [toggle, setToggle] = useState(true)
     const Toggle = () => { setToggle(!toggle) }
-    return (<div className='container-fluid bg-secondary min-vh-100 '>
-        <div className='row '>
-            {toggle && <div className='col-4 col-md-2 bg-white vh-100 position-fixed'>
-                <Sidebar />
-            </div>}
-            {toggle && <div className='col-4 col-md-2'></div>}
-            <div className='col'>
-                <Home Toggle={Toggle} />
+    return (
+        <div className={`container-fluid min-vh-100 ${Style.wrapper}`}>
+            <div className='row '>
+                <div className={`${toggle ? "col-4" : "col "} col-md-2  vh-100 position-fixed ${Style.sideBarContainer} ${toggle === false ? Style.mini : ""}`}>
+                    <Sidebar Toggle={toggle} />
+                </div>
+                <div className={`ms-auto ${toggle ? "col-10" : "col"} p-0`}>
+                    <Home Toggle={Toggle} />
+                </div>
             </div>
-        </div>
-    </div>)
+        </div >
+    )
 }
 
 export default AdminPage
