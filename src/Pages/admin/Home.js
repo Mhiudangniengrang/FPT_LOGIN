@@ -5,6 +5,7 @@ import { MajorCreate, MajorEdit, MajorList } from './Major'
 import { useParams } from 'react-router-dom'
 import { RoomList } from './Room'
 import { SubjectList } from './Subject'
+import { UserList } from './User'
 
 
 function Home({ Toggle }) {
@@ -22,6 +23,9 @@ function Home({ Toggle }) {
 
                 {(type === "subject" && !action) && <SubjectList />}
                 {(type === "room" && action === 'edit' && id) && <MajorEdit />}
+
+
+                {(type === "user" && !action) && <UserList />}
             </div>
         </div >)
 }

@@ -1,7 +1,7 @@
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Style from "../../assets/style/admin.module.scss"
-import { Button, Pagination, Stack, Table } from "react-bootstrap";
+import { Button, Pagination, Spinner, Stack, Table } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
@@ -13,30 +13,77 @@ import {
     faChevronRight,
 } from "@fortawesome/free-solid-svg-icons";
 import axios from "../../Services/customizeAxios";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
+import { useData } from "../../context/DataContext";
 export const MajorList = () => {
+    const { loginUser } = useData()
     const { action } = useParams();
     const [page, setPage] = useState(0)
+    const [loading, isLoading] = useState(true)
     const [pageContent, setPageContent] = useState([])
     const [filter, setFilter] = useState("majorId")
     const [sortDir, setSortDir] = useState("asc")
     const [totalPage, setTotalPage] = useState(1)
     const [pageSize, setPageSize] = useState(5)
+    const [status, setStatus] = useState("")
+    const [numberAll, setNumberAll] = useState(0)
+    const [numberOpen, setNumberOpen] = useState(0)
+    const [isDelete, setDelete] = useState(false)
+
+    const handleDelete = (item) => {
+        axios.put(`/api/v1/major/admin/${loginUser.userId}`,
+            {
+                majorId: item.majorId,
+                majorName: item.majorName,
+                status: "CLOSED",
+            }
+        ).then(res => {
+            toast.success(`Delete successfully`, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+            });
+            setDelete(true)
+        }).catch(error => {
+            console.log("Error at saving major", error)
+            toast.error(`${error.response != null ? error.response.data.message : error.message}`, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+            });
+        })
+    }
+
+    const location = useLocation()
     useEffect(async () => {
-        await axios.get(`/api/v1/admin/majors`,
+        await axios.get(`/api/v1/major/admin/majors`,
             {
                 params: {
                     pageNo: page,
                     pageSize: pageSize,
                     sortBy: filter,
                     sortDir: sortDir,
+                    status: status
                 }
             }
         ).then(res => {
-            console.log(res)
             setPageContent(res.content)
             setTotalPage(res.totalPage)
+            setNumberOpen(res.count)
+            if (status === "") {
+                setNumberAll(res.totalElement)
+            }
         }).catch(error => {
             console.log("Error at getting request:", error)
             toast.error(`${error.message}`, {
@@ -49,15 +96,35 @@ export const MajorList = () => {
                 progress: undefined,
                 theme: "light",
             });
+        }).finally(() => {
+            isLoading(false)
         })
-    }, [page, pageSize, filter, sortDir])
+    }, [page, pageSize, filter, sortDir, status, isDelete])
+
+    useEffect(() => {
+        console.log("number")
+
+        axios.get(`/api/v1/major/admin/majors`, {
+            params: {
+                status: "open"
+            }
+        }).then(res => {
+            setNumberOpen(res.totalElement)
+        });
+
+    }, [])
 
     const handlePageChange = (value) => {
         setPage(value)
     }
+    const handleRadioChange = (newStatus) => {
+        setStatus(newStatus);
+    };
+
     const navigate = useNavigate();
     return (
         <div className={Style.container}>
+
             <ToastContainer />
             <div className={Style.tableContainer}>
                 <Stack direction="horizontal" style={{ marginBottom: "10px" }}>
@@ -95,54 +162,61 @@ export const MajorList = () => {
                 </Stack>
 
                 {/* Table Header */}
-                <Table className={Style.table} striped bordered>
-                    <thead>
-                        <tr>
-                            <th>
-                                Major ID
-                                <span
-                                    style={{ paddingLeft: '10px', cursor: 'pointer' }}
-                                    onClick={() => {
-                                        setFilter("majorId");
-                                        setSortDir(sortDir === "asc" ? "desc" : "asc");
-                                    }}
-                                >
-                                    <FontAwesomeIcon
-                                        icon={sortDir === "asc" ? faArrowUp : faArrowDown}
-                                        style={{ color: "#000000" }}
-                                    />
-                                </span>
-                            </th>
-                            <th>Major Name</th>
-                            <th>Status</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        {pageContent.map((item, index) => (
-                            <tr key={index}>
-                                <td>{item.majorId}</td>
-                                <td>{item.majorName}</td>
-                                <td>{item.status}</td>
-                                <td>
+                {loading ? (
+                    <Spinner style={{ margin: '0 auto' }} />
+                ) : (
+                    <Table className={Style.table} striped bordered>
+                        <thead>
+                            <tr>
+                                <th>
+                                    Major ID
                                     <span
-                                        className={Style.icon}
-                                        onClick={() => navigate(`edit/${item.majorId}`, { state: { item } })}
+                                        style={{ paddingLeft: '10px', cursor: 'pointer' }}
+                                        onClick={() => {
+                                            setFilter("majorId");
+                                            setSortDir(sortDir === "asc" ? "desc" : "asc");
+                                        }}
                                     >
-                                        <FontAwesomeIcon icon={faPenToSquare} style={{ color: "#0071c7" }} />
+                                        <FontAwesomeIcon
+                                            icon={sortDir === "asc" ? faArrowUp : faArrowDown}
+                                            style={{ color: "#000000" }}
+                                        />
                                     </span>
-                                    <span
-                                        className={Style.icon}
-                                        id={Style.delete}
-                                    >
-                                        <FontAwesomeIcon icon={faTrash} style={{ color: "#db0000" }} />
-                                    </span>
-                                </td>
+                                </th>
+                                <th>Major Name</th>
+                                <th>Status</th>
+                                <th>Action</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </Table>
+                        </thead>
+
+                        <tbody>
+                            {pageContent.map((item, index) => (
+                                <tr key={index}>
+                                    <td>{item.majorId}</td>
+                                    <td>{item.majorName}</td>
+                                    <td>{item.status}</td>
+                                    <td>
+                                        <span
+                                            className={Style.icon}
+                                            onClick={() => navigate(`edit/${item.majorId}`, { state: { item } })}
+                                        >
+                                            <FontAwesomeIcon icon={faPenToSquare} style={{ color: "#0071c7" }} />
+                                        </span>
+
+                                        <span
+                                            className={Style.icon}
+                                            id={Style.delete}
+                                            onClick={() => handleDelete(item)}
+                                        >
+                                            <FontAwesomeIcon icon={faTrash} style={{ color: "#db0000" }} />
+                                        </span>
+
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </Table>
+                )}
 
                 {/* Pagination */}
                 <Pagination
@@ -177,19 +251,39 @@ export const MajorList = () => {
 
             {/* Filter Container */}
             <div className={Style.filterContainer}>
-                <form id="status" >
+                <form id="status">
                     <p>Status</p>
-                    <div>
-                        <input name="status" id="all" type="radio" />
-                        <label htmlFor="all">All</label><span>25</span>
+                    <div
+                        onChange={() => handleRadioChange('')}
+                    >
+                        <input name="status" id="all" type="radio" checked={status === "" ? true : false} />
+                        <label htmlFor="all">All</label>
+
+                        {loading ? (<span><Spinner style={{ width: '20px', height: '20px' }} /></span>) : (<span>
+                            {numberAll}
+                        </span>)}
                     </div>
-                    <div>
-                        <input name="status" id="open" type="radio" />
-                        <label htmlFor="open">Open</label><span>25</span>
+                    <div
+                        onChange={() => handleRadioChange('open')}
+                    >
+                        <input name="status" id="open" type="radio" checked={status === "open" ? true : false} />
+                        <label htmlFor="open">Open</label>
+                        <span>
+                            {loading ? (<span><Spinner style={{ width: '20px', height: '20px' }} /></span>) : (<span>
+                                {numberOpen}
+                            </span>)}
+                        </span>
                     </div>
-                    <div>
-                        <input name="status" id="close" type="radio" />
-                        <label htmlFor="close">Close</label><span>25</span>
+                    <div
+                        onChange={() => handleRadioChange('closed')}
+                    >
+                        <input name="status" id="closed" type="radio" checked={status === "closed" ? true : false} />
+                        <label htmlFor="closed">Closed</label>
+                        <span>
+                            {loading ? (<span><Spinner style={{ width: '20px', height: '20px' }} /></span>) : (<span>
+                                {numberAll - numberOpen}
+                            </span>)}
+                        </span>
                     </div>
                 </form>
             </div>
@@ -197,70 +291,210 @@ export const MajorList = () => {
     )
 };
 
-export const MajorEdit = ({ props }) => {
+export const MajorEdit = () => {
+    const { loginUser } = useData();
+    const { id } = useParams();
+    const [major, setMajor] = useState(null)
+    const [name, setName] = useState("")
+    const [loading, isLoading] = useState(true)
+    const [saving, isSaving] = useState(false)
+    const handleRadioChange = (newStatus) => {
+        console.log(newStatus)
+        setStatus(newStatus);
+    };
 
+    const [status, setStatus] = useState("")
+    useEffect(() => {
+        axios
+            .get(`/api/v1/major/admin/major/${id}`)
+            .then(res => {
+                setMajor(res)
+                setName(res.majorName)
+                setStatus(res.status)
+            }).catch(error => {
+                console.log("Error at getting major:", error)
+                toast.error(`${error.message}`, {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                });
+            }).finally(() => {
+                isLoading(false)
+            })
+    }, [])
 
+    const handleSave = (e) => {
+        isSaving(true)
+        e.preventDefault()
+        axios.put(`/api/v1/major/admin/${loginUser.userId}`,
+            {
+                majorId: major.majorId,
+                majorName: name,
+                status: status,
+            }
+        ).then(res => {
+            console.log(res)
+            toast.success(`Save successfully`, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+            });
+        }).catch(error => {
+            console.log("Error at saving major", error)
+            toast.error(`${error.message}`, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+            });
+        }).finally(() => {
+            isSaving(false)
+        })
+    }
+    const navigate = useNavigate();
     return (
         <div className={Style.container}>
+            {console.log(saving)}
             <ToastContainer />
-            <form className={Style.formEdit}>
-                <div>
-                    <label htmlFor="majorId">Major's Id</label>
-                    <input id="majorId" type="text" readOnly />
-                </div>
-                <div>
-                    <label htmlFor="majorName">Major's Name</label>
-                    <input id="majorName" type="text" required />
-                </div>
-                <div>
-                    <label htmlFor="status">Status</label>
-                    <Stack style={{ flexDirection: 'row', padding: '10px 20px', margin: '0' }}>
-                        <input name="status" id="open" type="radio" required /><label htmlFor="open">Open</label>
-                        <input name="status" id="close" type="radio" required /><label htmlFor="close">Close</label>
+            {loading ? (
+                <Spinner style={{ margin: '50px auto' }} />
+            ) : (
+                <form className={Style.formEdit}>
+
+                    <h3>Create major</h3>
+                    <div>
+                        <label htmlFor="majorId">Major's Id</label>
+                        <input id="majorId" type="text" value={major.majorId} readOnly />
+                    </div>
+                    <div>
+                        <label htmlFor="majorName">Major's Name</label>
+                        <input id="majorName" type="text" required value={name} onChange={(e) => setName(e.target.value)} />
+                    </div>
+                    <div>
+                        <label htmlFor="status">Status</label>
+                        <Stack style={{ flexDirection: 'row', padding: '10px 20px', margin: '0', justifyContent: 'center' }}>
+                            <div
+                                style={{ margin: '0' }}
+                            >
+                                <input name="status" id="open" type="radio" checked={status === "OPEN" ? true : false}
+                                    onClick={() => handleRadioChange('OPEN')} />
+                                <label htmlFor="open" style={{ textAlign: 'center' }}>Open</label>
+
+                            </div>
+                            <div
+                                style={{ margin: '0' }}
+                            >
+                                <input name="status" id="closed" type="radio" checked={status === "CLOSED" ? true : false}
+                                    onClick={() => handleRadioChange('CLOSED')} />
+                                <label htmlFor="closed" style={{ textAlign: 'center' }}>Closed</label>
+                            </div>
+                        </Stack>
+                    </div>
+                    <Stack style={{ flexDirection: 'row', padding: '10px 20px', width: '100%' }} gap={3}>
+                        <button className={Style.save}
+                            type="submit"
+                            onClick={(e) => handleSave(e)}
+                            style={{
+                                maxWidth: '100px'
+                            }}
+                        >
+                            {!saving ? "Save" : "Saving..."}
+                        </button>
+                        <button
+                            className={`ms-auto ${Style.back}`}
+                            type="submit" onClick={() => navigate("/admin/major")}
+                        >Back</button>
                     </Stack>
-                </div>
-                <Stack style={{ flexDirection: 'row', padding: '10px 20px', width: '100%' }} gap={3}>
-                    <button className={Style.save} type="submit">Save</button>
-                    <button className={Style.add} >
-                        <a href="">Add subject</a>
-                    </button>
-                    <button
-                        className={`ms-auto ${Style.delete}`}
-                        type="submit">Delete</button>
-                </Stack>
-            </form>
-
-
+                </form>
+            )}
         </div >
     )
 }
 export const MajorCreate = () => {
+    const { loginUser } = useData();
+    const [name, setName] = useState("")
+    const [saving, isSaving] = useState(false)
+    const [status, setStatus] = useState("")
 
-
+    const navigate = useNavigate();
+    const handleSave = (e) => {
+        isSaving(true)
+        e.preventDefault()
+        axios.put(`/api/v1/major/admin/${loginUser.userId}`,
+            {
+                majorId: major.majorId,
+                majorName: name,
+                status: status,
+            }
+        ).then(res => {
+            console.log(res)
+            toast.success(`Save successfully`, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+            });
+        }).catch(error => {
+            console.log("Error at saving major", error)
+            toast.error(`${error.message}`, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+            });
+        }).finally(() => {
+            isSaving(false)
+        })
+    }
     return (
         <div className={Style.container}>
+            {console.log(saving)}
             <ToastContainer />
+
             <form className={Style.formEdit}>
+                <h3>Create major</h3>
                 <div>
                     <label htmlFor="majorName">Major's Name</label>
-                    <input id="majorName" type="text" required />
-                </div>
-                <div>
-                    <label htmlFor="status">Status</label>
-                    <Stack style={{ flexDirection: 'row', padding: '10px 20px', margin: '0' }}>
-                        <input name="status" id="open" type="radio" required /><label htmlFor="open">Open</label>
-                        <input name="status" id="close" type="radio" required /><label htmlFor="close">Close</label>
-                    </Stack>
+                    <input id="majorName" type="text" required value={name} onChange={(e) => setName(e.target.value)} />
                 </div>
                 <Stack style={{ flexDirection: 'row', padding: '10px 20px', width: '100%' }} gap={3}>
-                    <button className={Style.save} type="submit">Save</button>
-                    <button className={Style.add} >
-                        <a href="">Add subject</a>
+                    <button className={Style.save}
+                        type="submit"
+                        onClick={(e) => handleSave(e)}
+                        style={{
+                            maxWidth: '100px'
+                        }}
+                    >
+                        {!saving ? "Create" : "Creating..."}
                     </button>
+                    <button
+                        className={`ms-auto ${Style.back}`}
+                        type="submit" onClick={() => navigate("/admin/major")}
+                    >Back</button>
                 </Stack>
             </form>
-
-
         </div >
     )
 }

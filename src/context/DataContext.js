@@ -2,6 +2,7 @@ import { createContext, useContext, useState, useEffect } from "react";
 import axios from "../Services/customizeAxios";
 import GlobalContext from "./GlobalContext";
 import PageLoading from "../components/PageLoad";
+import { useNavigate } from "react-router-dom";
 const DataContext = createContext();
 
 export const DataProvider = ({ children, role }) => {
@@ -11,29 +12,38 @@ export const DataProvider = ({ children, role }) => {
   const [loading, setLoading] = useState(true);
   const accessToken =
     typeof window !== null ? localStorage.getItem("accessToken") : null;
-  const [loginUser, setLoginUser] = useState({});
+  let loginUser = null;
+  // let savedUser = typeof window != null ? JSON.parse(sessionStorage.getItem("user")) : undefined;
+  let savedUser = JSON.parse(sessionStorage.getItem("user"))
+  if (savedUser !== null) {
+    const decodedInfo = atob(savedUser.info);
+    const userInfo = JSON.parse(decodedInfo);
+    loginUser = {
+      userName: savedUser.userName,
+      userId: userInfo.userId,
+      status: userInfo.status,
+      majorId: userInfo.majorId,
+      email: userInfo.email,
+      roleName: userInfo.roleName,
+    };
 
-  useEffect(async () => {
-    await axios
-      .get("/api/v1/user/userId", {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      })
-      .then((res) => {
-        setLoginUser(res);
-        setLoading(false);
-      })
-      .catch((error) => {
-        setLoading(false);
-        console.log("Erorr at getting user ", error);
-      });
-  }, []);
-
+  }
+  const navigate = useNavigate()
   useEffect(() => {
-    if (loginUser.roleName === role) {
-      setAuthorize(true);
-    } else setAuthorize(false);
+    try {
+      if (loginUser.roleName === role) {
+        setAuthorize(true);
+        setLoading(false)
+      } else if (loginUser.roleName === null || loginUser.roleName !== role) {
+        setLoading(false)
+        setAuthorize(false)
+        navigate("/unauthorize")
+      };
+    } catch (error) {
+      setLoading(false)
+      setAuthorize(false)
+      navigate("/unauthorize")
+    }
   }, [loginUser]);
 
   useEffect(() => {
@@ -46,9 +56,9 @@ export const DataProvider = ({ children, role }) => {
       })
   }, [])
 
-  if (loading) {
-    return <PageLoading />;
-  }
+  // if (loading && (loginUser.roleName === "LECTURER" || loginUser.roleName === "STUDENT")) {
+  //   return <PageLoading />;
+  // }
   return (
     <DataContext.Provider
       value={{
