@@ -74,9 +74,7 @@ export const DataProvider = ({ children, role }) => {
     </DataContext.Provider>
   );
 };
-export const useDataCourse = () => {
-  return useContext(DataContext);
-};
+
 export const useData = () => {
   const contextValue = useContext(DataContext);
   if (contextValue === undefined) {

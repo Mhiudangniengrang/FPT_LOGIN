@@ -6,12 +6,13 @@ const List = (props) => {
   const [list, setList] = useState([]);
 
   useEffect(() => {
-    const studentId = 6;
+    const studentId = 14;
 
     axios
-      .get(`/api/v1/subject/admin/bookedSlot/homePage/${studentId}`)
+      .get(`/api/v1/students/bookedSlot/homePage/${studentId}`)
       .then((response) => {
         setList(response);
+        // console.log(response);
       })
       .catch((error) => {
         console.log("Error at list: " + error);

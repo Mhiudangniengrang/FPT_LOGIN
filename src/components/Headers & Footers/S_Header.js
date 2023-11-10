@@ -33,7 +33,7 @@ const dropdownItems = [
 ];
 
 const S_Header = () => {
-  const { loginUser } = useData()
+  const { loginUser } = useData();
 
   return (
     <Stack className={Style.container}>
@@ -46,44 +46,35 @@ const S_Header = () => {
           title={`Student ${loginUser.userName}`}
           id="nav-dropdown"
           style={{
-            maxWidth: '200px'
+            maxWidth: "200px",
           }}
         >
-          <NavDropdown.Item
-            href="/student/viewprofile"
-          >
+          <NavDropdown.Item href="/student/viewprofile">
             <FontAwesomeIcon
               icon={faUser}
-              style={{ color: "#000000", paddingRight: " 5px" }}
+              style={{ color: "#000000", paddingRight: " 10px" }}
             />
             {loginUser.userName}
           </NavDropdown.Item>
-          <NavDropdown.Item
-            href="/student/viewprofile"
-          >
+          <NavDropdown.Item href="/student/viewprofile">
             <FontAwesomeIcon
               icon={faUserPen}
               style={{ color: "#000000", paddingRight: " 5px" }}
             />
             Edit Profile
           </NavDropdown.Item>
-          <NavDropdown.Item>
-            <NavLink
-              to="/student/viewschedule"
-            >
-              <FontAwesomeIcon
-                icon={faCalendarDays}
-                style={{ color: "#000000", paddingRight: " 5px" }}
-              />
-              View Schedule
-            </NavLink>
+
+          <NavDropdown.Item href="/student/viewprofile">
+            <FontAwesomeIcon
+              icon={faCalendarDays}
+              style={{ color: "#000000", paddingRight: " 10px" }}
+            />
+            View Profile
           </NavDropdown.Item>
-          <NavDropdown.Item
-            href="/"
-          >
+          <NavDropdown.Item href="/">
             <FontAwesomeIcon
               icon={faRightFromBracket}
-              style={{ color: "#050505", paddingRight: " 5px" }}
+              style={{ color: "#050505", paddingRight: " 10px" }}
             />
             Log out
           </NavDropdown.Item>
@@ -112,7 +103,6 @@ const S_Header = () => {
       </Stack>
     </Stack>
   );
-
-}
+};
 
 export default S_Header;
