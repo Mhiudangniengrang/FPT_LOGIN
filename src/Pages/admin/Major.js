@@ -16,6 +16,7 @@ import axios from "../../Services/customizeAxios";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import { useData } from "../../context/DataContext";
+import { MajorSubjectList } from "./Subject";
 export const MajorList = () => {
     const { loginUser } = useData()
     const { action } = useParams();
@@ -86,7 +87,7 @@ export const MajorList = () => {
             }
         }).catch(error => {
             console.log("Error at getting request:", error)
-            toast.error(`${error.message}`, {
+            toast.error(`${error.response != null ? error.response.data.message : error.message}`, {
                 position: "top-right",
                 autoClose: 5000,
                 hideProgressBar: false,
@@ -110,6 +111,18 @@ export const MajorList = () => {
             }
         }).then(res => {
             setNumberOpen(res.totalElement)
+        }).catch(error => {
+            console.log("Error at getting request:", error)
+            toast.error(`${error.response != null ? error.response.data.message : error.message}`, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+            });
         });
 
     }, [])
@@ -175,6 +188,7 @@ export const MajorList = () => {
                                         onClick={() => {
                                             setFilter("majorId");
                                             setSortDir(sortDir === "asc" ? "desc" : "asc");
+                                            setPage(1)
                                         }}
                                     >
                                         <FontAwesomeIcon
@@ -198,7 +212,7 @@ export const MajorList = () => {
                                     <td>
                                         <span
                                             className={Style.icon}
-                                            onClick={() => navigate(`edit/${item.majorId}`, { state: { item } })}
+                                            onClick={() => navigate(`/admin/major/edit/${item.majorId}`, { state: { item } })}
                                         >
                                             <FontAwesomeIcon icon={faPenToSquare} style={{ color: "#0071c7" }} />
                                         </span>
@@ -221,7 +235,7 @@ export const MajorList = () => {
                 {/* Pagination */}
                 <Pagination
                     style={{ justifyContent: 'center' }}
-                    active
+
                 >
                     <Button
                         variant="link"
@@ -291,10 +305,11 @@ export const MajorList = () => {
     )
 };
 
+// chua xong
 export const MajorEdit = () => {
     const { loginUser } = useData();
     const { id } = useParams();
-    const [major, setMajor] = useState(null)
+    const [major, setMajor] = useState({})
     const [name, setName] = useState("")
     const [loading, isLoading] = useState(true)
     const [saving, isSaving] = useState(false)
@@ -313,7 +328,7 @@ export const MajorEdit = () => {
                 setStatus(res.status)
             }).catch(error => {
                 console.log("Error at getting major:", error)
-                toast.error(`${error.message}`, {
+                toast.error(`${error.response.data.message}`, {
                     position: "top-right",
                     autoClose: 5000,
                     hideProgressBar: false,
@@ -323,6 +338,7 @@ export const MajorEdit = () => {
                     progress: undefined,
                     theme: "light",
                 });
+
             }).finally(() => {
                 isLoading(false)
             })
@@ -351,7 +367,7 @@ export const MajorEdit = () => {
             });
         }).catch(error => {
             console.log("Error at saving major", error)
-            toast.error(`${error.message}`, {
+            toast.error(`${error.response.data.message}`, {
                 position: "top-right",
                 autoClose: 5000,
                 hideProgressBar: false,
@@ -373,76 +389,76 @@ export const MajorEdit = () => {
             {loading ? (
                 <Spinner style={{ margin: '50px auto' }} />
             ) : (
-                <form className={Style.formEdit}>
+                <Stack direction="horizontal" style={{ width: '100%', alignItems: 'flex-start' }}>
+                    <form className={Style.formEdit} style={{ maxWidth: '300px', alignItems: 'center' }}>
 
-                    <h3>Create major</h3>
-                    <div>
-                        <label htmlFor="majorId">Major's Id</label>
-                        <input id="majorId" type="text" value={major.majorId} readOnly />
-                    </div>
-                    <div>
-                        <label htmlFor="majorName">Major's Name</label>
-                        <input id="majorName" type="text" required value={name} onChange={(e) => setName(e.target.value)} />
-                    </div>
-                    <div>
-                        <label htmlFor="status">Status</label>
-                        <Stack style={{ flexDirection: 'row', padding: '10px 20px', margin: '0', justifyContent: 'center' }}>
-                            <div
-                                style={{ margin: '0' }}
-                            >
-                                <input name="status" id="open" type="radio" checked={status === "OPEN" ? true : false}
-                                    onClick={() => handleRadioChange('OPEN')} />
-                                <label htmlFor="open" style={{ textAlign: 'center' }}>Open</label>
+                        <h3>Edit major</h3>
+                        <div>
+                            <label htmlFor="majorId">Major's Id</label>
+                            <input id="majorId" type="text" value={major.majorId} readOnly />
+                        </div>
+                        <div>
+                            <label htmlFor="majorName">Major's Name</label>
+                            <input id="majorName" type="text" required value={name} onChange={(e) => setName(e.target.value)} />
+                        </div>
+                        <div>
+                            <label htmlFor="status">Status</label>
+                            <Stack style={{ flexDirection: 'row', padding: '10px 20px', margin: '0', justifyContent: 'center' }}>
+                                <div
+                                    style={{ margin: '0' }}
+                                >
+                                    <input name="status" id="open" type="radio" checked={status === "OPEN" ? true : false}
+                                        onClick={() => handleRadioChange('OPEN')} />
+                                    <label htmlFor="open" style={{ textAlign: 'center' }}>Open</label>
 
-                            </div>
-                            <div
-                                style={{ margin: '0' }}
+                                </div>
+                                <div
+                                    style={{ margin: '0' }}
+                                >
+                                    <input name="status" id="closed" type="radio" checked={status === "CLOSED" ? true : false}
+                                        onClick={() => handleRadioChange('CLOSED')} />
+                                    <label htmlFor="closed" style={{ textAlign: 'center' }}>Closed</label>
+                                </div>
+                            </Stack>
+                        </div>
+                        <Stack style={{ flexDirection: 'row', padding: '10px 20px', width: '100%' }} gap={3}>
+                            <button className={Style.save}
+                                type="submit"
+                                onClick={(e) => handleSave(e)}
+                                style={{
+                                    maxWidth: '100px'
+                                }}
                             >
-                                <input name="status" id="closed" type="radio" checked={status === "CLOSED" ? true : false}
-                                    onClick={() => handleRadioChange('CLOSED')} />
-                                <label htmlFor="closed" style={{ textAlign: 'center' }}>Closed</label>
-                            </div>
+                                {!saving ? "Save" : "Saving..."}
+                            </button>
+                            <button
+                                className={`ms-auto ${Style.back}`}
+                                type="submit" onClick={() => navigate("/admin/major")}
+                            >Back</button>
                         </Stack>
+                    </form>
+                    <div className="ms-auto me-5" >
+                        <MajorSubjectList />
                     </div>
-                    <Stack style={{ flexDirection: 'row', padding: '10px 20px', width: '100%' }} gap={3}>
-                        <button className={Style.save}
-                            type="submit"
-                            onClick={(e) => handleSave(e)}
-                            style={{
-                                maxWidth: '100px'
-                            }}
-                        >
-                            {!saving ? "Save" : "Saving..."}
-                        </button>
-                        <button
-                            className={`ms-auto ${Style.back}`}
-                            type="submit" onClick={() => navigate("/admin/major")}
-                        >Back</button>
-                    </Stack>
-                </form>
+                </Stack>
             )}
         </div >
     )
 }
+
 export const MajorCreate = () => {
     const { loginUser } = useData();
     const [name, setName] = useState("")
     const [saving, isSaving] = useState(false)
-    const [status, setStatus] = useState("")
 
     const navigate = useNavigate();
     const handleSave = (e) => {
         isSaving(true)
         e.preventDefault()
-        axios.put(`/api/v1/major/admin/${loginUser.userId}`,
-            {
-                majorId: major.majorId,
-                majorName: name,
-                status: status,
-            }
+        axios.post(`/api/v1/major/admin/${loginUser.userId}?majorName=${name}`
         ).then(res => {
             console.log(res)
-            toast.success(`Save successfully`, {
+            toast.success(`Add successfully`, {
                 position: "top-right",
                 autoClose: 5000,
                 hideProgressBar: false,
@@ -498,3 +514,195 @@ export const MajorCreate = () => {
         </div >
     )
 }
+
+export const SubjectMajorList = ({ ChooseMajor }) => {
+    const [page, setPage] = useState(0)
+    const [pageContent, setPageContent] = useState([])
+    const [filter, setFilter] = useState("majorId")
+    const [sortDir, setSortDir] = useState("asc")
+    const [totalPage, setTotalPage] = useState(1)
+    const [pageSize, setPageSize] = useState(5)
+    const [selectedMajor, setSelectedMajor] = useState([])
+    console.log(selectedMajor)
+
+    useEffect(async () => {
+        const id = toast.loading('Please wait...')
+        await axios.get(`/api/v1/major/admin/majors`,
+            {
+                params: {
+                    pageNo: page,
+                    pageSize: pageSize,
+                    sortBy: filter,
+                    sortDir: sortDir,
+                    status: ""
+                }
+            }
+        ).then(res => {
+            setPageContent(res.content)
+            setTotalPage(res.totalPage)
+            toast.update(id, { render: "Get major complete", type: "success", isLoading: false, autoClose: true });
+
+        }).catch(error => {
+            toast.update(id, { render: `${error.response.data.message}`, type: "info", isLoading: false, autoClose: true });
+            console.log("Error at getting request:", error)
+        })
+    }, [page, pageSize, filter, sortDir])
+
+    const handlePageChange = (value) => {
+        setPage(value)
+    }
+    const handleChooseSubject = (item) => {
+        if (!selectedMajor.some(
+            (selected) => selected.majorId === item.majorId
+        )) {
+            setSelectedMajor(prev => [
+                ...prev,
+                {
+                    majorId: item.majorId,
+                }
+            ])
+            ChooseMajor(item)
+        } else {
+            setSelectedMajor(selectedMajor.filter(
+                (selected) => selected.majorId !== item.majorId
+            ))
+            ChooseMajor(item)
+        }
+
+    }
+
+    const checkChosen = (item) => {
+
+        return selectedMajor.some(
+            (selected) =>
+                selected.majorId === item.majorId
+        )
+
+    }
+
+    return (
+        <div className={Style.container}>
+
+            <ToastContainer />
+            <div className={Style.tableContainer}>
+                <Stack direction="horizontal" style={{ marginBottom: "10px" }}>
+                    <div>
+                        <span style={{ paddingRight: "10px" }}>Rows per page:</span>
+                        <select
+                            style={{ border: "none" }}
+                            onChange={(e) => {
+                                setPageSize(e.target.value);
+                                setPage(0);
+                            }}
+                        >
+                            <option value={5}>5</option>
+                            <option value={10}>10</option>
+                            <option value={15}>15</option>
+                            <option value={20}>20</option>
+                        </select>
+                    </div>
+                    <div className="ms-auto">
+                        <FontAwesomeIcon icon={faFilter} style={{ color: "#000000", paddingRight: "10px" }} />
+                        <span style={{ paddingRight: "10px" }}>Filter:</span>
+                        <select
+                            style={{ border: "none" }}
+                            onChange={(e) => setFilter(e.target.value)}
+                            value={filter}
+                        >
+                            <option value={"majorId"}>Major's Id</option>
+                            <option value={"status"}>Status</option>
+                        </select>
+                    </div>
+                    <div className={Style.create}
+                        onClick={() => {
+                            setSelectedMajor([]),
+                                ChooseMajor(null)
+                        }}
+                    >
+                        <span><a>Clear</a></span>
+                    </div>
+                </Stack>
+
+
+                <Table className={Style.table} striped bordered>
+                    <thead>
+                        <tr>
+                            <th>
+                                Major ID
+                                <span
+                                    style={{ paddingLeft: '10px', cursor: 'pointer' }}
+                                    onClick={() => {
+                                        setFilter("majorId");
+                                        setSortDir(sortDir === "asc" ? "desc" : "asc");
+                                        setPage(1)
+                                    }}
+                                >
+                                    <FontAwesomeIcon
+                                        icon={sortDir === "asc" ? faArrowUp : faArrowDown}
+                                        style={{ color: "#000000" }}
+                                    />
+                                </span>
+                            </th>
+                            <th>Major Name</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {pageContent.map((item, index) => (
+                            <tr key={index}
+                                className={checkChosen(item) ? Style.active : ""}>
+                                <td>{item.majorId}</td>
+                                <td>{item.majorName}</td>
+                                <td>{item.status}</td>
+                                <td>
+                                    <span
+                                        className={Style.icon}
+                                        onClick={() => handleChooseSubject(item)}
+                                    >
+                                        {!checkChosen(item) ? (
+                                            <FontAwesomeIcon icon={faPlus} style={{ color: "#0071c7" }} />
+                                        ) : (
+                                            <FontAwesomeIcon icon={faTrash} style={{ color: "#db0000" }} />
+                                        )}
+                                    </span>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </Table>
+
+                {/* Pagination */}
+                <Pagination
+                    style={{ justifyContent: 'center' }}
+
+                >
+                    <Button
+                        variant="link"
+                        onClick={() => setPage(prev => Math.max(prev - 1, 0))}
+                        style={{ marginRight: '10px' }}
+                    >
+                        <FontAwesomeIcon icon={faChevronLeft} />
+                    </Button>
+                    {Array.from({ length: totalPage }).map((_, index) => (
+                        <Pagination.Item
+                            style={{ width: "fit-content" }}
+                            key={index}
+                            onClick={() => handlePageChange(index)}
+                            active={page === index}
+                        >
+                            {index + 1}
+                        </Pagination.Item>
+                    ))}
+                    <Button
+                        variant="link"
+                        onClick={() => setPage(prev => Math.min(prev + 1, totalPage - 1))}
+                    >
+                        <FontAwesomeIcon icon={faChevronRight} />
+                    </Button>
+                </Pagination>
+            </div>
+        </div >
+    )
+};

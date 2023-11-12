@@ -1,11 +1,16 @@
 import React, { useState } from "react";
 import { Button } from "react-bootstrap";
 
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 const FormSearch = () => {
   const { filter, search } = useParams()
   const [searchText, setSearchText] = useState(search);
   const [filterData, setFilterData] = useState("lecturer");
+  const navigate = useNavigate()
+  const handleSearch = (e) => {
+    e.preventDefault()
+    navigate(`/student/search/${filterData}/${searchText}`)
+  }
   return (
     <div>
       <div
@@ -24,6 +29,7 @@ const FormSearch = () => {
           id="search"
           className="form pe-0"
           style={{ display: "flex", flex: "1" }}
+          onSubmit={(e) => handleSearch(e)}
         >
           <select
             className="form-select pe-0"
@@ -41,13 +47,10 @@ const FormSearch = () => {
             value={searchText}
             onChange={(e) => setSearchText(e.target.value)}
           />
-          <Button variant="secondary">
-            <Link
-              to={`/student/search/${filterData}/${searchText}`}
-              style={{ textDecoration: "none", color: "white" }}
-            >
-              Go
-            </Link>
+          <Button variant="secondary"
+            onClick={(e) => handleSearch(e)}
+          >
+            Go
           </Button>
         </form>
       </div>

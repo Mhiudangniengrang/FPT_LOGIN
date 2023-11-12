@@ -4,7 +4,6 @@ import Footer from "../components/Headers & Footers/Footer";
 import Container from "react-bootstrap/Container";
 
 const L_Layout = ({ children }) => {
-
   return (
     <>
       <Container

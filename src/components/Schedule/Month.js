@@ -3,24 +3,37 @@ import Day from "./Day";
 import Style from '../../assets/style/month.module.scss';
 import axios from "../../Services/customizeAxios";
 import { useData } from "../../context/DataContext";
+import { ToastContainer, toast } from "react-toastify";
 export default function Month({ month }) {
     const [emptySlot, setEmptySlot] = useState([])
-    const [bookedSlot, setBookedSlot] = useState([])
-    const [loading, isLoading] = useState(true)
     const { loginUser } = useData()
     useEffect(() => {
-        axios
-            .get(`/api/v1/user/emptySlot/lecturer/${loginUser.userId}`)
-            .then((response) => {
-                setEmptySlot(response)
-            })
-            .catch(error => {
-                console.log("Error at Month.js " + error)
+        const id = toast.loading("Please wait...")
+        if (loginUser.roleName === "LECTURER") {
+            axios
+                .get(`/api/v1/user/emptySlot/lecturer/${loginUser.userId}`)
+                .then((response) => {
+                    setEmptySlot(response)
+                    toast.update(id, { render: "Get slot complete", type: "success", isLoading: false, autoClose: true });
+                })
+                .catch(error => {
+                    console.log("Error at Month.js " + error)
+                    toast.update(id, { render: `${error.response.data.message}`, type: "info", isLoading: false, autoClose: true });
 
-            })
-            .finally(() => {
-                isLoading(false)
-            })
+                })
+        } else if (loginUser.roleName === "STUDENT") {
+            axios
+                .get(`/api/v1/students/bookedSlot/calendar/${loginUser.userId}`)
+                .then((response) => {
+                    setEmptySlot(response)
+                    toast.update(id, { render: "Get slot complete", type: "success", isLoading: false, autoClose: true });
+                })
+                .catch(error => {
+                    console.log("Error at Month.js " + error)
+                    toast.update(id, { render: `${error.response.data.message}`, type: "info", isLoading: false, autoClose: true });
+
+                })
+        }
 
     }, [])
 
@@ -38,8 +51,8 @@ export default function Month({ month }) {
 
     return (
         <>
+            <ToastContainer />
             <div className={Style.month}>
-
                 {month.map((row, i) => (
                     <React.Fragment key={i}>
                         {row.map((day, idx) => {

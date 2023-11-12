@@ -3,6 +3,8 @@ import axios from "../Services/customizeAxios";
 import GlobalContext from "./GlobalContext";
 import PageLoading from "../components/PageLoad";
 import { useNavigate } from "react-router-dom";
+import { AccessExpired } from "../components/AlertExpired";
+import dayjs from "dayjs";
 const DataContext = createContext();
 
 export const DataProvider = ({ children, role }) => {
@@ -10,10 +12,16 @@ export const DataProvider = ({ children, role }) => {
   const [emptySlots, setEmptySlots] = useState([]);
   const [authorize, setAuthorize] = useState(false);
   const [loading, setLoading] = useState(true);
+
   const accessToken =
     typeof window !== null ? localStorage.getItem("accessToken") : null;
+
+  const loginTime = typeof window !== 'undefined' ? sessionStorage.getItem('loginTime') : null;
+
+  function isTokenExpired() {
+    return dayjs(Date.now()) > dayjs(loginTime).add(1, 'hours');
+  }
   let loginUser = null;
-  // let savedUser = typeof window != null ? JSON.parse(sessionStorage.getItem("user")) : undefined;
   let savedUser = JSON.parse(sessionStorage.getItem("user"))
   if (savedUser !== null) {
     const decodedInfo = atob(savedUser.info);
@@ -26,7 +34,6 @@ export const DataProvider = ({ children, role }) => {
       email: userInfo.email,
       roleName: userInfo.roleName,
     };
-
   }
   const navigate = useNavigate()
   useEffect(() => {
@@ -46,19 +53,6 @@ export const DataProvider = ({ children, role }) => {
     }
   }, [loginUser]);
 
-  useEffect(() => {
-    axios
-      .get(`/api/v1/slots/lecturer/room`)
-      .then((response) => {
-        setRooms(response)
-      }).catch(error => {
-        console.log('Error at Data Context:', error)
-      })
-  }, [])
-
-  // if (loading && (loginUser.roleName === "LECTURER" || loginUser.roleName === "STUDENT")) {
-  //   return <PageLoading />;
-  // }
   return (
     <DataContext.Provider
       value={{
@@ -70,6 +64,9 @@ export const DataProvider = ({ children, role }) => {
         accessToken,
       }}
     >
+      {isTokenExpired() ? (
+        <AccessExpired />
+      ) : null}
       {children}
     </DataContext.Provider>
   );

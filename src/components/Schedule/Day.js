@@ -2,6 +2,7 @@ import React, { useContext, useState, useEffect } from "react";
 import dayjs from "dayjs";
 import GlobalContext from "../../context/GlobalContext";
 import Style from '../../assets/style/month.module.scss'
+import { useData } from "../../context/DataContext";
 
 export default function Day({ day, rowIdx, slots }) {
     const {
@@ -9,6 +10,7 @@ export default function Day({ day, rowIdx, slots }) {
         setDaySelected,
         setSelectedSlot,
     } = useContext(GlobalContext);
+    const { loginUser } = useData()
 
     function getCurrentDayClass() {
         const isCurrentDay =
@@ -53,9 +55,14 @@ export default function Day({ day, rowIdx, slots }) {
                             className={Style.dayEvent}
 
                             onClick={() => {
-                                setDaySelected(new Date(day));
-                                setShowSlotModal(true)
-                                setSelectedSlot(slot)
+                                if (loginUser.roleName === "LECTURER") {
+                                    setDaySelected(new Date(day));
+                                    setShowSlotModal(true)
+                                    setSelectedSlot(slot)
+                                } else if (loginUser.roleName === "STUDENT") {
+                                    setShowSlotModal(true)
+                                    setSelectedSlot(slot)
+                                }
                             }}
                         >
                             start {slot.timeStart} - room {slot.roomId}

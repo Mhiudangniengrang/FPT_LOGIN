@@ -21,20 +21,7 @@ function Nav({ Toggle }) {
                 aria-label="Toggle navigation">
                 <i className='bi bi-justify'></i>
             </button>
-            <div className="collapse navbar-collapse" id="collapsibleNavId">
-                <ul className="navbar-nav ms-auto mt-2 mt-lg-0">
-                    <li className="nav-item dropdown">
-                        <a className="nav-link dropdown-toggle text-dark" href="#" id="dropdownId" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Admin
-                        </a>
-                        <div className="dropdown-menu" aria-labelledby="dropdownId">
-                            <a className="dropdown-item" href="#">Profile</a>
-                            <a className="dropdown-item" href="#">Setting</a>
-                            <a className="dropdown-item" href="#">Logout</a>
-                        </div>
-                    </li>
-                </ul>
-            </div>
+            <h5 style={{ margin: '0' }}>Admin Panel</h5>
         </nav>
     )
 }

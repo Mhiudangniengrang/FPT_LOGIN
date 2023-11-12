@@ -29,12 +29,13 @@ const S_ViewSearch = () => {
     const { filter, search } = useParams();
     const [searchSubject, setSearchSubject] = useState([]);
     const [searchLecture, setSearchLecture] = useState([]);
+    const [err, isErr] = useState(false);
     const navigate = useNavigate();
 
     const { loginUser } = useData();
 
-    const handleClickSendRequest = (subject) => {
-        //axios post
+    const handleClickSubjectName = (subject) => {
+        navigate()
     }
 
     const handleSearchSubject = async () => {
@@ -51,7 +52,8 @@ const S_ViewSearch = () => {
                 });
             })
             .catch((error) => {
-                console.log("error at searchname:" + error);
+                console.log("error at searchname:", error);
+                if (error.response.status === 500) isErr(true)
             });
     };
 
@@ -70,12 +72,12 @@ const S_ViewSearch = () => {
                 });
             })
             .catch((error) => {
-                console.log("error at searchname:" + error);
+                console.log("error at searchname:", error);
+                if (error.response.status === 500) isErr(true)
             });
     };
 
     useEffect(() => {
-        console.log("useEffect");
 
         if (search === undefined) {
             navigate(`/student/search`);
@@ -91,12 +93,18 @@ const S_ViewSearch = () => {
     useEffect(() => {
         setSearchSubject([])
         setSearchLecture([])
+        isErr(false)
     }, [filter, search])
     return (
         <S_Layout>
             <Breadcrumbs items={path} />
             <div>
                 <FormSearch />
+                {err && (
+                    <div>
+                        <p>Search Results: 0 result(s) found</p>
+                    </div>
+                )}
                 {filter === "lecturer" && searchLecture.length > 0 && (
                     <div>
                         <p>Search Results: {searchLecture.length} result(s) found</p>
@@ -143,9 +151,9 @@ const S_ViewSearch = () => {
                                             </div>
                                             <div
                                                 className={` ${Style.subject}`}
-                                                onClick={() => handleClickSendRequest(teacher.subjectName)}
+                                                onClick={() => handleClickSubjectName(teacher.subjectName)}
                                             >
-                                                Send request: {teacher.subjectId} - {teacher.unique}
+                                                Subject's Name: {teacher.subjectName}
                                             </div>
                                         </div>
                                     </div>
@@ -165,51 +173,85 @@ const S_ViewSearch = () => {
                     <div className={Style.searchContainer}>
                         <ListGroup>
                             {searchSubject.map((subject, index) => (
-                                <ListGroup.Item
-                                    style={{
-                                        border: "none",
-                                    }}
-                                    key={index}
-                                >
-                                    <div className="d-flex justify-content-between align-items-center">
-                                        <div>
-                                            <div className={Style.subject}
-                                                onClick={() => handleClickSendRequest(subject)}
-                                            >Subject: {subject.subjectId} - {subject.unique}</div>
-                                            <div className={`mx-4 small`}>
-                                                <a
-                                                    className={Style.teacher}
-                                                    href={`/student/lecturer/profile/${subject.lecturerId}`}>
-                                                    Lecturer: {subject.lecturerName}
-                                                </a>
+                                subject.lecturerId ? (
+                                    <ListGroup.Item
+                                        style={{
+                                            border: "none",
+                                        }}
+                                        key={index}
+                                    >
+                                        <div className="d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <div className={Style.subject}
+                                                >Subject: {subject.subjectId} - {subject.unique}</div>
+                                                <div className={`mx-4 small`}>
+                                                    <a
+                                                        className={Style.teacher}
+                                                        href={`/student/lecturer/profile/${subject.lecturerId}`}>
+                                                        Lecturer: {subject.lecturerName}
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            <div className="d-flex flex-column align-items-end">
+
+                                                <div>
+                                                    <a href={`/student/lecturer/viewschedule/${subject.lecturerId}`}>
+                                                        <FontAwesomeIcon
+                                                            className={`mx-1 my-1 ${Style.icon}`}
+                                                            icon={faCalendarDays}
+                                                        />{" "}
+                                                    </a>
+
+                                                    <a href={`/student/lecturer/profile/${subject.lecturerId}`}>
+                                                        <FontAwesomeIcon
+                                                            className={`mx-2 my-1 ${Style.icon}`}
+                                                            icon={faMagnifyingGlass}
+                                                        />
+                                                    </a>
+                                                </div>
+                                                <div
+                                                    className={Style.subject}
+                                                    onClick={() => handleClickSendRequest(subject)}
+                                                >
+                                                    Subject's Name: {subject.subjectName}
+                                                </div>
                                             </div>
                                         </div>
-                                        <div className="d-flex flex-column align-items-end">
-
+                                    </ListGroup.Item>
+                                ) : (
+                                    <ListGroup.Item
+                                        style={{
+                                            border: "none",
+                                        }}
+                                        key={index}
+                                    >
+                                        <div className="d-flex justify-content-between align-items-center">
                                             <div>
-                                                <a href={`/student/lecturer/viewschedule/${subject.lecturerId}`}>
-                                                    <FontAwesomeIcon
-                                                        className={`mx-1 my-1 ${Style.icon}`}
-                                                        icon={faCalendarDays}
-                                                    />{" "}
-                                                </a>
+                                                <div className={Style.subject}
+                                                >Subject: {subject.subjectId}</div>
+                                                <div className={`mx-4 small`}>
+                                                    This subject have not been taught yet.
+                                                </div>
+                                            </div>
+                                            <div className="d-flex flex-column align-items-end">
 
-                                                <a href={`/student/lecturer/profile/${subject.lecturerId}`}>
+                                                <div>
                                                     <FontAwesomeIcon
                                                         className={`mx-2 my-1 ${Style.icon}`}
                                                         icon={faMagnifyingGlass}
+                                                        onClick={() => handleClickSubjectName(subject.subjectName)}
                                                     />
-                                                </a>
-                                            </div>
-                                            <div
-                                                className={Style.subject}
-                                                onClick={() => handleClickSendRequest(subject)}
-                                            >
-                                                Send request: {subject.subjectId} - {subject.unique}
+                                                </div>
+                                                <div
+                                                    className={Style.subject}
+                                                    onClick={() => handleClickSubjectName(subject.subjectName)}
+                                                >
+                                                    Subject's Name: {subject.subjectName}
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </ListGroup.Item>
+                                    </ListGroup.Item>
+                                )
                             ))}
                         </ListGroup>
                     </div>

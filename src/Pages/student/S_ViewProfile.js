@@ -61,9 +61,9 @@ function S_ViewProfile() {
                 <Row>
                   <Col md={6} className="py-2">
                     <h5>Name:</h5>
-                    <p>{name || "Write a name here."}</p>
+                    <p>{loginUser.userName}</p>
                     <h5>Email Address:</h5>
-                    <p>hieudmse161153@fpt.edu.vn</p>
+                    <p>{loginUser.email}</p>
                   </Col>
                   <Col md={6}>
                     <Button

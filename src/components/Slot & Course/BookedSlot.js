@@ -89,23 +89,23 @@ function BookedSlot() {
                         </Button>
                     </div>
 
-                    <table className="table text-center">
-                        <thead>
-                            <tr>
-                                <th>No</th>
-                                <th>Lecture</th>
-                                <th>Date</th>
-                                <th>Time Start</th>
-                                <th>Slot</th>
-                                <th>Room</th>
-                                <th>Subject</th>
-                                <th>Duration</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        {loading ? (
-                            <Spinner />
-                        ) : (
+                    {loading ? (
+                        <Spinner style={{ margin: "100px auto" }} />
+                    ) : (
+                        <table className="table text-center">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Lecture</th>
+                                    <th>Date</th>
+                                    <th>Time Start</th>
+                                    <th>Slot</th>
+                                    <th>Room</th>
+                                    <th>Subject</th>
+                                    <th>Duration</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
                             <tbody>
                                 {filteredSlot.length > 0 ? (
                                     filteredSlot.map((record, i) => {
@@ -142,10 +142,9 @@ function BookedSlot() {
                                     </tr>
                                 )}
                             </tbody>
-                        )}
-                    </table>
+                        </table>
+                    )}
 
-                    {/* ... (your pagination code) */}
                 </Card.Body>
             </Card>
         </div>

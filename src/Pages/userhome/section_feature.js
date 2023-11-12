@@ -3,7 +3,7 @@ import '../../assets/style/home.css'
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import Rate from '../../assets/image/rate 1.png';
+import Remind from '../../assets/image/remind 1.png';
 import Schedule from '../../assets/image/schedule 1.png';
 import Search from '../../assets/image/search 1.png';
 
@@ -22,9 +22,9 @@ const featuresData = [
     },
     {
         id: 3,
-        icon: Rate,
-        title: 'Rate',
-        description: 'your course'
+        icon: Remind,
+        title: 'Notify',
+        description: 'in due meeting'
     },
 ]
 

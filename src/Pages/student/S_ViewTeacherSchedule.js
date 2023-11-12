@@ -26,8 +26,11 @@ const S_ViewTeacherSchedule = () => {
             text: 'View schedule',
         },
     ]
-
     const [key, setKey] = useState('meeting');
+
+    const handleTabSelect = (selectedKey) => {
+        setKey(selectedKey);
+    };
     const { showSlotModal } = useContext(GlobalContext)
     return (
         <>
@@ -36,17 +39,17 @@ const S_ViewTeacherSchedule = () => {
                 <Breadcrumbs items={path} />
                 <Tabs
                     activeKey={key}
-                    onSelect={(k) => setKey(k)}
+                    onSelect={e => handleTabSelect(e)}
                     className="mb-3"
                     style={{
                         paddingTop: '30px'
                     }}
                 >
-                    <Tab eventKey="meeting" title="Meeting Schedule">
-                        <S_WeeklyCalendar />
+                    <Tab eventKey="meeting" title="Meeting Schedule" >
+                        {key === 'meeting' && (<S_WeeklyCalendar activeTab={key} />)}
                     </Tab>
                     <Tab eventKey="teaching" title="Teaching Schedule">
-                        <S_WeeklyCalendar />
+                        {key === 'teaching' && (<S_WeeklyCalendar activeTab={key} />)}
                     </Tab>
                 </Tabs>
             </S_Layout>

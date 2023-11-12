@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Style from "../../assets/style/header.module.scss";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBell } from "@fortawesome/free-solid-svg-icons";
+import { faBell, faTableColumns } from "@fortawesome/free-solid-svg-icons";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import { faUserPen } from "@fortawesome/free-solid-svg-icons";
 import { faCalendarDays } from "@fortawesome/free-solid-svg-icons";
@@ -54,7 +54,7 @@ const S_Header = () => {
           >
             <FontAwesomeIcon
               icon={faUser}
-              style={{ color: "#000000", paddingRight: " 5px" }}
+              style={{ color: "#000000", paddingRight: " 15px" }}
             />
             {loginUser.userName}
           </NavDropdown.Item>
@@ -63,27 +63,26 @@ const S_Header = () => {
           >
             <FontAwesomeIcon
               icon={faUserPen}
-              style={{ color: "#000000", paddingRight: " 5px" }}
+              style={{ color: "#000000", paddingRight: " 10px" }}
             />
             Edit Profile
           </NavDropdown.Item>
-          <NavDropdown.Item>
-            <NavLink
-              to="/student/viewschedule"
-            >
-              <FontAwesomeIcon
-                icon={faCalendarDays}
-                style={{ color: "#000000", paddingRight: " 5px" }}
-              />
-              View Schedule
-            </NavLink>
+          <NavDropdown.Item
+            href="/student/viewschedule"
+          >
+
+            <FontAwesomeIcon
+              icon={faCalendarDays}
+              style={{ color: "#000000", paddingRight: " 15px" }}
+            />
+            View Schedule
           </NavDropdown.Item>
           <NavDropdown.Item
             href="/"
           >
             <FontAwesomeIcon
               icon={faRightFromBracket}
-              style={{ color: "#050505", paddingRight: " 5px" }}
+              style={{ color: "#050505", paddingRight: " 15px" }}
             />
             Log out
           </NavDropdown.Item>
@@ -102,6 +101,7 @@ const S_Header = () => {
           icon={faCalendarDays}
           items={dropdownItems}
         />
+        <HorizontalStack icon={faTableColumns} text="Dashboard" link="/student/dashboard" />
 
         <HorizontalStack
           modify="ms-auto"

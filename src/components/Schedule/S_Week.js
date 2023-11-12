@@ -12,6 +12,9 @@ import { getDaysInWeek, getFullDaysInWeek } from '../../Utils/dateUtils';
 import { useEffect } from 'react';
 import dayjs from 'dayjs';
 import { useData } from '../../context/DataContext';
+import { ToastContainer, toast } from 'react-toastify';
+import ExcelReader from '../Excel/ExcelReader';
+import DownloadButton from '../Excel/DownloadExcel';
 
 
 const slotTime = [
@@ -59,44 +62,57 @@ const daysOfWeek = [
 
 const timeSlots = ["Slot 1", "Slot 2", "Slot 3", "Slot 4", "Slot 5", "Slot 6"];
 
-function S_WeeklyCalendar() {
+function S_WeeklyCalendar({ activeTab }) {
     const { loginUser } = useData()
     const [bookedSlot, setBookedSlot] = useState([])
     const [emptySlot, setEmptySlot] = useState([])
     const { setShowSlotModal, setDaySelected, setSelectedSlot, selectedSlot } = useContext(GlobalContext);
     const [selectedDate, setSelectedDate] = useState(new Date());
-    const [loading, isLoading] = useState(true)
     const { lecturerId } = useParams()
     useEffect(() => {
         if (lecturerId !== undefined) {
-            axios
-                .get(`/api/v1/user/emptySlot/lecturer/${lecturerId}`)
-                .then((response) => {
-                    console.log("emptySlot", response)
-                    setEmptySlot(response)
-
-                    isLoading(false)
-                })
-                .catch(error => {
-                    isLoading(false)
-                    console.log("Error at Week.js " + error)
-                })
+            if (activeTab === 'meeting') {
+                const id = toast.loading("Please wait...")
+                axios
+                    .get(`/api/v1/user/emptySlot/lecturer/${lecturerId}`)
+                    .then((response) => {
+                        console.log("emptySlot", response)
+                        setEmptySlot(response)
+                        toast.update(id, { render: "Get lecturer's empty slots complete", type: "success", isLoading: false, autoClose: true });
+                    })
+                    .catch(error => {
+                        toast.update(id, { render: `${error.response.data.message}`, type: "info", isLoading: false, autoClose: true });
+                        console.log("Error at Week.js " + error)
+                    })
+            } else {
+                const id = toast.loading("Please wait...")
+                axios
+                    .get(`/api/v1/user/emptySlot/lecturer/${lecturerId}`)
+                    .then((response) => {
+                        console.log("emptySlot", response)
+                        setEmptySlot(response)
+                        toast.update(id, { render: "Get lecturer's empty slots complete", type: "success", isLoading: false, autoClose: true });
+                    })
+                    .catch(error => {
+                        toast.update(id, { render: `${error.response.data.message}`, type: "info", isLoading: false, autoClose: true });
+                        console.log("Error at Week.js " + error)
+                    })
+            }
         }
-    }, [lecturerId])
+    }, [activeTab, lecturerId])
     useEffect(() => {
         if (lecturerId == undefined) {
+            const id = toast.loading("Please wait...")
+            console.log("schedule")
             axios.get(`/api/v1/students/bookedSlot/homePage/${loginUser.userId}`
             )
                 .then(res => {
                     setBookedSlot(res)
-
+                    toast.update(id, { render: "Get slots complete", type: "success", isLoading: false, autoClose: true });
                 })
                 .catch(error => {
-                    isLoading(false)
                     console.log("error at getting booked slot: " + error)
-                })
-                .finally(() => {
-                    isLoading(false)
+                    toast.update(id, { render: `${error.response.data.message}`, type: "info", isLoading: false, autoClose: true });
                 })
         }
     }, [])
@@ -107,6 +123,7 @@ function S_WeeklyCalendar() {
 
     return (
         <div>
+            <ToastContainer />
             <Table responsive striped bordered>
                 <thead
                     className={Style.thead}
@@ -166,76 +183,76 @@ function S_WeeklyCalendar() {
 
                 </thead>
                 <tbody >
-                    {loading ? (
-                        <tr>
-                            <td colSpan={8}>
-                                <Spinner />
-                            </td>
+
+                    {timeSlots.map((slot, idx) => (
+                        <tr key={idx}>
+                            <td style={{ display: 'block' }}>{slot}</td>
+                            {getFullDaysInWeek(selectedDate).map((day) => (
+                                <td className={Style.days} key={`${day}-${slot}`}>
+                                    {lecturerId !== undefined ? (
+                                        emptySlot.map((meeting) => {
+                                            if (meeting.dateStart === day && meeting.slotTimeId == slot.charAt(5) && meeting.status === "OPEN") {
+                                                return (
+                                                    <div
+                                                        key={meeting.slotId}
+                                                        className={Style.slot}
+                                                        style={{ border: "4px solid green" }}
+                                                        onClick={() => handleDayClick(meeting)}
+                                                    >
+                                                        <span>{(meeting.duration).slice(3, 5)} minutes at room {meeting.roomId} </span>
+                                                        <p> ({meeting.timeStart}-)</p>
+                                                    </div>
+                                                );
+                                            } else if (meeting.dateStart === day && meeting.slotTimeId == slot.charAt(5) && meeting.status === "BOOKED" && meeting.studentId === loginUser.userId) {
+                                                return (
+                                                    <div
+                                                        key={meeting.slotId}
+                                                        className={Style.slot}
+                                                        style={{ border: "4px solid red" }}
+                                                        onClick={() => handleDayClick(meeting)}
+                                                    >
+                                                        <span>{meeting.subjectId}</span><br></br>
+                                                        <span>{(meeting.duration).slice(3, 5)} minutes at room {meeting.roomId} </span>
+                                                        <p> ({meeting.timeStart}-{meeting.timeStart})</p>
+                                                    </div>
+                                                );
+                                            }
+                                            return null;
+                                        })
+                                    ) : (
+                                        bookedSlot.map((booked, index) => {
+                                            if (booked.dateStart === day && booked.slotTimeId == slot.charAt(5)) {
+                                                return (
+                                                    <div
+                                                        key={index}
+                                                        className={Style.slot}
+                                                        onClick={() => handleDayClick(booked)}
+                                                        style={{ border: "4px solid #333" }}
+                                                    >
+                                                        <span> </span>
+                                                        <span>Room {booked.roomId} -</span>
+                                                        <span> {booked.timeStart}</span>
+                                                        <br />
+                                                        <span> Duration {(booked.duration).slice(3, 5)} minutes</span>
+                                                    </div>
+                                                )
+                                            }
+                                            return null;
+                                        })
+                                    )}
+                                </td>
+                            ))}
                         </tr>
-                    ) : (
-                        timeSlots.map((slot, idx) => (
-                            <tr key={idx}>
-                                <td style={{ display: 'block' }}>{slot}</td>
-                                {getFullDaysInWeek(selectedDate).map((day) => (
-                                    <td className={Style.days} key={`${day}-${slot}`}>
-                                        {lecturerId !== undefined ? (
-                                            emptySlot.map((meeting) => {
-                                                if (meeting.dateStart === day && meeting.slotTimeId == slot.charAt(5) && meeting.status === "OPEN") {
-                                                    return (
-                                                        <div
-                                                            key={meeting.slotId}
-                                                            className={Style.slot}
-                                                            style={{ border: "4px solid green" }}
-                                                            onClick={() => handleDayClick(meeting)}
-                                                        >
-                                                            <span>{(meeting.duration).slice(3, 5)} minutes at room {meeting.roomId} </span>
-                                                            <p> ({meeting.timeStart}-)</p>
-                                                        </div>
-                                                    );
-                                                } else if (meeting.dateStart === day && meeting.slotTimeId == slot.charAt(5) && meeting.status === "BOOKED" && meeting.studentId === loginUser.userId) {
-                                                    return (
-                                                        <div
-                                                            key={meeting.slotId}
-                                                            className={Style.slot}
-                                                            style={{ border: "4px solid red" }}
-                                                            onClick={() => handleDayClick(meeting)}
-                                                        >
-                                                            <span>{meeting.subjectId}</span><br></br>
-                                                            <span>{(meeting.duration).slice(3, 5)} minutes at room {meeting.roomId} </span>
-                                                            <p> ({meeting.timeStart}-{meeting.timeStart})</p>
-                                                        </div>
-                                                    );
-                                                }
-                                                return null;
-                                            })
-                                        ) : (
-                                            bookedSlot.map((booked, index) => {
-                                                if (booked.dateStart === day && booked.slotTimeId == slot.charAt(5)) {
-                                                    return (
-                                                        <div
-                                                            key={index}
-                                                            className={Style.slot}
-                                                            onClick={() => handleDayClick(booked)}
-                                                            style={{ border: "4px solid #333" }}
-                                                        >
-                                                            <span> </span>
-                                                            <span>Room {booked.roomId} -</span>
-                                                            <span> {booked.timeStart}</span>
-                                                            <br />
-                                                            <span> Duration {(booked.duration).slice(3, 5)} minutes</span>
-                                                        </div>
-                                                    )
-                                                }
-                                                return null;
-                                            })
-                                        )}
-                                    </td>
-                                ))}
-                            </tr>
-                        ))
-                    )}
+                    ))
+                    }
                 </tbody>
             </Table>
+            {activeTab === 'teaching' && (
+                <div className='ms-auto'>
+                    <ExcelReader />
+                    <DownloadButton />
+                </div>
+            )}
         </div >
     );
 }

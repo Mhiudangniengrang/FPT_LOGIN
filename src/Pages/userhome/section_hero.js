@@ -5,29 +5,29 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import { GoogleLogin } from "@react-oauth/google";
 import axios from "../../Services/customizeAxios";
 import { useNavigate } from "react-router-dom";
-import { useContext } from "react";
-import GlobalContext from "../../context/GlobalContext";
+import { ToastContainer, toast } from "react-toastify";
+import dayjs from "dayjs";
 var heroData = [
   {
     id: 1,
     image: require("../../assets/image/pexels-fauxels-3184317.jpg"),
-    title: "The perfect design for your website",
+    title: "Schedule Personalized Meetings with Lecturers",
     description:
-      "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab suscipit dicta nulla. Consequuntur obcaecati officiis, labore doloribus non tempore impedit consequatur ab dolor. Explicabo quam repellendus vero omnis, nisi odio!",
+      "Welcome to Meet My Lecturer, the first app in our school that empowers students to schedule personalized meetings with their lecturers. Easily book one-on-one sessions to get the support you need for your academic journey. Connect with your lecturers and enhance your learning experience. ",
   },
   {
     id: 2,
     image: require("../../assets/image/pexels-icsa-1708912.jpg"),
-    title: "Start Your Future Financial Plan",
+    title: "Plan Your Academic Success",
     description:
-      "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab suscipit dicta nulla. Consequuntur obcaecati officiis, labore doloribus non tempore impedit consequatur ab dolor. Explicabo quam repellendus vero omnis, nisi odio!",
+      "Start planning for academic success with Meet My Lecturer. Our app allows you to take control of your learning journey by scheduling meetings with your lecturers. Whether you need clarification on a topic or additional guidance, we've got you covered. Plan your success with Meet My Lecturer.",
   },
   {
     id: 3,
     image: require("../../assets/image/pexels-icsa-1708988.jpg"),
-    title: "Enjoy the Difference",
+    title: "Connect and Learn",
     description:
-      "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab suscipit dicta nulla. Consequuntur obcaecati officiis, labore doloribus non tempore impedit consequatur ab dolor. Explicabo quam repellendus vero omnis, nisi odio!",
+      "Discover a new way to connect, learn with Meet My Lecturer. Our app fosters meaningful connections between students and lecturers. Enjoy the difference as you schedule meetings and engage in your academic journey like never before. Join Meet My Lecturer and elevate your learning experience. ",
   },
 ];
 
@@ -45,6 +45,7 @@ function Hero() {
       .then((response) => {
         console.log(response)
         sessionStorage.setItem('role', response.roleName)
+        sessionStorage.setItem('loginTime', dayjs(Date.now()))
         const encodeInfo = {
           userId: response.userId,
           email: response.email,
@@ -61,6 +62,16 @@ function Hero() {
       })
       .catch(error => {
         console.log("Error getting user data:", error);
+        toast.error(`${error.response != null ? error.response.data.message : error.message}`, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
       });
   };
 
@@ -71,6 +82,7 @@ function Hero() {
       }
       id="overview"
     >
+      <ToastContainer />
       <div className={"w-50 float-start " + styles.leftDivStyle}>
         <h1 className={"text-start "}>
           Connecting Students and Teachers for Meetings
@@ -85,6 +97,16 @@ function Hero() {
             onSuccess={handleLoginSuccess}
             onError={() => {
               console.log("Login Failed");
+              toast.error(`${error.response != null ? error.response.data.message : error.message}`, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+              });
             }}
           />
         </GoogleOAuthProvider>

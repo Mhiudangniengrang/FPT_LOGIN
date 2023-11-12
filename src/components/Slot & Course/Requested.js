@@ -68,10 +68,9 @@ function Requested() {
                     >Requests</h3>
                 </Stack>
             </div>
-            {/* 4 items next for next page */}
             <Row>
                 {loading ? (
-                    <Spinner />
+                    <Spinner style={{ margin: '40px auto' }} />
                 ) : (
                     pageContent.map((item, i) => (
                         <Col key={i} md={3} className="mb-3">
@@ -84,10 +83,10 @@ function Requested() {
                                     }}
                                 >
                                     <Card.Title>{item.subjectId}</Card.Title>
-                                    <Card.Text className="mb-0">
+                                    <div className="mb-0">
                                         <p>Instructor: {item.lecturerName}</p>
                                         <p> Status: {item.requestStatus}</p>
-                                    </Card.Text>
+                                    </div>
                                     <Card.Subtitle>
                                         <p>Purpose: {item.requestContent}</p>
                                     </Card.Subtitle>

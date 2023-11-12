@@ -7,12 +7,13 @@ import axios from "../../Services/customizeAxios";
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import GlobalContext from "../../context/GlobalContext";
+import { ToastContainer, toast } from "react-toastify";
 export default function Connect_section() {
     const navigate = useNavigate();
     const { setAccessToken } = useContext(GlobalContext);
     const handleLoginSuccess = (credentialResponse) => {
         const accessToken = credentialResponse.credential;
-        setAccessToken(accessToken)
+        localStorage.setItem('accessToken', accessToken)
         axios
             .get("/api/v1/user/userId", {
                 headers: {
@@ -20,16 +21,42 @@ export default function Connect_section() {
                 }
             })
             .then((response) => {
+                console.log(response)
+                sessionStorage.setItem('loginTime', Date.now())
+                sessionStorage.setItem('role', response.roleName)
+                const encodeInfo = {
+                    userId: response.userId,
+                    email: response.email,
+                    status: response.status,
+                    roleName: response.roleName,
+                    majorId: response.majorId,
+                };
+                const saveToSession = {
+                    userName: response.userName,
+                    info: btoa(JSON.stringify(encodeInfo))
+                }
+                sessionStorage.setItem("user", JSON.stringify(saveToSession));
                 navigate(`/${response.roleName}`)
             })
             .catch(error => {
                 console.log("Error getting user data:", error);
+                toast.error(`${error.response != null ? error.response.data.message : error.message}`, {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                });
             });
     };
 
     return (
 
         <section className={Style.section} id='overview'>
+            <ToastContainer />
             <div className={Style.content}>
                 <h2 className={Style.h2}>Scheduling made easy for students and teachers</h2>
 
@@ -51,6 +78,16 @@ export default function Connect_section() {
                                 onSuccess={handleLoginSuccess}
                                 onError={() => {
                                     console.log("Login Failed");
+                                    toast.error(`${error.response != null ? error.response.data.message : error.message}`, {
+                                        position: "top-right",
+                                        autoClose: 5000,
+                                        hideProgressBar: false,
+                                        closeOnClick: true,
+                                        pauseOnHover: true,
+                                        draggable: true,
+                                        progress: undefined,
+                                        theme: "light",
+                                    });
                                 }}
                             />
                         </GoogleOAuthProvider>

@@ -107,8 +107,8 @@ const Calender_type = (type) => {
             dayjs(new Date(dayjs().year(), monthIndex)).format("MMMM YYYY")}
           {activeButton === "week" &&
             getStartOfWeekFormatted(daySelected) +
-              " - " +
-              getEndOfWeekFormatted(daySelected)}
+            " - " +
+            getEndOfWeekFormatted(daySelected)}
           {activeButton === "list" && (
             <div className="d-flex justify-content-between">
               <Button variant="secondary" onClick={handleClickPrev}>
@@ -234,7 +234,7 @@ const Calender_type = (type) => {
                 {activeButton === "day" && (
                   <p>Student's Day content goes here.</p>
                 )}
-                {activeButton === "week" && <S_WeeklyCalendar />}
+                {activeButton === "week" && <S_WeeklyCalendar activeTab={""} />}
                 {activeButton === "month" && <Month month={currentMonth} />}
                 {activeButton === "list" && (
                   <List

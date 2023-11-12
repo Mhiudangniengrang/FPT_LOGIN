@@ -178,10 +178,6 @@ h2 {
   background-color: #dfdfdf;
   margin-right: 10px;
 }
-.nav-tabs>.nav-item>.nav-link,
-.active{
-  width: 100%;
-}
 .nav-tabs>.nav-item>.nav-link{
   font-weight: bolder;
   color: #000;

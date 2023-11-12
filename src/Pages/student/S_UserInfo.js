@@ -26,10 +26,9 @@ import { useData } from "../../context/DataContext";
 function S_UserInfo() {
   const navigate = useNavigate();
 
-  const [filteredSubjects, setFilteredSubjects] = useState(subjects);
+  const [subjects, setSubjects] = useState([]);
   const [major, setMajor] = useState("Select Major");
   const [selectedSubjects, setSelectedSubjects] = useState([]);
-  const [subjects, setSubjects] = useState([]);
   const [majors, setMajors] = useState([]);
   const [selectedMajor, setSelectedMajor] = useState(null);
   const [loading, isLoading] = useState(true);
@@ -67,7 +66,7 @@ function S_UserInfo() {
         });
     }
   }, [])
-  const handleClickSave = () => {
+  const saveSelectedSubjects = () => {
     // Handle saving the selected subjects (e.g., send to server or another component)
     console.log("Selected Subjects:", selectedSubjects);
 

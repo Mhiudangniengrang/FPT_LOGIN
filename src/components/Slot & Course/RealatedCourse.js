@@ -52,7 +52,7 @@ const RelatedCourse = () => {
     return (
         <Row>
             {loading ? (
-                <Spinner />
+                <Spinner style={{ magin: '40px auto' }} />
             ) : (
                 err === "" ? (
                     related.map((course, i) => (

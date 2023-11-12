@@ -3,7 +3,7 @@ import React, { useContext, useState } from "react";
 import Style from "../../assets/style/header.module.scss";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBell } from "@fortawesome/free-solid-svg-icons";
+import { faBell, faTableColumns } from "@fortawesome/free-solid-svg-icons";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import { faUserPen } from "@fortawesome/free-solid-svg-icons";
 import { faCalendarDays } from "@fortawesome/free-solid-svg-icons";
@@ -120,6 +120,7 @@ const L_Header = () => {
           icon={faCalendarDays}
           items={dropdownItems}
         />
+        <HorizontalStack icon={faTableColumns} text="Dashboard" link="/lecturer/dashboard" />
         <HorizontalStack
           modify="ms-auto"
           icon={faCircleQuestion}

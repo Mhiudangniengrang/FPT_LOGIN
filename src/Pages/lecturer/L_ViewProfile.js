@@ -14,18 +14,19 @@ import L_EditProfile from "../../components/ViewProfile/L_EditProfile";
 import L_Layout from "../../Layouts/L_Layout";
 import { useLocation } from "react-router-dom";
 import L_Course from "../../components/ViewProfile/L_Course";
+import { useData } from "../../context/DataContext";
 
 function L_ViewProfile() {
   const [activeTab, setActiveTab] = useState("course");
   const [course, setCourse] = useState([]);
-  const [name, setName] = useState(""); // Tên người dùng
-
+  const [name, setName] = useState("");
+  const { loginUser } = useData()
   const location = useLocation();
-  const state = location.state; // Initialize the state variable
+  const state = location.state;
 
   useEffect(() => {
     if (state && state.name) {
-      // Kiểm tra xem có tên (name) trong location.state hay không
+
       setName(state.name);
     }
 
@@ -72,9 +73,9 @@ function L_ViewProfile() {
                 <Row>
                   <Col md={6} className="py-2">
                     <h5>Name:</h5>
-                    <p>{name || "Write a name here."}</p>
+                    <p>{loginUser.userName}</p>
                     <h5>Email Address:</h5>
-                    <p>HungLD@fpt.edu.vn</p>{" "}
+                    <p>{loginUser.email}</p>{" "}
                   </Col>
                   <Col md={6}>
                     <Button
