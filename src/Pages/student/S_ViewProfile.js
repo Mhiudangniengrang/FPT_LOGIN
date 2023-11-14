@@ -15,22 +15,14 @@ import S_Layout from "../../Layouts/S_Layout";
 import S_Course from "../../components/ViewProfile/S_Course";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useData } from "../../context/DataContext";
+import Breadcrumbs from "../../components/BreadcrumpCus";
+import axios from "../../Services/customizeAxios";
+import { ToastContainer, toast } from "react-toastify";
 
 function S_ViewProfile() {
+  const { loginUser } = useData()
   const [activeTab, setActiveTab] = useState("course");
   const [name, setName] = useState("");
-  const navigate = useNavigate();
-  const location = useLocation();
-  const selectedSubjectsStr = location.state?.selectedSubjects;
-
-  const { loginUser } = useData();
-
-  const handleUpdateProfile = (updatedData) => {
-    navigate.replace({
-      ...location,
-      state: updatedData,
-    });
-  };
   const breadScrumData = [
     {
       route: "/student",
@@ -44,22 +36,17 @@ function S_ViewProfile() {
 
   return (
     <S_Layout>
+      <ToastContainer />
       <Container>
         <Row>
-          <Col md={4}>
-            <Card className="my-2">
-              <Card.Header>
-                <FontAwesomeIcon icon={faUser} /> View Profile
-              </Card.Header>
-            </Card>
-          </Col>
+          <Col><Breadcrumbs items={breadScrumData} /></Col>
         </Row>
         <Row>
           <Col md={12}>
-            <Card className="my-4">
+            <Card className="my-4" style={{ minHeight: '30vh' }}>
               <Card.Body className="py-2">
                 <Row>
-                  <Col md={6} className="py-2">
+                  <Col md={6} className="py-2 text-center">
                     <h5>Name:</h5>
                     <p>{loginUser.userName}</p>
                     <h5>Email Address:</h5>
@@ -71,7 +58,7 @@ function S_ViewProfile() {
                       variant={activeTab === "course" ? "warning" : "secondary"}
                       onClick={() => setActiveTab("course")}
                     >
-                      Course
+                      Subject
                     </Button>
 
                     <Button
@@ -85,12 +72,10 @@ function S_ViewProfile() {
                     <Card className="my-3">
                       <CardBody>
                         {activeTab === "course" && (
-                          <S_Course selectedSubjects={selectedSubjectsStr} />
+                          <S_Course />
                         )}
                         {activeTab === "editprofile" && (
-                          <S_EditProfile
-                            onUpdateProfile={handleUpdateProfile}
-                          />
+                          <S_EditProfile />
                         )}
                       </CardBody>
                     </Card>

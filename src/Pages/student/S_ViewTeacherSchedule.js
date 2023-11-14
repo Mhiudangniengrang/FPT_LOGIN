@@ -9,6 +9,7 @@ import GlobalContext from "../../context/GlobalContext";
 import BookPublicOverLay from "../../components/Schedule/BookPublicOverlay"
 import { useParams } from "react-router-dom";
 import S_WeeklyCalendar from "../../components/Schedule/S_Week";
+import StudentOverlay from "../../components/Schedule/StudentOverlay";
 
 const S_ViewTeacherSchedule = () => {
     const { lecturerId } = useParams()
@@ -34,7 +35,7 @@ const S_ViewTeacherSchedule = () => {
     const { showSlotModal } = useContext(GlobalContext)
     return (
         <>
-            {showSlotModal && <BookPublicOverLay />}
+            {showSlotModal && <StudentOverlay />}
             <S_Layout>
                 <Breadcrumbs items={path} />
                 <Tabs

@@ -3,6 +3,8 @@ import React, { useContext, useEffect, useState, useMemo } from "react";
 import GlobalContext from "../../context/GlobalContext";
 import { getMonth } from "../../Utils/dateUtils";
 import Style from "../../assets/style/month.module.scss"
+import axios from "../../Services/customizeAxios";
+import { ToastContainer, toast } from "react-toastify";
 export default function SmallCalendar({ emptySlot, selectedSlot }) {
     const [currentMonthIdx, setCurrentMonthIdx] = useState(
         dayjs().month()
@@ -55,7 +57,6 @@ export default function SmallCalendar({ emptySlot, selectedSlot }) {
     }
 
     const fillteredSlot = useMemo(() => {
-        console.log("usememo ne")
         const date = dayjs(daySelected).format("YYYY-MM-DD");
         const matchingSlots = emptySlot.reduce((accumulator, slot) => {
             if (slot.dateStart === date && slot.status === "OPEN") {
@@ -67,11 +68,27 @@ export default function SmallCalendar({ emptySlot, selectedSlot }) {
 
     }, [daySelected])
 
-    const handleAssignSlot = (slot) => {
-        console.log(slot)
+    const handleAssignSlot = (request, selectedEmptySlot) => {
+        console.log(selectedEmptySlot)
+        const id = toast.loading("Please wait...")
+
+        axios.put(`/api/v1/slots/lecture/meeting-request/${request.meetingRequestId}/emptySlot/${selectedEmptySlot.emptySlotId}`)
+            .then(res => {
+                console.log(res)
+                toast.update(id, { render: "Assign to empty slot complete", type: "success", isLoading: false, autoClose: true });
+
+            }).catch(error => {
+                toast.update(id, { render: `${error.response.data.message}`, type: "info", isLoading: false, autoClose: true });
+
+                console.log("Error at assign empty slot ", error)
+            }).finally(() => {
+                setDaySelected(Date.now())
+            })
+
     }
     return (
         <>
+            <ToastContainer />
             <h5>Assign to empty slot</h5>
             <div className={Style.content}>
                 <div className={`mt-9 ${Style.calendar}`}>
@@ -133,7 +150,7 @@ export default function SmallCalendar({ emptySlot, selectedSlot }) {
                                 <div className={Style.assignDiv}>
                                     {selectedSlot && (
                                         <button className={Style.assignBtn}
-                                            onClick={() => handleAssignSlot(selectedSlot)}
+                                            onClick={() => handleAssignSlot(selectedSlot, slot)}
                                         >Assign to this slot</button>
                                     )}
                                 </div>

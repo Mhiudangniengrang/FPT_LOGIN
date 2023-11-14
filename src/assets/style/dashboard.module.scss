@@ -17,3 +17,40 @@
 
 
 }
+
+
+.button {
+    border: none;
+    border-radius: 10px;
+    padding: 5px 10px;
+}
+
+#cancel {
+    background-color: #f74444;
+    color: #fff;
+    font-weight: 500;
+
+    &:hover {
+        background-color: rgba($color: #f74444, $alpha: 0.9);
+    }
+}
+
+#update {
+    background-color: #4454f7;
+    color: #fff;
+    font-weight: 500;
+
+    &:hover {
+        background-color: rgba($color: #4454f7, $alpha: 0.9);
+    }
+}
+
+#seeDetail {
+    background-color: #4454f7;
+    color: #fff;
+    font-weight: 500;
+
+    &:hover {
+        background-color: rgba($color: #4454f7, $alpha: 0.9);
+    }
+}

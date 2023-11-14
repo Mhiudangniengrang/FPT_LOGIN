@@ -10,6 +10,8 @@ import {
 import { useData } from "../../context/DataContext";
 import axios from "../../Services/customizeAxios";
 import Style from '../../assets/style/dashboard.module.scss'
+import { ToastContainer, toast } from "react-toastify";
+
 
 function BookedSlot() {
     const [currentDate, setCurrentDate] = useState(dayjs());
@@ -28,6 +30,7 @@ function BookedSlot() {
             })
             .catch(error => {
                 isLoading(false)
+                toast.error(`${error.message}`)
                 console.log("error at getting booked slot: " + error)
             })
     }, [])
@@ -59,6 +62,7 @@ function BookedSlot() {
     return (
         <div
             id="booked_slot" >
+            <ToastContainer />
             <div >
                 <div
                     style={{

@@ -7,11 +7,14 @@ import axios from "../../Services/customizeAxios";
 import { useData } from "../../context/DataContext";
 import Style from "../../assets/style/form.module.scss"
 import SmallCalendar from "../Schedule/SmallCalendar";
+import { ToastContainer, toast } from "react-toastify";
 
 function SolveRequests({ emptySlot }) {
     const [requestSlot, setRequestSlot] = useState([])
     const [selectedSlot, setSelectedSlot] = useState(null)
     const [filter, setFilter] = useState("PENDING")
+    const [save, isSaving] = useState(false)
+    const [complete, setComplete] = useState(false)
     const { loginUser } = useData()
     useEffect(() => {
         axios.get(`/api/v1/requests/lecturer/${loginUser.userId}`)
@@ -20,10 +23,53 @@ function SolveRequests({ emptySlot }) {
             }).catch(error => {
                 console.log("Error at lecturer home:", error)
             })
-    }, [])
+    }, [complete])
 
+    const handleApprove = (item) => {
+        console.log(item)
+        isSaving(true)
+        axios
+            .put(`/api/v1/requests/${item.meetingRequestId}/lecturer/${loginUser.userId}`,
+                {
+                    requestStatus: "APPROVED"
+                })
+            .then(res => {
+                console.log(res)
+                toast.success(`Approve successfully`, {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                });
+                setComplete(true)
+            })
+            .catch(error => {
+                console.log("Error at approve request", error)
+                toast.error(`${error.response != null ? error.response.data.message : error.message}`, {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                });
+            }).finally(() => {
+                isSaving(false)
+            })
+    }
 
-
+    const handleClickSelectedSlot = (item) => {
+        console.log(item.requestStatus)
+        if (item.requestStatus === "APPROVED") {
+            setSelectedSlot(item)
+        }
+    }
     return (
 
         <div id="requests"
@@ -32,6 +78,7 @@ function SolveRequests({ emptySlot }) {
                 minHeight: '20vh'
             }}
         >
+            <ToastContainer />
             <div >
                 <div
                     style={{
@@ -78,11 +125,11 @@ function SolveRequests({ emptySlot }) {
                                 <tbody>
                                     {requestSlot.map((record, i) => (
 
-                                        (record.requestStatus === filter) && (
+                                        (record.requestStatus === filter && record.emptySlotId === null) && (
                                             <tr
                                                 className={`${Style.tableRowOnClick} ${selectedSlot === record ? Style.active : ""}`}
                                                 key={i}
-                                                onClick={() => selectedSlot === record ? setSelectedSlot(null) : setSelectedSlot(record)}
+                                                onClick={() => selectedSlot === record ? setSelectedSlot(null) : handleClickSelectedSlot(record)}
                                             >
                                                 <td>{record.studentName}</td>
                                                 <td>{record.subjectId}</td>
@@ -101,7 +148,10 @@ function SolveRequests({ emptySlot }) {
                                                 </td>
                                                 <td>
                                                     {filter === "PENDING" ? (
-                                                        <button className={Style.approveBtn}>Approve</button>
+                                                        <button
+                                                            className={Style.approveBtn}
+                                                            onClick={() => { !save && handleApprove(record) }}
+                                                        >{save ? "Processing" : "Approve"}</button>
                                                     ) : null}
                                                 </td>
                                             </tr>
@@ -113,13 +163,13 @@ function SolveRequests({ emptySlot }) {
                     </Card>
                 </Col>
                 <Col >
-                    {filter === "APPROVED" && (
-                        <Card className="text-center">
-                            <Card.Body>
-                                <SmallCalendar emptySlot={emptySlot} selectedSlot={selectedSlot} />
-                            </Card.Body>
-                        </Card>
-                    )}
+                    {/* {filter === "APPROVED" && ( */}
+                    <Card className="text-center">
+                        <Card.Body>
+                            <SmallCalendar emptySlot={emptySlot} selectedSlot={selectedSlot} />
+                        </Card.Body>
+                    </Card>
+                    {/* )} */}
                 </Col>
             </Row>
         </div>

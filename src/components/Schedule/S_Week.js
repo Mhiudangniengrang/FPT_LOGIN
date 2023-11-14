@@ -247,12 +247,6 @@ function S_WeeklyCalendar({ activeTab }) {
                     }
                 </tbody>
             </Table>
-            {activeTab === 'teaching' && (
-                <div className='ms-auto'>
-                    <ExcelReader />
-                    <DownloadButton />
-                </div>
-            )}
         </div >
     );
 }

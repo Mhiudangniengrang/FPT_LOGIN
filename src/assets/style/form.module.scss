@@ -79,7 +79,12 @@
 
     .approveBtn {
         border: none;
+        background-color: #07d730;
+        border-radius: 10px;
 
+        &:hover {
+            background-color: rgba($color: #07d730, $alpha: 0.8);
+        }
     }
 }
 
@@ -119,5 +124,32 @@
         &:hover {
             color: #FB9553
         }
+    }
+}
+
+.btnExcel {
+    &:hover {
+        background-color: #FB9553;
+    }
+}
+
+#createSlot {
+    width: 350px;
+    height: auto;
+    padding-right: 20px;
+    padding-left: 20px;
+
+    .object {
+        label {
+            font-weight: 500;
+            margin-left: 20px;
+            margin-right: auto;
+            text-align: right;
+
+            &+select {
+                width: 150px;
+            }
+        }
+
     }
 }

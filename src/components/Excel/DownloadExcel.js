@@ -1,6 +1,7 @@
 import React from 'react';
 import * as XLSX from "xlsx/xlsx.mjs";
 import dayjs from 'dayjs';
+import Style from '../../assets/style/form.module.scss'
 
 const DownloadButton = () => {
     const exportExcel = (data, nameSheet, nameFile) => {
@@ -20,7 +21,9 @@ const DownloadButton = () => {
         const todayString = `[MML] Materials ${today.$D}_${today.$M + 1}_${today.$y}`;
         const data = [
             {
-                "date": "11/13/2023",
+                "date": "13",
+                "month": "11",
+                "year": "2023",
                 "subjectId": "CSD201",
                 "roomId": "Room101",
                 "meetingURL": "https://example.com/meeting",
@@ -36,7 +39,10 @@ const DownloadButton = () => {
     };
 
     return (
-        <button onClick={handleDownload}>Download Excel</button>
+        <button
+            className={Style.btnExcel}
+            style={{ border: 'none', borderRadius: '10px' }}
+            onClick={handleDownload}>Download Excel</button>
     );
 };
 

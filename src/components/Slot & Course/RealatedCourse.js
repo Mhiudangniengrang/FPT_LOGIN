@@ -4,6 +4,7 @@ import { useData } from "../../context/DataContext";
 
 import axios from "../../Services/customizeAxios";
 import Style from '../../assets/style/dashboard.module.scss'
+import { ToastContainer, toast } from "react-toastify";
 const RelatedCourse = () => {
 
     const [loading, isLoading] = useState(true)
@@ -27,6 +28,8 @@ const RelatedCourse = () => {
                         setErr(error.response.data.message)
                     }
                 } else {
+                    toast.update(`${error.message}`);
+
                     console.log('Error:', error.message);
                 }
                 isLoading(false)
@@ -35,24 +38,26 @@ const RelatedCourse = () => {
 
     const handleRequest = async (e, subjectId, lecturerId) => {
         e.preventDefault();
-        isLoading(true)
+        const id = toast.loading("Sending request...")
+
         await axios.post(`/api/v1/requests/student/${loginUser.userId}`, {
             lecturerId: lecturerId,
             subjectId: subjectId,
             requestContent: purpose
         }).then(res => {
-            isLoading(false)
-            window.alert("Send request successfully!")
+            toast.update(id, { render: "Send request successfully", type: "success", isLoading: false, autoClose: true });
             console.log(res)
-        }).catch(err => {
-            isLoading(false)
-            console.log(err)
+        }).catch(error => {
+            toast.update(id, { render: `${error.response.data.message}`, type: "error", isLoading: false, autoClose: true });
+
+            console.log(error)
         })
     }
     return (
         <Row>
+            <ToastContainer />
             {loading ? (
-                <Spinner style={{ magin: '40px auto' }} />
+                <Spinner style={{ margin: '40px auto' }} />
             ) : (
                 err === "" ? (
                     related.map((course, i) => (

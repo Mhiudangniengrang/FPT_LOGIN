@@ -10,6 +10,8 @@ import {
 import { useData } from "../../context/DataContext";
 import axios from "../../Services/customizeAxios";
 import Style from '../../assets/style/dashboard.module.scss'
+import { ToastContainer, toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 function Requested() {
     const [loading, isLoading] = useState(true)
@@ -30,9 +32,12 @@ function Requested() {
             }
         ).then(res => {
             isLoading(false)
+            console.log(res.content)
             setPageContent(res.content)
             setTotalPage(res.totalPage)
         }).catch(error => {
+            toast.update(`${error.message}`);
+
             isLoading(false)
             console.log("Error at getting request:", error)
         })
@@ -42,7 +47,22 @@ function Requested() {
         setPage(value)
     }
 
-
+    const handleDelete = (item) => {
+        console.log(item)
+        const id = toast.loading("Delete request...")
+        axios
+            .delete(`/api/v1/requests/${item.meetingRequestId}/student/${loginUser.userId}`)
+            .then(res => {
+                console.log(res)
+                toast.update(id, { render: "Delete successfully", type: "success", isLoading: false, autoClose: true });
+            }).catch(error => {
+                console.log("error at cancel request", error)
+                toast.update(id, { render: `${error.response.data.message}`, type: "error", isLoading: false, autoClose: true });
+            })
+    }
+    const handleSeeDetail = (item) => {
+        console.log(item)
+    }
     return (
 
         <div
@@ -52,6 +72,7 @@ function Requested() {
                 minHeight: '20vh'
             }}
         >
+            <ToastContainer />
             <div>
                 <div
                     style={{
@@ -85,11 +106,41 @@ function Requested() {
                                     <Card.Title>{item.subjectId}</Card.Title>
                                     <div className="mb-0">
                                         <p>Instructor: {item.lecturerName}</p>
-                                        <p> Status: {item.requestStatus}</p>
+                                        <p> Status: <span
+                                            style={{
+                                                padding: '5px 10px',
+                                                borderRadius: '10px',
+                                                textTransform: 'lowercase',
+                                                fontWeight: '600',
+                                                backgroundColor: `${item.requestStatus === "PENDING" ? "rgba(255, 222, 16,0.8)" : "#07d730"}`,
+                                            }}
+                                        >
+                                            {item.requestStatus}
+                                        </span>
+                                        </p>
                                     </div>
                                     <Card.Subtitle>
-                                        <p>Purpose: {item.requestContent}</p>
+                                        <p style={{ fontWeight: 'normal' }}>Purpose: {item.requestContent}</p>
                                     </Card.Subtitle>
+                                    {item.requestStatus === "PENDING" && (
+                                        <Stack direction="horizontal" gap={3}>
+
+                                            <button
+                                                className={Style.button} id={Style.cancel}
+                                                onClick={() => handleDelete(item)}
+                                            >Cancel</button>
+                                            <button className={Style.button} id={Style.update}>Update</button>
+                                        </Stack>
+                                    )}
+                                    {item.requestStatus === "APPROVED" && item.emptySlotId !== null && (
+                                        <Stack direction="horizontal" gap={3}>
+
+                                            <button
+                                                className={Style.button} id={Style.seeDetail}
+                                                onClick={() => handleSeeDetail(item)}
+                                            >See slot detail</button>
+                                        </Stack>
+                                    )}
                                 </Card.Body>
                             </Card>
                         </Col>
@@ -115,7 +166,9 @@ function Requested() {
                         <FontAwesomeIcon icon={faChevronLeft} />
                     </Button>
                     {Array.from({ length: totalPage }).map((_, index) => (
-                        <Pagination.Item key={index} onClick={() => handlePageChange(index)}>
+                        <Pagination.Item key={index} onClick={() => handlePageChange(index)}
+                            active={page === index}
+                        >
                             {index + 1}
                         </Pagination.Item>
                     ))}

@@ -3,33 +3,27 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCircleCheck,
   faCalendarDays,
+  faBriefcase,
+  faTrash
 } from "@fortawesome/free-solid-svg-icons";
 import axios from "../../Services/customizeAxios";
-import { FormGroup, ListGroup, ListGroupItem } from "react-bootstrap";
+import { Col, FormGroup, ListGroup, ListGroupItem, Row, Stack } from "react-bootstrap";
 import { toast } from "react-toastify";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-function S_EditProfile(props) {
-  const [name, setName] = useState();
-  const [major, setMajor] = useState("Select Major");
-  const [majorId, setMajorId] = useState(null);
+import { useData } from "../../context/DataContext";
+import S_Course from "./S_Course";
+function S_EditProfile() {
+  const { loginUser } = useData()
+  const [name, setName] = useState(loginUser.userName);
+  const [majorId, setMajorId] = useState(loginUser.majorId ? loginUser.majorId : null);
+  const [selectedMajor, setSelectedMajor] = useState({});
   const [majors, setMajors] = useState([]);
-  const [selectedSubjects, setSelectedSubjects] = useState([]);
+  const [subject, setSubject] = useState([]);
+  const [err, isErr] = useState(false)
+  const [selectedSubject, setSelectedSubject] = useState([]);
   const handleUpdateProfile = () => {
-    const newName = name;
-    const selectedSubjectsToUpdate = selectedSubjects.filter(
-      (subject) => subject.selected
-    );
 
-    props.onUpdateProfile({
-      name: newName,
-      selectedSubjects: selectedSubjectsToUpdate,
-    });
-
-    toast.success("Update Successfully", {
-      position: "top-right",
-      autoClose: 3000,
-    });
   };
 
   const handleNameChange = (event) => {
@@ -41,38 +35,46 @@ function S_EditProfile(props) {
       .get("/api/v1/student/searching/majors")
       .then((response) => {
         setMajors(response);
-        if (response.length > 0) {
-          setMajorId(response[0].majorId);
-        }
+        const id = toast.loading("Getting subjects...")
+        axios
+          .get(`/api/v1/students/${loginUser.userId}/subjects/lecturers`)
+          .then(res => {
+            setSelectedSubject(res)
+            isErr(false)
+            toast.update(id, { render: "Get subjects complete", type: "success", isLoading: false, autoClose: true });
+          }).catch(error => {
+            console.log("Error at getting subject", error)
+            toast.update(id, { render: `${error.response.data.message}`, type: "info", isLoading: false, autoClose: true });
+            isErr(true)
+          })
       })
       .catch((error) => {
         console.error("Error fetching majors:", error);
       });
+
   }, []);
 
-  const handleMajorChange = (event) => {
-    setMajor(event.target.value);
-    const selectedMajor = majors.find(
-      (majorOption) => majorOption.majorName === event.target.value
-    );
-    if (selectedMajor) {
-      setMajorId(selectedMajor.majorId);
-    }
-  };
-
   useEffect(() => {
-    if (majorId) {
-      axios
-        .get(`/api/v1/student/searching/subjects/major/${majorId}`)
-        .then((res) => {
-          setSelectedSubjects(res);
-          // console.log(res);
-        })
-        .catch((error) => {
-          console.error("Error", error);
-        });
-    }
-  }, [majorId]);
+    setSubject([])
+    axios
+      .get(`/api/v1/student/searching/subject/major/${majorId}`)
+      .then(res => {
+        console.log(res)
+        setSubject(res)
+        isErr(false)
+      }).catch(error => {
+        console.log("Error at getting subject", error)
+        isErr(true)
+      })
+  }, [majorId])
+
+  const handleMajorChange = (item) => {
+    setMajorId(item.split('-')[0])
+    setSelectedMajor({
+      majorId: item.split('-')[0],
+      majorName: item.split('-')[1]
+    })
+  };
   const handleClickSubject = (subjectId) => {
     const updatedSubjects = selectedSubjects.map((subject) => {
       if (subject.subjectId === subjectId) {
@@ -85,12 +87,14 @@ function S_EditProfile(props) {
 
   return (
     <div>
+
       <h3>Edit Profile</h3>
       <div className="form-group">
         <label>Name:</label>
         <input
           type="text"
           className="form-control"
+          value={name}
           onChange={handleNameChange}
         />
       </div>
@@ -98,45 +102,49 @@ function S_EditProfile(props) {
         <label htmlFor="major">Major:</label>
         <select
           className="mx-2 my-3"
-          value={major}
-          onChange={handleMajorChange}
+          onChange={e => handleMajorChange(e.target.value)}
         >
           <option value="Select Major" disabled hidden>
             Select Major
           </option>
           {majors.map((majorOption) => (
-            <option key={majorOption.majorId}>{majorOption.majorName}</option>
+            <option key={majorOption.majorId}
+              value={`${majorOption.majorId}-${majorOption.majorName}`}>{majorOption.majorName}</option>
           ))}
         </select>
       </FormGroup>
-      <div className="form-group ">
-        <p className="my-3">Course:</p>
-        {selectedSubjects.length > 0 && (
-          <div className="my-3">
-            <strong>
-              {" "}
-              <FontAwesomeIcon icon={faCalendarDays} className="mx-2" />
-              {major}
-            </strong>
-            <div className="my-2">
-              <ListGroup>
-                {selectedSubjects.map((result) => (
-                  <ListGroupItem
-                    key={result.subjectId}
-                    onClick={() => handleClickSubject(result.subjectId)}
-                    style={{
-                      background: result.selected ? "#a9a9a9" : "transparent",
-                    }}
-                  >
-                    {result.subjectId} - {result.lecturerName}{" "}
-                    <FontAwesomeIcon icon={faCircleCheck} />
-                  </ListGroupItem>
-                ))}
-              </ListGroup>
-            </div>
-          </div>
-        )}
-      </div>
+      <Row style={{ marginBottom: '10px' }}>
+        <Col md={6}>
+          <p className="pb-1"><strong>Your Current Subjects:</strong></p>
+          <Stack gap={3}>
+            {selectedSubject.map(item => (
+              <Stack direction="horizontal" >
+                <FontAwesomeIcon icon={faBriefcase} style={{ color: "#000000", paddingRight: "10px" }} />
+
+                <p key={item.subjectId} className="m-0">{item.subjectId} - {item.unique}</p>
+                <FontAwesomeIcon className="ms-auto me-5" icon={faTrash} />
+
+              </Stack>
+            ))}
+            {err && <p>There is no subject for this student</p>}
+          </Stack>
+        </Col>
+        <Col >
+          <p className="pb-1"><strong>{selectedMajor.majorName}:</strong></p>
+          <Stack gap={3}>
+            {subject.map(item => (
+              <Stack direction="horizontal" >
+                <FontAwesomeIcon icon={faBriefcase} style={{ color: "#000000", paddingRight: "10px" }} />
+
+                <p key={item.subjectId} className="m-0">{item.subjectId} - {item.unique}</p>
+                <FontAwesomeIcon className="ms-auto me-5" icon={faCircleCheck} />
+              </Stack>
+            ))}
+            {err && <p>There is no subject for this major</p>}
+          </Stack>
+        </Col>
+      </Row>
+
       <div>
         <button
           type="button"

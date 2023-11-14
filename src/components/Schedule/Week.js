@@ -11,6 +11,8 @@ import { getDaysInWeek, getFullDaysInWeek } from '../../Utils/dateUtils';
 import { useEffect } from 'react';
 import dayjs from 'dayjs';
 import { useData } from '../../context/DataContext';
+import ExcelReader from '../Excel/ExcelReader';
+import DownloadButton from '../Excel/DownloadExcel';
 
 
 const slotTime = [
@@ -59,14 +61,13 @@ const daysOfWeek = [
 const timeSlots = ["Slot 1", "Slot 2", "Slot 3", "Slot 4", "Slot 5", "Slot 6"];
 
 function WeeklyCalendar({ isDisable = false }) {
-    const lecturerId = typeof window != null ? sessionStorage.getItem("lecturerId") : null
+
     const [rooms, setRooms] = useState([]);
     const [emptySlot, setEmptySlot] = useState([])
     const { loginUser } = useData()
 
-    const { setShowSlotModal, setDaySelected, setSelectedSlot, selectedSlot } = useContext(GlobalContext);
+    const { setShowSlotModal, setDaySelected, setSelectedSlot } = useContext(GlobalContext);
     const [selectedDate, setSelectedDate] = useState(new Date());
-    console.log(selectedSlot)
 
     const getRoom = () => {
         axios
@@ -80,17 +81,16 @@ function WeeklyCalendar({ isDisable = false }) {
     useEffect(() => {
         if (!isDisable) {
             axios
-                .get(`/api/v1/user/emptySlot/lecturer/${lecturerId}`)
+                .get(`/api/v1/user/emptySlot/lecturer/${loginUser.userId}`)
                 .then((response) => {
                     setEmptySlot(response)
                     getRoom()
-                    console.log(response)
                 })
                 .catch(error => {
                     console.log("Error at Week.js " + error)
                 })
         }
-    }, [lecturerId])
+    }, [])
 
     const handleCreateClick = (day) => {
         let year = dayjs(selectedDate).year().toString()
@@ -168,7 +168,7 @@ function WeeklyCalendar({ isDisable = false }) {
                                 <th key={index}
                                     className={Style.createContain}
                                 >
-                                    {checkDate(day) && (
+                                    {(checkDate(day) && !isDisable) && (
                                         <span
                                             className={Style.create}
                                             onClick={() => {
@@ -240,6 +240,12 @@ function WeeklyCalendar({ isDisable = false }) {
                     ))}
                 </tbody>
             </Table>
+            {isDisable && (
+                <div>
+                    <ExcelReader />
+                    <DownloadButton />
+                </div>
+            )}
         </div >
     );
 }

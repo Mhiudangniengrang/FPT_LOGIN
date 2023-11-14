@@ -10,6 +10,7 @@ import GlobalContext from "../../context/GlobalContext";
 import Calender_type from "../../components/Schedule/Calender_type";
 import Breadcrumbs from "../../components/BreadcrumpCus";
 import { useParams } from "react-router-dom";
+import StudentOverlay from "../../components/Schedule/StudentOverlay";
 
 const path = [
     {
@@ -27,7 +28,7 @@ const S_Schedule = () => {
     const { type } = useParams()
     return (
         <>
-            {showSlotModal && <BookPublicOverlay />}
+            {showSlotModal && <StudentOverlay />}
             <S_Layout>
                 <Breadcrumbs items={path} />
                 <FormSearch />

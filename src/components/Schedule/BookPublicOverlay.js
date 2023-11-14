@@ -11,11 +11,13 @@ import { useState } from 'react';
 import { useData } from '../../context/DataContext';
 import axios from '../../Services/customizeAxios'
 import dayjs from 'dayjs';
+import { useParams } from 'react-router-dom';
 const subjects = [
     'SWP391', 'MATH101', 'JPN301'
 ]
 
 function BookPublicOverlay() {
+    const { lecturerId } = useParams()
     const { loginUser } = useData()
     const { setShowSlotModal, selectedSlot } = useContext(GlobalContext)
     const [purpose, setPurpose] = useState(
@@ -26,9 +28,14 @@ function BookPublicOverlay() {
     );
     const [subjectList, setSubjectList] = useState([])
     const [loading, isLoading] = useState(true)
+    const checkDate = (day) => {
+        let currDay = new Date();
+        const [date, month, year] = day.split('/').map(String)
+        let selectDate = new Date(year + "/" + month + "/" + date)
 
-    console.log("BookPublicOverLay")
-    console.log(selectedSlot)
+        if (selectDate >= currDay) { return true }
+        return false;
+    }
     const handleSubmit = (e) => {
         e.preventDefault();
         axios
@@ -45,19 +52,38 @@ function BookPublicOverlay() {
         setShowSlotModal(false);
     };
 
-    useEffect(() => {
-        axios.get(`/api/v1/students/${loginUser.userId}/subjects/lecturers`)
-            .then(res => {
-                setSubjectList(res);
-                isLoading(false)
-            })
-            .catch(error => {
-                console.log("Error at getting subject list", error);
-                isLoading(false)
+    const handleUpdateSlot = () => {
 
-            });
+    }
+
+    useEffect(() => {
+        if (lecturerId) {
+            axios.get(`/api/v1/lecturer/${lecturerId}/subjects`)
+                .then(res => {
+                    setSubjectList(res);
+                    isLoading(false)
+                })
+                .catch(error => {
+                    console.log("Error at getting subject list", error);
+                    isLoading(false)
+
+                });
+        } else {
+            console.log(selectedSlot)
+            axios.get(`/api/v1/lecturer/${selectedSlot.lecturerId}/subjects`)
+                .then(res => {
+                    setSubjectList(res);
+                    isLoading(false)
+                })
+                .catch(error => {
+                    console.log("Error at getting subject list", error);
+                    isLoading(false)
+
+                });
+        }
     }, []);
 
+    console.log("BookOverlay")
     return (
         <>
             <div className={Style.box}>
@@ -136,55 +162,127 @@ function BookPublicOverlay() {
                             </Stack>
                         </Stack>
                     </div>
-                ) :
-                    <div className={Style.box_content}>
-                        <div
-                            style={{
-                                width: '30px',
-                                height: '15px',
-                                borderRadius: "10px",
-                                background: "red",
-                                margin: '10px 10px 10px 10px',
-                            }}
-                        >
-                        </div>
-
-                        <Stack direction='vertical' gap='2'>
-                            <Stack className='pb-2 pe-2' direction='horizontal' gap='2'>
-                                <h4
-                                    style={{ margin: '0' }}
-                                >View slot</h4><span style={{ margin: '0' }}>    (You had booked this slot)</span>
-                                <FontAwesomeIcon icon={faXmark}
-
-                                    className='ms-auto'
+                ) : (
+                    !checkDate(selectedSlot.dateStart) ?
+                        (
+                            <div className={Style.box_content}>
+                                <div
                                     style={{
-                                        color: "#000000",
-                                        cursor: 'pointer',
+                                        width: '30px',
+                                        height: '15px',
+                                        borderRadius: "10px",
+                                        background: "red",
+                                        margin: '10px 10px 10px 10px',
                                     }}
-                                    onClick={() => setShowSlotModal(false)} />
-                            </Stack>
-                            <Stack direction='vertical'>
-                                <p>Lecturer: {selectedSlot.lecturerName}</p>
-                                <p>Slot: {selectedSlot.slotTimeId}</p>
-                                <p>Duration: {selectedSlot.duration}</p>
-                                <p>Subject: {selectedSlot.subjectId}</p>
-                                <p>Date : {selectedSlot.dateStart}</p>
-                                <p>Time : {selectedSlot.timeStart}</p>
-                                <p>Room: {selectedSlot.roomId}</p>
-                                <p>Booked date: {dayjs(selectedSlot.bookedDate).format("YYYY-MM-DD")}</p>
-                                <Stack direction='vertical' gap='2'
-                                    style={{ marginBottom: '10px' }}
                                 >
-                                    <label htmlFor='purpose'>Purpose:</label>
-                                    <textarea id='purpose' className={Style.purpose}
-                                        value={selectedSlot.description}
-                                        disabled
-                                    >
-                                    </textarea>
+                                </div>
+
+                                <Stack direction='vertical' gap='2'>
+                                    <Stack className='pb-2 pe-2' direction='horizontal' gap='2'>
+                                        <h4
+                                            style={{ margin: '0' }}
+                                        >View slot</h4><span style={{ margin: '0' }}>    (This slot has overdue)</span>
+                                        <FontAwesomeIcon icon={faXmark}
+
+                                            className='ms-auto'
+                                            style={{
+                                                color: "#000000",
+                                                cursor: 'pointer',
+                                            }}
+                                            onClick={() => setShowSlotModal(false)} />
+                                    </Stack>
+                                    <Stack direction='vertical'>
+                                        <p>Lecturer: {selectedSlot.lecturerName}</p>
+                                        <p>Slot: {selectedSlot.slotTimeId}</p>
+                                        <p>Duration: {selectedSlot.duration}</p>
+                                        <p>Subject: {selectedSlot.subjectId}</p>
+                                        <p>Date : {selectedSlot.dateStart}</p>
+                                        <p>Time : {selectedSlot.timeStart}</p>
+                                        <p>Room: {selectedSlot.roomId}</p>
+                                        <p>Booked date: {dayjs(selectedSlot.bookedDate).format("YYYY-MM-DD")}</p>
+                                        <Stack direction='vertical' gap='2'
+                                            style={{ marginBottom: '10px' }}
+                                        >
+                                            <label htmlFor='purpose'>Purpose:</label>
+                                            <textarea id='purpose' className={Style.purpose}
+                                                value={selectedSlot.description}
+                                                disabled
+                                            >
+                                            </textarea>
+                                        </Stack>
+                                    </Stack>
                                 </Stack>
-                            </Stack>
-                        </Stack>
-                    </div>
+                            </div>
+                        ) : (
+                            <div className={Style.box_content}>
+                                <div
+                                    style={{
+                                        width: '30px',
+                                        height: '15px',
+                                        borderRadius: "10px",
+                                        background: "red",
+                                        margin: '10px 10px 10px 10px',
+                                    }}
+                                >
+                                </div>
+
+                                <Stack direction='vertical' gap='2'>
+                                    <Stack className='pb-2 pe-2' direction='horizontal' gap='2'>
+                                        <h4
+                                            style={{ margin: '0' }}
+                                        >View slot</h4>
+                                        <FontAwesomeIcon icon={faXmark}
+
+                                            className='ms-auto'
+                                            style={{
+                                                color: "#000000",
+                                                cursor: 'pointer',
+                                            }}
+                                            onClick={() => setShowSlotModal(false)} />
+                                    </Stack>
+                                    <Stack direction='vertical'>
+                                        <p>Lecturer: {selectedSlot.lecturerName}</p>
+                                        <p>Slot: {selectedSlot.slotTimeId}</p>
+                                        <p>Duration: {selectedSlot.duration}</p>
+                                        <p>Date : {selectedSlot.dateStart}</p>
+                                        <p>Time : {selectedSlot.timeStart}</p>
+                                        <p>Room: {selectedSlot.roomId}</p>
+                                        <p>Booked date: {dayjs(selectedSlot.bookedDate).format("YYYY-MM-DD")}</p>
+                                        <Stack direction='horizontal' gap={1} style={{ marginBottom: '1rem' }}>
+                                            <p style={{ margin: '0' }}>Subject:</p>
+                                            <select
+                                                onChange={e => setSubject(e.target.value)}
+                                            >
+                                                {subjectList.map((item, index) => (
+                                                    <option
+                                                        key={index}
+                                                        value={`${item.subjectId}`}
+                                                        defaultValue={selectedSlot.subjectId === item.subjectId ? true : false}>
+                                                        {item.subjectId}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                        </Stack>
+                                        <Stack direction='vertical' gap='2'
+                                            style={{ marginBottom: '10px' }}
+                                        >
+                                            <label htmlFor='purpose'>Purpose:</label>
+                                            <textarea id='purpose' className={Style.purpose}
+                                                value={purpose}
+                                                onChange={e => setPurpose(e.target.value)}
+                                            >
+                                            </textarea>
+                                        </Stack>
+                                        <button
+                                            className={Style.book_btn}
+                                            onClick={() => handleUpdateSlot}
+                                        >Update</button>
+                                    </Stack>
+                                </Stack>
+                            </div>
+                        )
+
+                )
                 }
             </div>
         </>

@@ -21,8 +21,11 @@ export const DataProvider = ({ children, role }) => {
   function isTokenExpired() {
     return dayjs(Date.now()) > dayjs(loginTime).add(1, 'hours');
   }
-  let loginUser = null;
-  let savedUser = JSON.parse(sessionStorage.getItem("user"))
+
+  const navigate = useNavigate()
+
+  const savedUser = typeof window !== 'undefined' ? JSON.parse(sessionStorage.getItem("user")) : null
+  let loginUser = {};
   if (savedUser !== null) {
     const decodedInfo = atob(savedUser.info);
     const userInfo = JSON.parse(decodedInfo);
@@ -34,8 +37,10 @@ export const DataProvider = ({ children, role }) => {
       email: userInfo.email,
       roleName: userInfo.roleName,
     };
+  } else if (savedUser === null) {
+    console.log("unauthor")
+    navigate("/unauthorize")
   }
-  const navigate = useNavigate()
   useEffect(() => {
     try {
       if (loginUser.roleName === role) {
