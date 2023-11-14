@@ -7,6 +7,7 @@ import HelpCenter from "../Pages/student/S_HelpCenter";
 import S_ViewSearch from "../components/S_SearchTeacher/S_ViewSearch";
 import S_ViewTeacherSchedule from "../Pages/student/S_ViewTeacherSchedule";
 import S_HelpCenter from "../Pages/student/S_HelpCenter";
+import S_ReportError from "../Pages/student/S_ReportError";
 
 const StudentRoutes = [
   { path: "/student", component: S_HelpCenter },
@@ -27,7 +28,7 @@ const StudentRoutes = [
   { path: "/student/viewschedule/:type", component: S_Schedule },
   { path: "/student/search/:filter/:search", component: S_ViewSearch },
   { path: "/student/search", component: S_ViewSearch },
-  { path: "/student/helpcenter", component: HelpCenter },
+  { path: "/student/help_center", component: S_ReportError },
 ];
 
 export default StudentRoutes;

@@ -15,6 +15,7 @@ function SolveRequests({ emptySlot }) {
     const [filter, setFilter] = useState("PENDING")
     const [save, isSaving] = useState(false)
     const [complete, setComplete] = useState(false)
+    const [process, setProcess] = useState("")
     const { loginUser } = useData()
     useEffect(() => {
         axios.get(`/api/v1/lecturer/lecturer/${loginUser.userId}`)
@@ -31,7 +32,7 @@ function SolveRequests({ emptySlot }) {
         axios
             .put(`/api/v1/lecturer/${item.meetingRequestId}/lecturer/${loginUser.userId}`,
                 {
-                    requestStatus: "APPROVED"
+                    requestStatus: process
                 })
             .then(res => {
                 console.log(res)
@@ -148,10 +149,16 @@ function SolveRequests({ emptySlot }) {
                                                 </td>
                                                 <td>
                                                     {filter === "PENDING" ? (
-                                                        <button
-                                                            className={Style.approveBtn}
-                                                            onClick={() => { !save && handleApprove(record) }}
-                                                        >{save ? "Processing" : "Approve"}</button>
+                                                        <div>
+                                                            <button
+                                                                className={Style.approveBtn}
+                                                                onClick={() => { !save && handleApprove(record) }}
+                                                            >{save ? "Processing" : "Approve"}</button>
+                                                            <button
+                                                                className={Style.approveBtn}
+                                                                onClick={() => { !save && handleApprove(record) }}
+                                                            >{save ? "Processing" : "Reject"}</button>
+                                                        </div>
                                                     ) : null}
                                                 </td>
                                             </tr>

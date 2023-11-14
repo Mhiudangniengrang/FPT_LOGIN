@@ -23,7 +23,7 @@ export default function Month({ month }) {
                 })
         } else if (loginUser.roleName === "STUDENT") {
             axios
-                .get(`/api/v1/students/bookedSlot/calendar/${loginUser.userId}`)
+                .get(`/api/v1/students/bookedSlot/homePage/${loginUser.userId}`)
                 .then((response) => {
                     setEmptySlot(response)
                     toast.update(id, { render: "Get slot complete", type: "success", isLoading: false, autoClose: true });

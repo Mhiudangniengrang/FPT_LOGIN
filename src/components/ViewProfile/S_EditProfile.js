@@ -9,15 +9,15 @@ import { FormGroup, ListGroup, ListGroupItem } from "react-bootstrap";
 //toast
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useData } from "../../context/DataContext";
 
-function S_EditProfile(props) {
-  const { loginUser } = props;
+function S_EditProfile() {
   const [majors, setMajors] = useState([]);
   const [subjects, setSubjects] = useState([]);
   const [selectedMajor, setSelectedMajor] = useState(null);
   const [selectedSubjects, setSelectedSubjects] = useState([]);
   const [loading, isLoading] = useState(true);
-
+  const { loginUser } = useData();
   useEffect(() => {
     axios
       .get("/api/v1/student/searching/majors")
@@ -69,17 +69,25 @@ function S_EditProfile(props) {
   const updateSubjects = async () => {
     try {
       const selectedSubjectsData = selectedSubjects.map((subject) => ({
-        lecturerId: loginUser.userId,
+        lecturerId: subject.lecturerId,
+        studentId: loginUser.userId,
         subjectId: subject.subjectId,
       }));
 
-      await axios.post("/api/v1/lecturer/subject", selectedSubjectsData);
+      await axios.post(
+        "/api/v1/students/profile/subject",
+        selectedSubjectsData
+      );
       console.log(selectedSubjectsData);
       toast.success("Update profile success");
     } catch (err) {
       console.error("Error creating URL:", err);
       toast.error(err.response.data.message);
     }
+  };
+  const resetForm = () => {
+    setSelectedMajor(null);
+    setSelectedSubjects([]);
   };
 
   return (
@@ -96,9 +104,7 @@ function S_EditProfile(props) {
             setSelectedMajor(e.target.value);
           }}
         >
-          <option value="" disabled>
-            Select Major
-          </option>
+          <option value="">Select Major</option>
           {majors.map((majorOption) => (
             <option key={majorOption.majorId}>{majorOption.majorName}</option>
           ))}
@@ -137,7 +143,11 @@ function S_EditProfile(props) {
         >
           Update Profile
         </button>
-        <button type="button" className="btn btn-secondary mx-2">
+        <button
+          type="button"
+          className="btn btn-secondary mx-2"
+          onClick={resetForm}
+        >
           Cancel
         </button>
       </div>

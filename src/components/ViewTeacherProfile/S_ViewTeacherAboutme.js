@@ -4,39 +4,24 @@ import { Card, CardBody } from "react-bootstrap";
 import { faBriefcase } from "@fortawesome/free-solid-svg-icons";
 import { useParams } from "react-router-dom";
 
-const S_ViewTeacherAboutme = () => {
+const S_ViewTeacherAboutme = (props) => {
+  const { subjects } = props;
   const { lecturerId } = useParams();
   return (
     <div className="my-2 ">
       <Card>
         <CardBody>
           <h4>About me</h4>
-          <strong>Description:</strong>
-          <p> Write a brief introduction about yourself here.</p>
 
           <div>
             <strong>Course</strong>
-            <div>Course Profile:</div>
             <div className="my-2">
-              <div style={{ float: "left", width: "50%" }}>
-                <FontAwesomeIcon icon={faBriefcase} /> CSI104 - Introduction to
-                Computing
-                <br />
-                <FontAwesomeIcon icon={faBriefcase} /> SWT301 - Software Testing
-                <br />
-                <FontAwesomeIcon icon={faBriefcase} /> SWE102 - Introduction to
-                Software Engineering
-              </div>
-              <div style={{ float: "left", width: "50%" }}>
-                <FontAwesomeIcon icon={faBriefcase} /> SWR301 - Software
-                Requirement
-                <br />
-                <FontAwesomeIcon icon={faBriefcase} /> SWP391 - Application
-                Development Project
-                <br />
-                <FontAwesomeIcon icon={faBriefcase} /> CEA201 - Computer
-                Organization and Architecture
-              </div>
+              {subjects.map((res) => (
+                <p key={res.lecturerId}>
+                  <FontAwesomeIcon icon={faBriefcase} /> {res.subjectId} -{" "}
+                  {res.lecturerName}
+                </p>
+              ))}
             </div>
           </div>
           <div>

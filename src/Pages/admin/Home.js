@@ -6,6 +6,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { RoomCreate, RoomEdit, RoomList } from './Room'
 import { SubjectCreate, SubjectEdit, SubjectList } from './Subject'
 import { UserEdit, UserList } from './User'
+import { SemesterList } from './Semester'
 
 
 function Home({ Toggle }) {
@@ -33,6 +34,11 @@ function Home({ Toggle }) {
                 {(type === "user" && !action) && <UserList />}
                 {(type === "user" && action === 'edit' && id) && <UserEdit />}
                 {(type === "user" && action === 'edit' && !id) && navigate('/admin/user')}
+
+                {(type === "semester" && !action) && <SemesterList />}
+                {(type === "semester" && action === 'edit' && id) && <UserEdit />}
+
+
             </div>
         </div >)
 }

@@ -17,7 +17,6 @@ export function Sidebar({ Toggle }) {
     ];
     const { type } = useParams()
     const { loginUser } = useData()
-    console.log(loginUser)
     const navigate = useNavigate()
     const handleLogout = () => {
         const userAgrees = window.confirm('Are you sure you want to logout?');

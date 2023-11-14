@@ -125,7 +125,7 @@ const L_Header = () => {
           modify="ms-auto"
           icon={faCircleQuestion}
           text="Help Center"
-          link="/"
+          link="/lecturer/help_center"
         />
       </Stack>
     </Stack>

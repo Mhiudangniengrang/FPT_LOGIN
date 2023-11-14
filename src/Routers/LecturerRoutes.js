@@ -12,6 +12,7 @@ const LecturerRoutes = [
   { path: "/lecturer/teachingschedule", component: L_ViewTeaching },
   { path: "/lecturer/viewprofile", component: L_ViewProfile },
   { path: "/lecturer/viewschedule", component: L_Schedule },
+  { path: "/lecturer/help_center", component: L_HelpCenter },
 ];
 
 export default LecturerRoutes;

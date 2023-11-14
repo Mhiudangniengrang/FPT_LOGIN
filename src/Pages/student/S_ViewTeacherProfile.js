@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser } from "@fortawesome/free-solid-svg-icons";
 import { Container, Row, Col, Card, Button, Spinner } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import S_Layout from "../../Layouts/S_Layout";
@@ -11,6 +10,7 @@ import Breadcrumbs from "../../components/BreadcrumpCus";
 
 const S_ViewTeacherProfile = () => {
   const { setSelectedLecturer, selectedLecturer } = useContext(GlobalContext);
+  const [subjects, setSubjects] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const { lecturerId } = useParams();
   const path = [
@@ -38,6 +38,17 @@ const S_ViewTeacherProfile = () => {
         });
     }
   }, []);
+  useEffect(() => {
+    axios
+      .get(`/api/v1/lecturer/${lecturerId}/subjects`)
+      .then((response) => {
+        setSubjects(response);
+        // console.log(response);
+      })
+      .catch((error) => {
+        console.error("API call failed:", error);
+      });
+  }, []);
   return (
     <S_Layout>
       <Container>
@@ -53,7 +64,7 @@ const S_ViewTeacherProfile = () => {
                     ) : (
                       selectedLecturer && (
                         <>
-                          <h5>ID:</h5>
+                          <h5>Lecturer ID:</h5>
                           <p>{selectedLecturer.userId}</p>
                           <h5>Name:</h5>
                           <p>{selectedLecturer.userName}</p>
@@ -65,7 +76,10 @@ const S_ViewTeacherProfile = () => {
                   </Col>
 
                   <Col md={6}>
-                    <S_ViewTeacherAboutme />
+                    <S_ViewTeacherAboutme
+                      subjects={subjects}
+                      setSubjects={setSubjects}
+                    />
                   </Col>
                 </Row>
               </Card.Body>

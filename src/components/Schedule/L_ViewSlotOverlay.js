@@ -414,7 +414,7 @@ function ViewSlot() {
                             <Stack className='pb-2 pe-2' direction='horizontal' gap='2'>
                                 <h4
                                     style={{ margin: '0' }}
-                                >View slot</h4><span>(This slot had been booked)</span>
+                                >View slot</h4>
                                 <FontAwesomeIcon
                                     icon={faXmark}
                                     className='ms-auto'
@@ -438,7 +438,7 @@ function ViewSlot() {
 
                                 <button className={`${Style.book_btn} mt-1 mb-1 p-2`}
                                     onClick={() => setRechedule(!rechedule)}
-                                >Reschedule</button>
+                                >Edit</button>
                             </Stack>
                         </Stack>
 
@@ -573,7 +573,7 @@ function ViewSlot() {
                                         <button
                                             className={Style.book_btn}
                                             onClick={(e) => handleUpdateSlot(e)}
-                                        >{!loading ? "Update" : "Updating..."}</button>
+                                        >{!loading ? "Save" : "Saving..."}</button>
                                     </form>
                                 </div>
                             </Stack>
