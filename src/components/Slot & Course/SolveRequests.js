@@ -17,7 +17,7 @@ function SolveRequests({ emptySlot }) {
     const [complete, setComplete] = useState(false)
     const { loginUser } = useData()
     useEffect(() => {
-        axios.get(`/api/v1/requests/lecturer/${loginUser.userId}`)
+        axios.get(`/api/v1/lecturer/lecturer/${loginUser.userId}`)
             .then(res => {
                 setRequestSlot(res)
             }).catch(error => {
@@ -29,7 +29,7 @@ function SolveRequests({ emptySlot }) {
         console.log(item)
         isSaving(true)
         axios
-            .put(`/api/v1/requests/${item.meetingRequestId}/lecturer/${loginUser.userId}`,
+            .put(`/api/v1/lecturer/${item.meetingRequestId}/lecturer/${loginUser.userId}`,
                 {
                     requestStatus: "APPROVED"
                 })

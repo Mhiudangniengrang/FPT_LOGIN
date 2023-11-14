@@ -14,7 +14,6 @@ function OffCanvasSidebar() {
                 <Button variant="light" onClick={openSidebar}>
                     <span className="navbar-toggler-icon"></span>
                 </Button>
-                <h1 className="navbar-brand">Your App</h1>
             </nav>
 
             <Offcanvas show={showSidebar} onHide={closeSidebar}>

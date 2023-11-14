@@ -87,7 +87,7 @@ function S_WeeklyCalendar({ activeTab }) {
             } else {
                 const id = toast.loading("Please wait...")
                 axios
-                    .get(`/api/v1/user/emptySlot/lecturer/${lecturerId}`)
+                    .get(`/api/v1/user/lecturer/${lecturerId}`)
                     .then((response) => {
                         console.log("emptySlot", response)
                         setEmptySlot(response)
@@ -117,6 +117,7 @@ function S_WeeklyCalendar({ activeTab }) {
         }
     }, [])
     const handleDayClick = (meeting) => {
+        console.log("asdasd")
         setSelectedSlot(meeting)
         setShowSlotModal(true)
     }
@@ -200,7 +201,7 @@ function S_WeeklyCalendar({ activeTab }) {
                                                         onClick={() => handleDayClick(meeting)}
                                                     >
                                                         <span>{(meeting.duration).slice(3, 5)} minutes at room {meeting.roomId} </span>
-                                                        <p> ({meeting.timeStart}-)</p>
+                                                        <p> ({meeting.timeStart})</p>
                                                     </div>
                                                 );
                                             } else if (meeting.dateStart === day && meeting.slotTimeId == slot.charAt(5) && meeting.status === "BOOKED" && meeting.studentId === loginUser.userId) {
@@ -213,7 +214,7 @@ function S_WeeklyCalendar({ activeTab }) {
                                                     >
                                                         <span>{meeting.subjectId}</span><br></br>
                                                         <span>{(meeting.duration).slice(3, 5)} minutes at room {meeting.roomId} </span>
-                                                        <p> ({meeting.timeStart}-{meeting.timeStart})</p>
+                                                        <p> ({meeting.timeStart})</p>
                                                     </div>
                                                 );
                                             }

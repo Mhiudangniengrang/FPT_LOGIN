@@ -4,6 +4,7 @@ import Footer from "../components/Headers & Footers/Footer";
 import Container from "react-bootstrap/Container";
 import GlobalContext from "../context/GlobalContext";
 import LecturerOverlay from "../components/Schedule/LecturerOverlay";
+import OffCanvasSidebar from "../components/OffCanvasSidebar";
 
 const L_Layout = ({ children }) => {
   const { showSlotModal } = useContext(GlobalContext)

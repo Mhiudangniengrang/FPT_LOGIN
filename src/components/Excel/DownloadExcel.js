@@ -25,7 +25,7 @@ const DownloadButton = () => {
                 "month": "11",
                 "year": "2023",
                 "subjectId": "CSD201",
-                "roomId": "Room101",
+                "roomId": "101",
                 "meetingURL": "https://example.com/meeting",
                 "slotTimeId": 0
             },

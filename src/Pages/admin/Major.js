@@ -188,7 +188,7 @@ export const MajorList = () => {
                                         onClick={() => {
                                             setFilter("majorId");
                                             setSortDir(sortDir === "asc" ? "desc" : "asc");
-                                            setPage(1)
+                                            setPage(0)
                                         }}
                                     >
                                         <FontAwesomeIcon

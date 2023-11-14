@@ -3,153 +3,137 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCircleCheck,
   faCalendarDays,
-  faBriefcase,
-  faTrash
 } from "@fortawesome/free-solid-svg-icons";
 import axios from "../../Services/customizeAxios";
-import { Col, FormGroup, ListGroup, ListGroupItem, Row, Stack } from "react-bootstrap";
+import { FormGroup, ListGroup, ListGroupItem } from "react-bootstrap";
+//toast
 import { toast } from "react-toastify";
-import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useData } from "../../context/DataContext";
-import S_Course from "./S_Course";
-function S_EditProfile() {
-  const { loginUser } = useData()
-  const [name, setName] = useState(loginUser.userName);
-  const [majorId, setMajorId] = useState(loginUser.majorId ? loginUser.majorId : null);
-  const [selectedMajor, setSelectedMajor] = useState({});
+
+function S_EditProfile(props) {
+  const { loginUser } = props;
   const [majors, setMajors] = useState([]);
-  const [subject, setSubject] = useState([]);
-  const [err, isErr] = useState(false)
-  const [selectedSubject, setSelectedSubject] = useState([]);
-  const handleUpdateProfile = () => {
-
-  };
-
-  const handleNameChange = (event) => {
-    setName(event.target.value);
-  };
+  const [subjects, setSubjects] = useState([]);
+  const [selectedMajor, setSelectedMajor] = useState(null);
+  const [selectedSubjects, setSelectedSubjects] = useState([]);
+  const [loading, isLoading] = useState(true);
 
   useEffect(() => {
     axios
       .get("/api/v1/student/searching/majors")
       .then((response) => {
         setMajors(response);
-        const id = toast.loading("Getting subjects...")
-        axios
-          .get(`/api/v1/students/${loginUser.userId}/subjects/lecturers`)
-          .then(res => {
-            setSelectedSubject(res)
-            isErr(false)
-            toast.update(id, { render: "Get subjects complete", type: "success", isLoading: false, autoClose: true });
-          }).catch(error => {
-            console.log("Error at getting subject", error)
-            toast.update(id, { render: `${error.response.data.message}`, type: "info", isLoading: false, autoClose: true });
-            isErr(true)
-          })
       })
       .catch((error) => {
         console.error("Error fetching majors:", error);
       });
-
   }, []);
 
   useEffect(() => {
-    setSubject([])
-    axios
-      .get(`/api/v1/student/searching/subject/major/${majorId}`)
-      .then(res => {
-        console.log(res)
-        setSubject(res)
-        isErr(false)
-      }).catch(error => {
-        console.log("Error at getting subject", error)
-        isErr(true)
-      })
-  }, [majorId])
+    if (selectedMajor) {
+      const item = majors.find((major) => major.majorName === selectedMajor);
 
-  const handleMajorChange = (item) => {
-    setMajorId(item.split('-')[0])
-    setSelectedMajor({
-      majorId: item.split('-')[0],
-      majorName: item.split('-')[1]
-    })
-  };
-  const handleClickSubject = (subjectId) => {
-    const updatedSubjects = selectedSubjects.map((subject) => {
-      if (subject.subjectId === subjectId) {
-        return { ...subject, selected: !subject.selected };
+      console.log(item);
+
+      axios
+        .get(`/api/v1/student/searching/subject/major/${item.majorId}`)
+        .then((res) => {
+          setSubjects(res);
+          // console.log(res);
+        })
+        .catch((error) => {
+          console.error("Error", error);
+        })
+        .finally(() => {
+          isLoading(false);
+        });
+    }
+  }, [selectedMajor]);
+
+  const handleClickSubject = (item) => {
+    setSelectedSubjects((prevSubjects) => {
+      if (prevSubjects.includes(item)) {
+        return prevSubjects.filter((subject) => subject !== item);
+      } else {
+        return [...prevSubjects, item];
       }
-      return subject;
     });
-    setSelectedSubjects(updatedSubjects);
+  };
+
+  const isActive = (item) => {
+    if (selectedSubjects.some((subject) => subject === item)) {
+      return "active";
+    }
+    return "";
+  };
+  const updateSubjects = async () => {
+    try {
+      const selectedSubjectsData = selectedSubjects.map((subject) => ({
+        lecturerId: loginUser.userId,
+        subjectId: subject.subjectId,
+      }));
+
+      await axios.post("/api/v1/lecturer/subject", selectedSubjectsData);
+      console.log(selectedSubjectsData);
+      toast.success("Update profile success");
+    } catch (err) {
+      console.error("Error creating URL:", err);
+      toast.error(err.response.data.message);
+    }
   };
 
   return (
     <div>
-
       <h3>Edit Profile</h3>
-      <div className="form-group">
-        <label>Name:</label>
-        <input
-          type="text"
-          className="form-control"
-          value={name}
-          onChange={handleNameChange}
-        />
-      </div>
-      <FormGroup>
+      <FormGroup className="my-3">
         <label htmlFor="major">Major:</label>
         <select
-          className="mx-2 my-3"
-          onChange={e => handleMajorChange(e.target.value)}
+          className="mx-2"
+          id="major"
+          name="major"
+          value={selectedMajor}
+          onChange={(e) => {
+            setSelectedMajor(e.target.value);
+          }}
         >
-          <option value="Select Major" disabled hidden>
+          <option value="" disabled>
             Select Major
           </option>
           {majors.map((majorOption) => (
-            <option key={majorOption.majorId}
-              value={`${majorOption.majorId}-${majorOption.majorName}`}>{majorOption.majorName}</option>
+            <option key={majorOption.majorId}>{majorOption.majorName}</option>
           ))}
         </select>
       </FormGroup>
-      <Row style={{ marginBottom: '10px' }}>
-        <Col md={6}>
-          <p className="pb-1"><strong>Your Current Subjects:</strong></p>
-          <Stack gap={3}>
-            {selectedSubject.map(item => (
-              <Stack direction="horizontal" >
-                <FontAwesomeIcon icon={faBriefcase} style={{ color: "#000000", paddingRight: "10px" }} />
-
-                <p key={item.subjectId} className="m-0">{item.subjectId} - {item.unique}</p>
-                <FontAwesomeIcon className="ms-auto me-5" icon={faTrash} />
-
-              </Stack>
-            ))}
-            {err && <p>There is no subject for this student</p>}
-          </Stack>
-        </Col>
-        <Col >
-          <p className="pb-1"><strong>{selectedMajor.majorName}:</strong></p>
-          <Stack gap={3}>
-            {subject.map(item => (
-              <Stack direction="horizontal" >
-                <FontAwesomeIcon icon={faBriefcase} style={{ color: "#000000", paddingRight: "10px" }} />
-
-                <p key={item.subjectId} className="m-0">{item.subjectId} - {item.unique}</p>
-                <FontAwesomeIcon className="ms-auto me-5" icon={faCircleCheck} />
-              </Stack>
-            ))}
-            {err && <p>There is no subject for this major</p>}
-          </Stack>
-        </Col>
-      </Row>
-
+      <div className="form-group ">
+        <p className="my-3">Your current subjects:</p>
+        {subjects.length > 0 && (
+          <div className="my-3">
+            <strong>
+              {" "}
+              <FontAwesomeIcon icon={faCalendarDays} className="mx-2" />
+              {selectedMajor}
+            </strong>
+            <div className="my-2">
+              <ListGroup>
+                {subjects.map((result) => (
+                  <ListGroupItem
+                    onClick={() => handleClickSubject(result)}
+                    className={`${isActive(result)}`}
+                  >
+                    {result.subjectId} - {result.lecturerName}
+                    <FontAwesomeIcon className="mx-2" icon={faCircleCheck} />
+                  </ListGroupItem>
+                ))}
+              </ListGroup>
+            </div>
+          </div>
+        )}
+      </div>
       <div>
         <button
           type="button"
-          className="btn btn-primary  "
-          onClick={handleUpdateProfile}
+          className="btn btn-primary"
+          onClick={updateSubjects}
         >
           Update Profile
         </button>
@@ -157,7 +141,6 @@ function S_EditProfile() {
           Cancel
         </button>
       </div>
-      <ToastContainer />
     </div>
   );
 }

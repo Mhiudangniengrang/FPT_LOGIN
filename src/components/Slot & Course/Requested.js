@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Button, Card, Row, Col, Stack, Spinner, Pagination } from "react-bootstrap";
 import dayjs from "dayjs";
@@ -12,13 +12,15 @@ import axios from "../../Services/customizeAxios";
 import Style from '../../assets/style/dashboard.module.scss'
 import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import GlobalContext from "../../context/GlobalContext";
+import StudentOverlay from "../Schedule/StudentOverlay";
 
 function Requested() {
     const [loading, isLoading] = useState(true)
     const [page, setPage] = useState(0)
     const [pageContent, setPageContent] = useState([])
     const [totalPage, setTotalPage] = useState(1)
-
+    const { setSelectedSlot, setShowSlotModal, showSlotModal } = useContext(GlobalContext)
     const { loginUser } = useData()
 
     useEffect(async () => {
@@ -60,8 +62,10 @@ function Requested() {
                 toast.update(id, { render: `${error.response.data.message}`, type: "error", isLoading: false, autoClose: true });
             })
     }
+    const navigate = useNavigate()
     const handleSeeDetail = (item) => {
         console.log(item)
+        navigate("/student/viewschedule")
     }
     return (
 
@@ -72,6 +76,7 @@ function Requested() {
                 minHeight: '20vh'
             }}
         >
+            {showSlotModal && <StudentOverlay />}
             <ToastContainer />
             <div>
                 <div
@@ -140,6 +145,14 @@ function Requested() {
                                                 onClick={() => handleSeeDetail(item)}
                                             >See slot detail</button>
                                         </Stack>
+                                    )}
+                                    {item.requestStatus === "APPROVED" && item.emptySlotId === null && (
+                                        <span
+                                            style={{
+                                                color: 'red',
+                                                fontSize: '12px'
+                                            }}
+                                        >Please wait for your lecturer assign to empty slot</span>
                                     )}
                                 </Card.Body>
                             </Card>

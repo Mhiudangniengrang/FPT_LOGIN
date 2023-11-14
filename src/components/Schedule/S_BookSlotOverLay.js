@@ -1,8 +1,8 @@
-import { Stack } from 'react-bootstrap';
+import { Button, OverlayTrigger, Stack, Tooltip } from 'react-bootstrap';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { faEllipsisVertical } from '@fortawesome/free-solid-svg-icons'
+import { faCircleInfo, faEllipsisVertical } from '@fortawesome/free-solid-svg-icons'
 import { faXmark } from '@fortawesome/free-solid-svg-icons'
 import Style from '../../assets/style/form.module.scss'
 import { useContext, useEffect, useMemo } from 'react';
@@ -12,6 +12,7 @@ import { useData } from '../../context/DataContext';
 import axios from '../../Services/customizeAxios'
 import dayjs from 'dayjs';
 import { useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 function S_BookSlot() {
     const { lecturerId } = useParams()
@@ -23,22 +24,48 @@ function S_BookSlot() {
     const [subject, setSubject] = useState(
         selectedSlot ? selectedSlot.subjectId : ""
     );
+    const [code, setCode] = useState("")
     const [subjectList, setSubjectList] = useState([])
     const [loading, isLoading] = useState(true)
+    const [saving, isSaving] = useState(false)
     const handleSubmit = (e) => {
         e.preventDefault();
+        isSaving(true)
         axios
             .put(`/api/v1/students/emptySlot/${selectedSlot.emptySlotId}/student/${loginUser.userId}/subject/${subject}`,
                 {
                     subjectId: subject,
                     description: purpose,
+                    code: code,
                 }
-            ).then(res => [
+            ).then(res => {
                 console.log(res)
-            ]).catch(err => {
+                toast.success(`Book slot successfully`, {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                });
+            }).catch(err => {
                 console.log(err)
+                toast.error(`${err.response ? err.response.data.message : "Error at booking slot"}`, {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                });
+            }).finally(() => {
+                isSaving(false)
+                setShowSlotModal(false);
             })
-        setShowSlotModal(false);
     };
 
     useEffect(() => {
@@ -67,8 +94,6 @@ function S_BookSlot() {
                 });
         }
     }, []);
-
-    console.log("OpenOVerLau")
     return (
         <>
             <div className={Style.box}>
@@ -139,8 +164,29 @@ function S_BookSlot() {
                                         required
                                     >
                                     </textarea>
+                                    <label htmlFor='code'>
+                                        Private code:
+                                        <OverlayTrigger
+                                            placement='right'
+                                            overlay={
+                                                <Tooltip id={`tooltip-right`}>
+                                                    <span style={{ fontSize: '12px', textAlign: 'left' }}>You must contact to your teacher to get this private code</span>
+                                                </Tooltip>
+                                            }
+                                        >
+                                            <Button style={{ backgroundColor: '#fff', border: 'none' }}>
+                                                <FontAwesomeIcon icon={faCircleInfo} style={{ color: "#000000", }} />
+                                            </Button>
+                                        </OverlayTrigger>
+                                    </label>
+                                    <input type='number' id='code'
+                                        placeholder='Type a meeting code'
+                                        className={Style.code}
+                                        value={code}
+                                        onChange={e => setCode(e.target.value)}
+                                    ></input>
 
-                                    <button className={Style.book_btn} type='submit'>Book</button>
+                                    <button className={Style.book_btn} type='submit'>{!saving ? "Save" : "Saving..."}</button>
 
                                 </Stack>
                             </form>

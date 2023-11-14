@@ -17,6 +17,7 @@ import GlobalContext from "../../context/GlobalContext";
 import { useData } from "../../context/DataContext";
 import S_WeeklyCalendar from "./S_Week";
 import axios from "../../Services/customizeAxios";
+import L_List from "./L_List";
 
 const Calender_type = (type) => {
   const { loginUser } = useData()
@@ -225,7 +226,10 @@ const Calender_type = (type) => {
                 {(activeButton === 'day' || type === 'day') && <p>Lecturer's Day content goes here.</p>}
                 {(activeButton === 'week' || type === 'week') && <WeeklyCalendar isDisable={false} />}
                 {(activeButton === 'month' || type === 'month') && <Month month={currentMonth} />}
-                {(activeButton === 'list' || type === 'list') && <List />}
+                {(activeButton === 'list' || type === 'list') && <L_List
+                  semesters={semesters}
+                  currentSemesterIndex={currentSemesterIndex}
+                />}
               </Card.Body>
             )}
 

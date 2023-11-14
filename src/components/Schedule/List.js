@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from "react";
 import axios from "../../Services/customizeAxios";
+import { useData } from "../../context/DataContext";
 
 const List = (props) => {
   const { semesters, currentSemesterIndex } = props;
   const [list, setList] = useState([]);
+  const { loginUser } = useData();
+  const studentId = loginUser.userId;
 
   useEffect(() => {
-    const studentId = 6;
-
     axios
-      .get(`/api/v1/subject/admin/bookedSlot/homePage/${studentId}`)
+      .get(`/api/v1/students/bookedSlot/homePage/${studentId}`)
       .then((response) => {
         setList(response);
+        // console.log(response);
       })
       .catch((error) => {
         console.log("Error at list: " + error);

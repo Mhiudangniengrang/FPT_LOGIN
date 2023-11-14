@@ -87,7 +87,6 @@ function CreateSlot() {
     const handleSubmit = async () => {
         isSaving(true)
         await axios.post(`/api/v1/slots/lecturer/${loginUser.userId}`, {
-            emptySlotId: 103,
             slotTimeId: slot,
             dateStart: dayjs(daySelected).format("YYYY-MM-DD"),
             timeStart: time + ':00',

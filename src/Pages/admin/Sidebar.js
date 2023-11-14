@@ -8,7 +8,6 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useData } from '../../context/DataContext';
 export function Sidebar({ Toggle }) {
     const menuItems = [
-        { icon: faGauge, text: 'Dashboard', href: '/admin/dashboard' },
         { icon: faBook, text: 'Major', href: '/admin/major' },
         { icon: faPersonShelter, text: 'Room', href: '/admin/room' },
         { icon: faBookOpen, text: 'Subject', href: '/admin/subject' },

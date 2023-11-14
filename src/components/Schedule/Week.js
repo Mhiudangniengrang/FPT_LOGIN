@@ -13,6 +13,7 @@ import dayjs from 'dayjs';
 import { useData } from '../../context/DataContext';
 import ExcelReader from '../Excel/ExcelReader';
 import DownloadButton from '../Excel/DownloadExcel';
+import { ToastContainer, toast } from 'react-toastify';
 
 
 const slotTime = [
@@ -61,32 +62,47 @@ const daysOfWeek = [
 const timeSlots = ["Slot 1", "Slot 2", "Slot 3", "Slot 4", "Slot 5", "Slot 6"];
 
 function WeeklyCalendar({ isDisable = false }) {
-
-    const [rooms, setRooms] = useState([]);
     const [emptySlot, setEmptySlot] = useState([])
+    const [teachSlot, setTeachSlot] = useState([])
     const { loginUser } = useData()
+
+    const handleTeaching = (item) => {
+        setTeachSlot(item)
+    }
 
     const { setShowSlotModal, setDaySelected, setSelectedSlot } = useContext(GlobalContext);
     const [selectedDate, setSelectedDate] = useState(new Date());
 
-    const getRoom = () => {
-        axios
-            .get(`/api/v1/slots/lecturer/room`)
-            .then((response) => {
-                setRooms(response)
-            }).catch(error => {
-                console.log('Error at Data Context:', error)
-            })
-    }
     useEffect(() => {
         if (!isDisable) {
+            const id = toast.loading("Please wait...")
+
             axios
                 .get(`/api/v1/user/emptySlot/lecturer/${loginUser.userId}`)
                 .then((response) => {
+                    console.log(response)
                     setEmptySlot(response)
-                    getRoom()
+                    toast.update(id, { render: "Get empty slots complete", type: "success", isLoading: false, autoClose: true });
+
                 })
                 .catch(error => {
+                    toast.update(id, { render: `${error.response.data.message}`, type: "info", isLoading: false, autoClose: true });
+
+                    console.log("Error at Week.js " + error)
+                })
+        } else {
+            const id = toast.loading("Please wait...")
+
+            axios
+                .get(`/api/v1/user/lecturer/${loginUser.userId}`)
+                .then((response) => {
+                    console.log(response)
+                    setTeachSlot(response)
+                    toast.update(id, { render: "Get teaching slots complete", type: "success", isLoading: false, autoClose: true });
+
+                })
+                .catch(error => {
+                    toast.update(id, { render: `${error.response.data.message}`, type: "info", isLoading: false, autoClose: true });
                     console.log("Error at Week.js " + error)
                 })
         }
@@ -118,6 +134,7 @@ function WeeklyCalendar({ isDisable = false }) {
 
     return (
         <div>
+            <ToastContainer />
             <Table responsive striped bordered>
                 <thead
                     className={Style.thead}
@@ -234,6 +251,32 @@ function WeeklyCalendar({ isDisable = false }) {
                                             }
                                         })
                                     }
+                                    {
+                                        isDisable && (
+                                            teachSlot.map(teaching => {
+                                                {
+                                                    if (teaching.date === day && teaching.slotTimeId == slot.charAt(5)) {
+                                                        return (
+                                                            <div
+                                                                key={teaching.slotTimeId}
+                                                                className={Style.slot}
+                                                                style={{
+                                                                    border: "1px solid #333",
+                                                                    fontWeight: '500'
+                                                                }}
+                                                            >
+                                                                <span>{teaching.subjectId}</span><br></br>
+                                                                <span>at {teaching.roomId}</span>
+                                                                <span className='ms-2'>
+                                                                    <a href={`${teaching.meetingUrl}`} target="_blank">Meet URL</a>
+                                                                </span>
+                                                            </div>
+                                                        )
+                                                    } return null
+                                                }
+                                            })
+                                        )
+                                    }
                                 </td>
                             ))}
                         </tr>
@@ -241,9 +284,16 @@ function WeeklyCalendar({ isDisable = false }) {
                 </tbody>
             </Table>
             {isDisable && (
-                <div>
-                    <ExcelReader />
-                    <DownloadButton />
+                <div style={{
+                    width: '500px',
+
+                }}>
+                    <div className='mb-2'>
+                        <ExcelReader handleTeachSlot={handleTeaching} />
+                    </div>
+                    <div>
+                        If you do not have the excel file yet. Click this:<DownloadButton />
+                    </div>
                 </div>
             )}
         </div >

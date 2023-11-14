@@ -47,6 +47,10 @@ export const RoomList = () => {
             console.log(res)
             setPageContent(res.content)
             setTotalPage(res.totalPage)
+            setNumberOpen(res.totalOpen)
+            if (status === "") {
+                setNumberAll(res.totalElement)
+            }
         }).catch(error => {
             console.log("Error at getting request:", error)
             toast.error(`${error.response.data.message}`, {
