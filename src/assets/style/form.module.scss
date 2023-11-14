@@ -88,6 +88,16 @@
             background-color: rgba($color: #07d730, $alpha: 0.8);
         }
     }
+
+    .rejectBtn {
+        border: none;
+        background-color: #d70b07;
+        border-radius: 10px;
+
+        &:hover {
+            background-color: rgba($color: #d70b07, $alpha: 0.8);
+        }
+    }
 }
 
 .active>td {

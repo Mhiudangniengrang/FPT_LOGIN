@@ -26,13 +26,13 @@ function SolveRequests({ emptySlot }) {
             })
     }, [complete])
 
-    const handleApprove = (item) => {
+    const handleApprove = (item, action) => {
         console.log(item)
         isSaving(true)
         axios
             .put(`/api/v1/lecturer/${item.meetingRequestId}/lecturer/${loginUser.userId}`,
                 {
-                    requestStatus: process
+                    requestStatus: action
                 })
             .then(res => {
                 console.log(res)
@@ -152,11 +152,11 @@ function SolveRequests({ emptySlot }) {
                                                         <div>
                                                             <button
                                                                 className={Style.approveBtn}
-                                                                onClick={() => { !save && handleApprove(record) }}
+                                                                onClick={() => { !save && handleApprove(record, "APPROVED") }}
                                                             >{save ? "Processing" : "Approve"}</button>
                                                             <button
                                                                 className={Style.approveBtn}
-                                                                onClick={() => { !save && handleApprove(record) }}
+                                                                onClick={() => { !save && handleApprove(record, "REJECTED") }}
                                                             >{save ? "Processing" : "Reject"}</button>
                                                         </div>
                                                     ) : null}
