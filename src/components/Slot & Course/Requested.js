@@ -117,7 +117,15 @@ function Requested() {
                                                 borderRadius: '10px',
                                                 textTransform: 'lowercase',
                                                 fontWeight: '600',
-                                                backgroundColor: `${item.requestStatus === "PENDING" ? "rgba(255, 222, 16,0.8)" : "#07d730"}`,
+                                                backgroundColor: (() => {
+                                                    if (item.requestStatus === "PENDING") {
+                                                        return "rgba(255, 222, 16, 0.8)";
+                                                    } else if (item.requestStatus === "APPROVED") {
+                                                        return "#07d730";
+                                                    } else {
+                                                        return "rgba(255, 15, 0, 0.8)";
+                                                    }
+                                                })(),
                                             }}
                                         >
                                             {item.requestStatus}

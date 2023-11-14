@@ -84,7 +84,7 @@ function BookPublicOverlay() {
 
     useEffect(() => {
         if (lecturerId) {
-            axios.get(`/api/v1/lecturer/${lecturerId}/subjects`)
+            axios.get(`/api/v1/students/subjects/lecturer/${lecturerId}`)
                 .then(res => {
                     setSubjectList(res);
                     isLoading(false)
@@ -96,7 +96,7 @@ function BookPublicOverlay() {
                 });
         } else {
             console.log(selectedSlot)
-            axios.get(`/api/v1/lecturer/${selectedSlot.lecturerId}/subjects`)
+            axios.get(`/api/v1/students/subjects/lecturer/${selectedSlot.lecturerId}`)
                 .then(res => {
                     setSubjectList(res);
                     isLoading(false)
@@ -194,7 +194,11 @@ function BookPublicOverlay() {
                                             onClick={() => setShowSlotModal(false)} />
                                     </Stack>
                                     <Stack direction='horizontal' gap={5}>
-                                        <Stack direction='vertical'>
+                                        <Stack direction='vertical'
+                                            style={{
+                                                maxWidth: '300px',
+                                            }}
+                                        >
                                             <p>Lecturer: {selectedSlot.lecturerName}</p>
                                             <p>Slot: {selectedSlot.slotTimeId}</p>
                                             <p>Duration: {selectedSlot.duration}</p>

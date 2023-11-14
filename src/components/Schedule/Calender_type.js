@@ -273,7 +273,7 @@ const Calender_type = (type) => {
             {loginUser.roleName === "STUDENT" && (
               <Card.Body>
                 {activeButton === "day" && (
-                  <p>Student's Day content goes here.</p>
+                  <DaySchedule currentDate={currentDate} />
                 )}
                 {activeButton === "week" && <S_WeeklyCalendar activeTab={""} />}
                 {activeButton === "month" && <Month month={currentMonth} />}

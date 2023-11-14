@@ -11,7 +11,7 @@ function DaySchedule(props) {
     const [filteredSlot, setFilteredSlot] = useState([]);
 
     const { loginUser } = useData();
-    const studentId = 14;
+    const studentId = loginUser.userId;
     useEffect(() => {
         axios
             .get(`/api/v1/students/bookedSlot/homePage/${studentId}`)
