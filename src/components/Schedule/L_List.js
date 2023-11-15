@@ -6,11 +6,11 @@ const L_List = (props) => {
     const { semesters, currentSemesterIndex } = props;
     const [list, setList] = useState([]);
     const { loginUser } = useData();
-    const lecturerId = 13;
+    const lecturerId = loginUser.userId;
 
     useEffect(() => {
         axios
-            .get(`/api/v1/students/bookedSlot/calendar/${lecturerId}`)
+            .get(`/api/v1/user/emptySlot/lecturer/${lecturerId}`)
             .then((response) => {
                 setList(response);
                 console.log(response);
