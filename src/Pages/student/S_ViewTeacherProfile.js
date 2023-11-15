@@ -40,7 +40,7 @@ const S_ViewTeacherProfile = () => {
   }, []);
   useEffect(() => {
     axios
-      .get(`/api/v1/lecturer/${lecturerId}/subjects`)
+      .get(`/api/v1/students/subjects/lecturer/${lecturerId}`)
       .then((response) => {
         setSubjects(response);
         // console.log(response);
