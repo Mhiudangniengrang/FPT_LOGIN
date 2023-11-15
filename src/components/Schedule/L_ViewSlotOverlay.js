@@ -217,12 +217,13 @@ function ViewSlot() {
                 <div className={Style.box_content}
 
                     style={{
-                        height: 'fit-content', width: "fit-content"
+                        height: 'fit-content', width: "fit-content",
                     }}
 
                 >
                     <Stack direction="horizontal" gap={3}>
-                        <Stack direction='vertical' gap='2' className={Style.object}>
+                        <Stack direction='vertical' gap='2' className={Style.object}
+                        >
                             <Stack className='pb-2 pe-2' direction='horizontal' gap='2'>
                                 <h4
                                     style={{ margin: '0' }}
@@ -255,7 +256,9 @@ function ViewSlot() {
                                 <Stack direction='vertical' gap='2'
                                     style={{ marginBottom: '10px' }}
                                 >
-                                    <p>Purpose: {selectedSlot.requestContent || selectedSlot.description}</p>
+                                    <p
+                                        style={{ maxWidth: '300px' }}
+                                    >Purpose: {selectedSlot.requestContent || selectedSlot.description}</p>
                                 </Stack>
                                 <button className={`${Style.book_btn} mt-1 mb-1 p-2`}
                                     onClick={() => setRechedule(!rechedule)}
@@ -405,11 +408,11 @@ function ViewSlot() {
                 <div className={Style.box_content}
 
                     style={{
-                        height: 'fit-content', width: "fit-content"
+                        height: 'fit-content', width: 'fit-content'
                     }}
 
                 >
-                    <Stack direction="horizontal" gap={3}>
+                    <Stack direction="horizontal" gap={5}>
                         <Stack direction='vertical' gap='2' className={Style.object}>
                             <Stack className='pb-2 pe-2' direction='horizontal' gap='2'>
                                 <h4
@@ -438,7 +441,7 @@ function ViewSlot() {
 
                                 <button className={`${Style.book_btn} mt-1 mb-1 p-2`}
                                     onClick={() => setRechedule(!rechedule)}
-                                >Edit</button>
+                                >{rechedule ? "Editing..." : "Edit"}</button>
                             </Stack>
                         </Stack>
 

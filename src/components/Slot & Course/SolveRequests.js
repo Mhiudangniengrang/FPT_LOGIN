@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Card, Col, Row, } from "react-bootstrap";
+import { Card, Col, Row, Stack, } from "react-bootstrap";
 import dayjs from "dayjs";
 import axios from "../../Services/customizeAxios";
 import { useData } from "../../context/DataContext";
@@ -23,6 +23,16 @@ function SolveRequests({ emptySlot }) {
                 setRequestSlot(res)
             }).catch(error => {
                 console.log("Error at lecturer home:", error)
+                toast.error(`${error.message}`, {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                });
             })
     }, [complete])
 
@@ -50,7 +60,7 @@ function SolveRequests({ emptySlot }) {
             })
             .catch(error => {
                 console.log("Error at approve request", error)
-                toast.error(`${error.response != null ? error.response.data.message : error.message}`, {
+                toast.error(`${error.message}`, {
                     position: "top-right",
                     autoClose: 5000,
                     hideProgressBar: false,
@@ -149,16 +159,16 @@ function SolveRequests({ emptySlot }) {
                                                 </td>
                                                 <td>
                                                     {filter === "PENDING" ? (
-                                                        <div>
+                                                        <Stack direction="horizontal" gap={3}>
                                                             <button
                                                                 className={Style.approveBtn}
                                                                 onClick={() => { !save && handleApprove(record, "APPROVED") }}
                                                             >{save ? "Processing" : "Approve"}</button>
                                                             <button
-                                                                className={Style.approveBtn}
+                                                                className={Style.rejectBtn}
                                                                 onClick={() => { !save && handleApprove(record, "REJECTED") }}
                                                             >{save ? "Processing" : "Reject"}</button>
-                                                        </div>
+                                                        </Stack>
                                                     ) : null}
                                                 </td>
                                             </tr>

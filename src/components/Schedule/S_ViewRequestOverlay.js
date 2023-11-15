@@ -22,7 +22,8 @@ function S_ViewRequest() {
             <div className={Style.box}>
                 <div className={Style.box_content}
                     style={{
-                        height: 'fit-content'
+                        height: 'fit-content',
+                        maxWidth: '300px'
                     }}
                 >
                     <div
