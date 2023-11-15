@@ -218,6 +218,7 @@ function ViewSlot() {
     const handleAbsent = () => {
         axios.put(`/api/v1/slots/${selectedSlot.emptySlotId}/lecturer/${loginUser.userId}/student/${selectedSlot.studentId}`)
             .then(res => {
+                console.log(res)
                 toast.success(`Save successful`, {
                     position: "top-right",
                     autoClose: 3000,
@@ -302,9 +303,8 @@ function ViewSlot() {
                                 )}
                                 {checkDate() && (
                                     <Stack direction="horizontal" gap={3}>
-                                        <button className={`${Style.presentBtn} mt-1 mb-1 p-2`}
-                                        >Present</button>
                                         <button className={`${Style.absentBtn} mt-1 mb-1 p-2`}
+                                            onClick={() => handleAbsent()}
                                         >Absent</button>
                                     </Stack>
                                 )}

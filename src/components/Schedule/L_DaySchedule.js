@@ -14,7 +14,7 @@ function L_DaySchedule(props) {
     const lecturerId = loginUser.userId;
     useEffect(() => {
         axios
-            .get(`/api/v1/students/bookedSlot/calendar/${lecturerId}`)
+            .get(`/api/v1/user/emptySlot/lecturer/${lecturerId}`)
             .then((response) => {
                 setFilteredSlot(response);
                 isLoading(false);
