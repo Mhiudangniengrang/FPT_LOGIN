@@ -40,7 +40,8 @@ const ExcelReader = ({ handleTeachSlot }) => {
                 setCols(makeCols(ws['!ref']));
                 setData(parsedData);
                 const teachingSlotData = parsedData.map(item => ({
-                    date: dayjs(Date(`${item.year}-${item.month}-${item.date}`)).format("YYYY-MM-DD"),
+
+                    dateStart: dayjs(new Date(`${parseInt(item.year)}-${parseInt(item.month)}-${parseInt(item.date)}`)).format("YYYY-MM-DD"),
                     lecturerId: loginUser.userId,
                     subjectId: item.subjectId,
                     roomId: item.roomId,

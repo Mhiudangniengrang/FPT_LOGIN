@@ -33,7 +33,7 @@ const Unauthorize = () => {
                         </div>
 
                         <div className="buttons">
-                            <a className="button" href="http://localhost:3000">Go to homepage</a> and log in again.
+                            <a className="button" href="/">Go to homepage</a> and log in again.
                         </div>
                     </div>
                 </Container>

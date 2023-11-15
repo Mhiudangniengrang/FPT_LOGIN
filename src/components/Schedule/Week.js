@@ -255,7 +255,7 @@ function WeeklyCalendar({ isDisable = false }) {
                                         isDisable && (
                                             teachSlot.map(teaching => {
                                                 {
-                                                    if (teaching.date === day && teaching.slotTimeId == slot.charAt(5)) {
+                                                    if (teaching.dateStart === day && teaching.slotTimeId == slot.charAt(5)) {
                                                         return (
                                                             <div
                                                                 key={teaching.slotTimeId}

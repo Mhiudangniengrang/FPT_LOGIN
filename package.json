@@ -1,7 +1,6 @@
 {
   "name": "fpt_login",
   "version": "0.1.0",
-  "proxy": "https://meetmylecture-production.up.railway.app",
   "private": true,
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.4.2",
