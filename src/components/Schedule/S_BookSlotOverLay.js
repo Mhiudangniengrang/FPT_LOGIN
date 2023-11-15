@@ -70,7 +70,7 @@ function S_BookSlot() {
 
     useEffect(() => {
         if (lecturerId) {
-            axios.get(`/api/v1/lecturer/${lecturerId}/subjects`)
+            axios.get(`/api/v1/students/subjects/lecturer/${lecturerId}`)
                 .then(res => {
                     setSubjectList(res);
                     isLoading(false)
