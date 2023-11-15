@@ -18,7 +18,7 @@ function SolveRequests({ emptySlot }) {
     const [process, setProcess] = useState("")
     const { loginUser } = useData()
     useEffect(() => {
-        axios.get(`/api/v1/lecturer/lecturer/${loginUser.userId}`)
+        axios.get(`/api/v1/lecturer/${loginUser.userId}`)
             .then(res => {
                 setRequestSlot(res)
             }).catch(error => {
