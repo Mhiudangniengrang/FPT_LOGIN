@@ -43,6 +43,32 @@
             font-weight: bold;
         }
 
+        .presentBtn {
+            padding: '5px 10px';
+            color: #fff;
+            font-weight: 500;
+            border: none;
+            background-color: #07d730;
+            border-radius: 10px;
+
+            &:hover {
+                background-color: rgba($color: #07d730, $alpha: 0.8);
+            }
+        }
+
+        .absentBtn {
+            color: #fff;
+            padding: '5px 10px';
+            font-weight: 500;
+            border: none;
+            background-color: #d70b07;
+            border-radius: 10px;
+
+            &:hover {
+                background-color: rgba($color: #d70b07, $alpha: 0.8);
+            }
+        }
+
         #tooltip-right {
             background-color: #d0dbd1;
         }

@@ -210,6 +210,41 @@ function ViewSlot() {
         return address == null ? true : false
     }
 
+    const checkDate = () => {
+        const currDate = dayjs(Date.now()).format("YYYY-MM-DD");
+        return currDate === selectedSlot.dateStart
+    }
+
+    const handleAbsent = () => {
+        axios.put(`/api/v1/slots/${selectedSlot.emptySlotId}/lecturer/${loginUser.userId}/student/${selectedSlot.studentId}`)
+            .then(res => {
+                toast.success(`Save successful`, {
+                    position: "top-right",
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                });
+            }).catch(error => {
+                toast.error(`${error.message}`, {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                });
+                console.log("error at absent: ", error);
+            }).finally(() => {
+                setShowSlotModal(false)
+            })
+    }
+
     return (
         <div className={Style.box}>
             <ToastContainer />
@@ -260,9 +295,20 @@ function ViewSlot() {
                                         style={{ maxWidth: '300px' }}
                                     >Purpose: {selectedSlot.requestContent || selectedSlot.description}</p>
                                 </Stack>
-                                <button className={`${Style.book_btn} mt-1 mb-1 p-2`}
-                                    onClick={() => setRechedule(!rechedule)}
-                                >Reschedule</button>
+                                {!checkDate() && (
+                                    <button className={`${Style.book_btn} mt-1 mb-1 p-2`}
+                                        onClick={() => setRechedule(!rechedule)}
+                                    >Reschedule</button>
+                                )}
+                                {checkDate() && (
+                                    <Stack direction="horizontal" gap={3}>
+                                        <button className={`${Style.presentBtn} mt-1 mb-1 p-2`}
+                                        >Present</button>
+                                        <button className={`${Style.absentBtn} mt-1 mb-1 p-2`}
+                                        >Absent</button>
+                                    </Stack>
+                                )}
+
                             </Stack>
                         </Stack>
 
@@ -444,7 +490,7 @@ function ViewSlot() {
                                 >{rechedule ? "Editing..." : "Edit"}</button>
                             </Stack>
                         </Stack>
-
+                        {checkDate()}
                         {rechedule && (
                             <Stack direction='vertical' gap='2' className={`${Style.object}`}>
                                 <h4

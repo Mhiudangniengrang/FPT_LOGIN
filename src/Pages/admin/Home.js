@@ -7,6 +7,7 @@ import { RoomCreate, RoomEdit, RoomList } from './Room'
 import { SubjectCreate, SubjectEdit, SubjectList } from './Subject'
 import { UserEdit, UserList } from './User'
 import { SemesterList } from './Semester'
+import { SlotList } from './Slot'
 
 
 function Home({ Toggle }) {
@@ -36,7 +37,8 @@ function Home({ Toggle }) {
                 {(type === "user" && action === 'edit' && !id) && navigate('/admin/user')}
 
                 {(type === "semester" && !action) && <SemesterList />}
-                {(type === "semester" && action === 'edit' && id) && <UserEdit />}
+                {/* {(type === "semester" && action === 'edit' && id) && <UserEdit />} */}
+                {(type === "slot" && !action) && <SlotList />}
 
 
             </div>

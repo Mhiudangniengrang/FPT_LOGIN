@@ -30,6 +30,7 @@ export const SlotList = () => {
     const [status, setStatus] = useState("")
     const [numberAll, setNumberAll] = useState(0)
     const [numberOpen, setNumberOpen] = useState(0)
+    const [numberBook, setNumberBook] = useState(0)
     const [isDelete, setDelete] = useState(false)
 
     const handleDelete = (item) => {
@@ -66,7 +67,6 @@ export const SlotList = () => {
         })
     }
 
-    const location = useLocation()
     useEffect(async () => {
         await axios.get(`/api/v1/admin/weeklyEmptySlot`,
             {
@@ -75,18 +75,18 @@ export const SlotList = () => {
                     pageSize: pageSize,
                     sortBy: filter,
                     sortDir: sortDir,
-                    status: status
                 }
             }
         ).then(res => {
             setPageContent(res.content)
             setTotalPage(res.totalPage)
-            setNumberOpen(res.count)
+            setNumberOpen(res.totalOPEN)
+            setNumberBook(res.totalBOOKED)
             if (status === "") {
                 setNumberAll(res.totalElement)
             }
         }).catch(error => {
-            console.log("Error at getting request:", error)
+            console.log("Error at getting slot:", error)
             toast.error(`${error.response != null ? error.response.data.message : error.message}`, {
                 position: "top-right",
                 autoClose: 5000,
@@ -143,10 +143,6 @@ export const SlotList = () => {
                             <option value={"status"}>Status</option>
                         </select>
                     </div>
-                    <div className={Style.create}>
-                        <FontAwesomeIcon icon={faPlus} style={{ paddingRight: "10px" }} />
-                        <span><a href="major/create">CREATE</a></span>
-                    </div>
                 </Stack>
 
                 {/* Table Header */}
@@ -157,11 +153,11 @@ export const SlotList = () => {
                         <thead>
                             <tr>
                                 <th>
-                                    Major ID
+                                    Slot ID
                                     <span
                                         style={{ paddingLeft: '10px', cursor: 'pointer' }}
                                         onClick={() => {
-                                            setFilter("majorId");
+                                            setFilter("emptySlotId");
                                             setSortDir(sortDir === "asc" ? "desc" : "asc");
                                             setPage(0)
                                         }}
@@ -172,35 +168,34 @@ export const SlotList = () => {
                                         />
                                     </span>
                                 </th>
-                                <th>Major Name</th>
+                                <th>Lecturer Name</th>
+                                <th>Slot</th>
+                                <th>Student Name</th>
+                                <th>Subject</th>
+                                <th>Date start</th>
+                                <th>Time start</th>
+                                <th>Booked date</th>
+                                <th>Room</th>
+                                <th>Description</th>
                                 <th>Status</th>
-                                <th>Action</th>
                             </tr>
                         </thead>
 
                         <tbody>
                             {pageContent.map((item, index) => (
                                 <tr key={index}>
-                                    <td>{item.majorId}</td>
-                                    <td>{item.majorName}</td>
+                                    <td>{item.emptySlotId}</td>
+                                    <td>{item.lecturerName}</td>
+                                    <td>{item.slotTimeId}</td>
+                                    <td>{item.studentName}</td>
+                                    <td>{item.subjectId}</td>
+                                    <td>{item.dateStart}</td>
+                                    <td>{item.timeStart}</td>
+                                    <td>{item.bookedDate}</td>
+                                    <td>{item.roomId}</td>
+                                    <td>{item.description}</td>
                                     <td>{item.status}</td>
-                                    <td>
-                                        <span
-                                            className={Style.icon}
-                                            onClick={() => navigate(`/admin/major/edit/${item.majorId}`, { state: { item } })}
-                                        >
-                                            <FontAwesomeIcon icon={faPenToSquare} style={{ color: "#0071c7" }} />
-                                        </span>
 
-                                        <span
-                                            className={Style.icon}
-                                            id={Style.delete}
-                                            onClick={() => handleDelete(item)}
-                                        >
-                                            <FontAwesomeIcon icon={faTrash} style={{ color: "#db0000" }} />
-                                        </span>
-
-                                    </td>
                                 </tr>
                             ))}
                         </tbody>
@@ -239,7 +234,7 @@ export const SlotList = () => {
             </div>
 
             {/* Filter Container */}
-            <div className={Style.filterContainer}>
+            {/* <div className={Style.filterContainer}>
                 <form id="status">
                     <p>Status</p>
                     <div
@@ -275,7 +270,7 @@ export const SlotList = () => {
                         </span>
                     </div>
                 </form>
-            </div>
+            </div> */}
         </div >
     )
 };

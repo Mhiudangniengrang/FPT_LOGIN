@@ -46,7 +46,7 @@ function SolveRequests({ emptySlot }) {
                 })
             .then(res => {
                 console.log(res)
-                toast.success(`Approve successfully`, {
+                toast.success(`${action} successfully`, {
                     position: "top-right",
                     autoClose: 5000,
                     hideProgressBar: false,

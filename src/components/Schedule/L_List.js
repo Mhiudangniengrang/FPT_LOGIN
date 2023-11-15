@@ -44,7 +44,6 @@ const L_List = (props) => {
             <table className="table text-center">
                 <thead>
                     <tr>
-                        <th>Lecturer ID</th>
                         <th>Lecturer Name</th>
                         <th>Slot</th>
                         <th>Subject</th>
@@ -58,7 +57,6 @@ const L_List = (props) => {
                 <tbody>
                     {filteredList.map((record, i) => (
                         <tr key={i}>
-                            <td>{record.lecturerId}</td>
                             <td>{record.lecturerName}</td>
                             <td>{record.slotTimeId}</td>
                             <td>{record.subjectId}</td>
