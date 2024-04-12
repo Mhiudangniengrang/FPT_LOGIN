@@ -63,28 +63,27 @@ const ExcelReader = ({ handleTeachSlot }) => {
         }
     };
 
-    const handleSave = () => {
-        console.log(teachSlot)
-        setFile({})
-        const id = toast.loading("Please wait...")
-        isSaving(true)
-        axios
-            .post(`/api/v1/schedule/lecturer/${loginUser.userId}`, teachSlot)
-            .then(res => {
-                console.log(res)
-                toast.update(id, { render: "Get teaching slots complete", type: "success", isLoading: false, autoClose: true });
+    // const handleSave = () => {
+    //     console.log(teachSlot)
+    //     setFile({})
+    //     const id = toast.loading("Please wait...")
+    //     isSaving(true)
+    //     axios
+    //         .post(`/api/v1/schedule/lecturer/${loginUser.userId}`, teachSlot)
+    //         .then(res => {
+    //             console.log(res)
+    //             toast.update(id, { render: "Get teaching slots complete", type: "success", isLoading: false, autoClose: true });
 
-            }).catch(error => {
-                toast.update(id, { render: `${error.response.data.message}`, type: "info", isLoading: false, autoClose: true });
+    //         }).catch(error => {
+    //             toast.update(id, { render: `${error.response.data.message}`, type: "info", isLoading: false, autoClose: true });
 
-                console.log(error)
-            }).finally(() => {
-                isSaving(false)
-            })
-    }
+    //             console.log(error)
+    //         }).finally(() => {
+    //             isSaving(false)
+    //         })
+    // }
     return (
         <div>
-            <ToastContainer />
             <label htmlFor="file">Upload an excel file</label>
             <br />
             <input
@@ -97,11 +96,7 @@ const ExcelReader = ({ handleTeachSlot }) => {
                 onChange={handleChange}
             />
             <br />
-            <Stack direction='horizontal' gap={3}>
 
-                <input type="submit" value="Add to weekly calendar" onClick={handleFile} />
-                <input type="submit" value={`${!saving ? "Save into database" : "Saving..."}`} onClick={handleSave} disabled={teachSlot.length === 0 ? true : false} />
-            </Stack>
         </div>
     );
 };

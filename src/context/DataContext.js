@@ -39,7 +39,7 @@ export const DataProvider = ({ children, role }) => {
     };
   } else if (savedUser === null) {
     console.log("unauthor")
-    navigate("/unauthorize")
+    // navigate("/unauthorize")
   }
   useEffect(() => {
     try {
@@ -49,12 +49,12 @@ export const DataProvider = ({ children, role }) => {
       } else if (loginUser.roleName === null || loginUser.roleName !== role) {
         setLoading(false)
         setAuthorize(false)
-        navigate("/unauthorize")
+        // navigate("/unauthorize")
       };
     } catch (error) {
       setLoading(false)
       setAuthorize(false)
-      navigate("/unauthorize")
+      // navigate("/unauthorize")
     }
   }, [loginUser]);
 
